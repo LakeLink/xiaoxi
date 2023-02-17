@@ -1,0 +1,39 @@
+<!--pages/exercise-now/exercise-now.wxml-->
+
+<van-cell-group title="运动打卡" inset="true">
+    <van-cell title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
+    <van-calendar show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
+
+
+    <picker mode="selector" bindchange="bindActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
+        <van-cell title="运动项目" value="{{ activity.name }}" is-link></van-cell>
+    </picker>
+
+    <view wx:if='{{activity.unit == "distance"}}'>
+        <van-field model:value="{{ numberInput }}" label="运动距离" type="digit" input-align="right">
+            <label slot="right-icon">千米</label>
+        </van-field>
+    </view>
+    <view wx:elif='{{activity.unit == "time"}}'>
+        <van-field model:value="{{ numberInput }}" label="运动时长" type="number" input-align="right">
+            <label slot="right-icon">分钟</label>
+        </van-field>
+    </view>
+    <view wx:elif='{{activity.unit == "number"}}'>
+        <van-field model:value="{{ numberInput }}" label="数量" type="number" input-align="right">
+            <label slot="right-icon">个</label>
+        </van-field>
+    </view>
+    <van-uploader style="margin: 8px;" accept="image" multiple="true" upload-text="用图片见证一下吧" bind:after-read="afterImgRead" file-list="{{ imgList }}" />
+</van-cell-group>
+<button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享到微信运动</button>
+<button style="margin-top: 16px;">Back</button>
+<!-- <view>
+    <form bindsubmit="bindSubmit">
+        <picker mode="date" bindchange="bindDateChange" value="{{date}}">
+            <view>
+                时间：{{date}}
+            </view>
+        </picker>
+    </form>
+</view> -->
