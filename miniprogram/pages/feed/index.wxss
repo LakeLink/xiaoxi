@@ -1,0 +1,29 @@
+/* pages/feed/index.wxss */
+.class{
+    margin-top: 10px; 
+    margin-right: 10px;
+}
+.classtitle{
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    height: 30px;
+    margin-left: 20px ;
+}
+.classcontent{
+    display: block;
+    margin-left: 10px;
+    line-height: 19px;
+
+}
+.classuser{
+    display: block;
+    font-size: 10px;
+    margin-top:2px;
+    margin-left: 5px;
+}
+.flex-wrp{
+    display:flex;
+    margin-top: 10px;
+    margin-left: 20px;
+}

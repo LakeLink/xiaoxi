@@ -6,6 +6,8 @@
   <view class="top_tip">免鉴权接口调用 免部署后台 高并发</view>
 
   <navigator url="/pages/exercise-now/exercise-now" style="text-align: center;">点这里</navigator>
+  <navigator url="/pages/feed/good" style="text-align: center;">点这里</navigator>
+  <navigator url="/pages/feed/index" style="text-align: center;">点这里</navigator>
   <view class="power" wx:key="title" wx:for="{{powerList}}" wx:for-item="power">
     <view class="power_info" data-index="{{index}}" bindtap="onClickPowerInfo">
       <view class="power_info_text">

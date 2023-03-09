@@ -1,0 +1,16 @@
+<!--pages/feed/index.wxml-->
+
+<view>
+    <image src="{{ imgUrl }}" mode="aspectFill" style="height: 150px;"></image>
+</view>
+
+<view class="flex-wrp" style="flex-direction:row;">
+    <image src="{{ imgUrlheart }}" style="height: 30px;"></image>
+    <text style="margin-left: 5px; margin-top: 5px;">{{number_of_likes}}</text>
+    <image src="{{ imgUrlshare }}" style="margin-left: 200px; margin-right: 20px; height: 30px;"></image>
+</view>
+<view class="class">
+    <text space="bmsp" class="classtitle">{{title}} </text>
+    <text space="bmsp" class="classcontent">{{content}} </text>
+    <text space="bmsp" class="classuser">{{user}}</text>
+</view>

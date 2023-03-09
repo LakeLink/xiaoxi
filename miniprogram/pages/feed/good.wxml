@@ -1,0 +1,25 @@
+<!--pages/feed/good.wxml-->
+
+<van-cell-group>
+<view><image src="{{ imgUrl }}" mode="aspectFill" style="height: 150px;"></image>
+</view>
+    
+    <!-- <textarea style="min-height: 100px;" auto-height="true"></textarea> -->
+    <van-field
+        model:value="{{ message }}"
+        class="feed-input"
+        type="textarea"
+        placeholder="请输入"
+        
+        border="{{ false }}"
+    />
+    <!-- <van-uploader 
+        preview-size="100px"
+        accept="image" 
+        multiple="true" 
+        max-count="1"
+        bind:after-read="afterImgRead" 
+        file-list="{{ List }}" 
+    /> -->
+    <button style="margin-top: 24px;" type="primary"  bindtap="bindSubmit">分享动态</button>
+</van-cell-group>
