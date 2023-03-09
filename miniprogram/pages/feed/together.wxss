@@ -1,0 +1,38 @@
+/* pages/feed/together.wxss */
+.card {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background: white;
+    padding: 10px;
+    /* border:1px solid gray; */
+    border-radius: 8px;
+}
+
+.title {
+    font-size: large;
+    font-weight: bold;
+}
+
+.author {
+    color: green;
+}
+
+.content {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.action {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 10px;
+}
+
+.description {
+    font-size: large;
+    display: block;
+}

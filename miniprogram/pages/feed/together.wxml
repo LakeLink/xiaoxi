@@ -1,0 +1,19 @@
+<!--pages/feed/together.wxml-->
+
+<view class="card">
+    <text class="title">{{title}} </text>
+    <text class="author">{{user}}</text>
+    <text class="description">2023.03.17 - 西湖大学（云谷校区）</text>
+    <rich-text class="content">{{content}} </rich-text>
+    <view class="action">
+        <view style="flex-grow: 8;">
+            <text style="color: grey; font-size: small;">3小时前</text>
+        </view>
+        <view style="flex-grow: 4;" >
+            <text>{{number_of_likes}}人想去</text>
+        </view>
+        <view style="flex: auto;">
+            <van-button icon="smile-comment-o" type="primary">加我一个</van-button>
+        </view>
+    </view>
+</view>

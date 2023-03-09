@@ -2,4 +2,5 @@
 <van-cell-group inset>
   <van-cell title="运动打卡" url="/pages/exercise-now/exercise-now" is-link/>
   <van-cell title="详情展示" url="/pages/feed/index" is-link/>
+  <van-cell title="Together®" url="/pages/feed/together" is-link/>
 </van-cell-group>
