@@ -1,23 +1,25 @@
 <!--pages/feed/index.wxml-->
+<view wx:for="{{ weRunDetails }}">
 
-<image src="{{ imgUrl }}" mode="aspectFill" style="width: 100%; height: 200px;"></image>
-<view>
-    <view class="flex-wrp" style="flex-direction:row;">
-    </view>
-    <view class="container">
-        <text class="title">{{title}} </text>
-        <text class="author">{{user}}</text>
-        <rich-text class="content">{{content}} </rich-text>
-        <view class="action">
-            <view style="flex-grow: 2; color: red;" >
-                <van-icon name="like"/>
-                <text style="margin-left: 5px;">{{number_of_likes}}</text>
-            </view>
-            <view style="flex-grow: 2;">
-                <van-icon name="share-o" /> 分享
-            </view>
-            <view style="flex-grow: 4; display: flex; justify-content: flex-end;">
-                <text class="description">2022.02.17 - 西湖大学（云谷校区）</text>
+    <image src="{{ item.images[0] }}" mode="aspectFill" style="width: 100%; height: 200px;"></image>
+    <view>
+        <view class="flex-wrp" style="flex-direction:row;">
+        </view>
+        <view class="container">
+            <text class="title">{{item.exerciseType}} </text>
+            <text class="author">@{{item._openid}}</text>
+            <rich-text class="content">{{item.textContent}} </rich-text>
+            <view class="action">
+                <view style="flex-grow: 2; color: red;">
+                    <van-icon name="like" />
+                    <text style="margin-left: 5px;">{{number_of_likes}}</text>
+                </view>
+                <view style="flex-grow: 2;">
+                    <van-icon name="share-o" /> 分享
+                </view>
+                <view style="flex-grow: 4; display: flex; justify-content: flex-end;">
+                    <text class="description">2022.02.17 - 西湖大学（云谷校区）</text>
+                </view>
             </view>
         </view>
     </view>

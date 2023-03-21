@@ -24,7 +24,12 @@
             <label slot="right-icon">个</label>
         </van-field>
     </view>
-    <van-uploader style="margin: 8px;" accept="image" multiple="true" upload-text="用图片见证一下吧" bind:after-read="afterImgRead" file-list="{{ imgList }}" />
+    <view style="background-color: white; padding: 16px;">
+        <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}" />
+    </view>
+    <view style="background-color: white; padding: 16px;">
+        <van-uploader accept="image" multiple="true" upload-text="配个图?" image-fit="aspectFit" bind:after-read="afterImgRead" file-list="{{ imgList }}" max-count="9" />
+    </view>
 </van-cell-group>
 <button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享到微信运动</button>
 <button style="margin-top: 16px;">Back</button>

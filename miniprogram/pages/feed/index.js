@@ -5,6 +5,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        weRunDetails: [],
         imgUrl: "https://blog.playo.co/wp-content/uploads/2019/02/shutterstock_794204539-scaled.jpg",
         title: "羽毛球",
         number_of_likes:"11",
@@ -16,7 +17,12 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-
+        const db = wx.cloud.database()
+        db.collection('WeRunDetail').get().then(r => {
+            this.setData({
+                weRunDetails: r.data
+            })
+        })
     },
 
     /**
