@@ -6,6 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@vant/weapp": "^1.10.13"
+    "@vant/weapp": "^1.10.13",
+    "dayjs": "^1.11.7"
   }
 }

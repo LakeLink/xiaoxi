@@ -24,6 +24,10 @@
         "navigationBarTitleText": "小贝爱运动",
         "navigationBarTextStyle": "black"
     },
+    "resolveAlias": {
+        "~/*": "/*",
+        "@3rdparty/*": "3rdparty/*"
+    },
     "sitemapLocation": "sitemap.json",
     "style": "v2"
 }
