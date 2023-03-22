@@ -1,8 +1,8 @@
 <!--pages/exercise-now/exercise-now.wxml-->
 
 <van-cell-group title="运动打卡" inset="true">
-    <van-cell title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
-    <van-calendar show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
+    <!-- <van-cell title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
+    <van-calendar show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" /> -->
 
 
     <picker mode="selector" bindchange="bindActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">

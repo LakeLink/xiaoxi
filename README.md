@@ -4,16 +4,18 @@
 
 ### Path
 
-* /WeRunDetail
+* /WeRunDetails/{WeRunDetails.Id}/img{index}: User uploaded images
 
 ## Database System
 
 ### Collections
 
-#### WeRunDetail
+#### WeRunDetails
 
 * when (Date)
-* exerciseType (Number)
+* likedBy (openid[])
+* exerciseType (String)
+* exerciseTypeId (Number)
 * unit (String)
 * numericData (Number)
 * textContent (String)

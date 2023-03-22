@@ -8,7 +8,7 @@ Page({
         openCalendar: false,
         date: "",
         textInput: "",
-        activity: {},
+        activity: null,
         /*
         运动类型	typeId	支持传入单位
         锻炼	1001	time/calorie
@@ -119,7 +119,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad() {
-
+        wx.cloud.init();
     },
 
     /**
@@ -192,103 +192,83 @@ Page({
         })
     },
 
-    bindActivityChange: function (e) {
+    bindActivityChange(e) {
         console.log('picker event:', e)
         this.setData({
             activity: this.data.activities[e.detail.value]
         })
     },
 
-    bindSubmit: function (e) {
+    bindSubmit(e) {
         console.log("submit event:", e)
         console.log(this.data)
         const db = wx.cloud.database()
-        const col = db.collection('WeRunDetail')
+        const col = db.collection('WeRunDetails')
 
         col.add({
             data: {
-                when: this.date,
-                exerciseType: this.data.activity.typeId,
+                when: db.serverDate(),
+                exerciseType: this.data.activity.name,
+                exerciseTypeId: this.data.activity.typeId,
                 unit: this.data.activity.unit,
                 numericData: this.data.numberInput,
                 textContent: this.data.textInput,
                 images: []
             }
         }).then(r => {
-            this.uploadImgToCloud(`WeRunDetail/${r._id}/`)
-            .then(uploadResult => {
-                console.log(uploadResult)
-                col.doc(r._id).update({
-                    data: {
-                        images: uploadResult.map((file, index) => file.fileID)
-                    }
+            this.uploadImgsToCloud(`WeRunDetails/${r._id}/img`)
+                .then(uploadResult => {
+                    console.log(uploadResult)
+                    col.doc(r._id).update({
+                        data: {
+                            images: uploadResult.map((file, index) => file.fileID)
+                        }
+                    })
                 })
-            })
         })
+        let recordList = []
         switch (this.data.activity.unit) {
             case "number":
-                wx.shareToWeRun({
-                    recordList: [{
-                        typeId: this.data.activity.typeId,
-                        number: parseInt(this.data.numberInput)
-                    }],
-                    success(res) {
-                        wx.showToast({
-                            title: '打卡成功'
-                        })
-                    },
-                    fail(res) {
-                        wx.showToast({
-                            title: '打卡失败'
-                        })
-                        console.log(res)
-                    }
+                recordList.push({
+                    typeId: this.data.activity.typeId,
+                    number: parseInt(this.data.numberInput)
                 })
                 break;
             case "distance":
-                wx.shareToWeRun({
-                    recordList: [{
-                        typeId: this.data.activity.typeId,
-                        distance: Math.round(parseFloat(this.data.numberInput) * 1000)
-                    }],
-                    success(res) {
-                        wx.showToast({
-                            title: '打卡成功'
-                        })
-                    },
-                    fail(res) {
-                        wx.showToast({
-                            title: '打卡失败',
-                            icon: 'error'
-                        })
-                        console.log(res)
-                    }
+                recordList.push({
+                    typeId: this.data.activity.typeId,
+                    distance: Math.round(parseFloat(this.data.numberInput) * 1000)
                 })
                 break;
             case "time":
-                wx.shareToWeRun({
-                    recordList: [{
-                        typeId: this.data.activity.typeId,
-                        time: parseInt(this.data.numberInput)
-                    }],
-                    success(res) {
-                        wx.showToast({
-                            title: '打卡成功'
-                        })
-                    },
-                    fail(res) {
-                        wx.showToast({
-                            title: '打卡失败',
-                            icon: 'error'
-                        })
-                        console.log(res)
-                    }
+                recordList.push({
+                    typeId: this.data.activity.typeId,
+                    time: parseInt(this.data.numberInput)
                 })
                 break;
-
             default:
-                break;
+                wx.showToast({
+                  title: 'Error: ILLEGAL_EXERCISE_UNIT',
+                  icon: 'error'
+                })
+                return
         }
+
+        wx.shareToWeRun({
+            recordList,
+            success(res) {
+                wx.showToast({
+                    title: '打卡成功'
+                })
+            },
+            fail(res) {
+                wx.showToast({
+                    title: '打卡失败',
+                    icon: 'error'
+                })
+                console.log(res)
+            }
+        })
     },
 
     bindNumberInput: function (e) {
@@ -306,18 +286,11 @@ Page({
         });
     },
 
-    uploadImgToCloud(filePrefix) {
-        wx.cloud.init();
-        console.log(`${filePrefix}`)
+    uploadImgsToCloud(filePrefix) {
         const {
             imgList
         } = this.data;
-        if (!imgList.length) {
-            wx.showToast({
-                title: '请选择图片',
-                icon: 'none'
-            });
-        } else {
+        if (imgList.length) {
             const uploadTasks = imgList.map((file, index) => wx.cloud.uploadFile({
                 cloudPath: `${filePrefix}${index}`,
                 filePath: file.url
