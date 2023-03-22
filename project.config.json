@@ -24,7 +24,9 @@
         "useApiHook": true,
         "useApiHostProcess": true,
         "babelSetting": {
-            "ignore": [],
+            "ignore": [
+                "utils/3rdparty/*"
+            ],
             "disablePlugins": [],
             "outputPath": ""
         },
