@@ -4,6 +4,9 @@
     <van-cell title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
     <van-calendar show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
 
+    <van-field model:value="{{ location }}" label="地点" input-align="right">
+    </van-field>
+
     <picker mode="selector" bindchange="bindActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
         <van-cell title="运动项目" value="{{ activity.name }}" is-link></van-cell>
     </picker>

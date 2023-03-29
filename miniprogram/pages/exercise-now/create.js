@@ -112,6 +112,7 @@ Page({
             },
         ],
         numberInput: "",
+        location: "",
         fileList: []
     },
 
