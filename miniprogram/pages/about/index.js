@@ -13,7 +13,7 @@ Page({
         college: "未选择",
         collegeIndex: 0,
         collegeList: ["α", "β", "γ", "δ"],
-        year: "请选择",
+        year: "",
         avatarUrl: defaultAvatarUrl,
     },
     onChooseAvatar(e) {
