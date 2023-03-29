@@ -205,8 +205,8 @@ Page({
         const db = wx.cloud.database()
         const col = db.collection('WeRunDetails')
 
-        let images = this.data.fileList.filter(e => e.isImage),
-            videos = this.data.fileList.filter(e => e.isVideo)
+        let images = this.data.fileList.filter(e => e.type == "image"),
+            videos = this.data.fileList.filter(e => e.type == "video")
         col.add({
             data: {
                 when: db.serverDate(),
@@ -299,7 +299,11 @@ Page({
     },
 
     fileDelete(e) {
-        this.fileList.splice(e.detail.index)
+        console.log(e)
+        this.data.fileList.splice(e.detail.index);
+        this.setData({
+            fileList: this.data.fileList
+        });
     },
 
     uploadFilesToCloud(fileList, filePrefix) {
