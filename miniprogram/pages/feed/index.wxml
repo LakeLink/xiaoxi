@@ -18,7 +18,7 @@
                         <van-icon name="share-o" /> 分享
                     </view>
                     <view style="flex-grow: 4; display: flex; justify-content: flex-end;">
-                        <text class="description">{{item.when}} - 西湖大学（云谷校区）</text>
+                        <text class="description">{{item.when}} - {{item.location}}</text>
                     </view>
                 </view>
             </view>

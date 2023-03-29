@@ -19,6 +19,7 @@
 * unit (String)
 * numericData (Number)
 * textContent (String)
+* location (string)
 * images (string[])
 * videos (string[])
 

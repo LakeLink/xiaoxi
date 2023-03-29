@@ -216,6 +216,7 @@ Page({
                 unit: this.data.activity.unit,
                 numericData: this.data.numberInput,
                 textContent: this.data.textInput,
+                location: this.data.location,
                 images: [],
                 videos: []
             }
