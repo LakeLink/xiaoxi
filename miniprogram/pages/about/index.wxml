@@ -22,19 +22,20 @@
     <van-field model:value="{{realname}}" required placeholder="请输入真实姓名" label="真实姓名"></van-field>
     <van-field model:value="{{hobby}}" required placeholder="输入运动喜好" label="运动喜好">
     </van-field>
-    <van-field required clearable label="书院">
-        <picker style="width: 100%; height: 100%;" slot="input" bindchange="onPickerChange" value="{{collegeIndex}}" range="{{collegeList}}">
-            {{college}}
-            <van-icon name="arrow-down"></van-icon>
-        </picker>
-    </van-field>
+    <picker bindchange="onPickerChange" value="{{collegeIndex}}" range="{{collegeList}}">
+        <van-field required label="书院">
+            <view slot="input">{{college}}
+                <van-icon name="arrow-down" />
+            </view>
+        </van-field>
+    </picker>
     <!-- <van-field label="入学年份">
         <picker style="width: 100%; height: 100%;" slot="input" model:value="{{year}}" mode="date" fields="year">
             {{year}}
             <van-icon name="arrow-down"></van-icon>
         </picker>
     </van-field> -->
-    
+
     <van-field model:value="{{year}}" placeholder="输入入学年份" type="digit" label="入学年份">
     </van-field>
     <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">

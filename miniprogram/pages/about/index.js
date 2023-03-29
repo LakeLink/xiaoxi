@@ -14,6 +14,7 @@ Page({
         collegeIndex: 0,
         collegeList: ["α", "β", "γ", "δ"],
         year: "",
+        age: "",
         avatarUrl: defaultAvatarUrl,
     },
     onChooseAvatar(e) {
