@@ -112,7 +112,7 @@ Page({
             },
         ],
         numberInput: "",
-        imgList: []
+        fileList: []
     },
 
     /**
@@ -205,6 +205,8 @@ Page({
         const db = wx.cloud.database()
         const col = db.collection('WeRunDetails')
 
+        let images = this.data.fileList.filter(e => e.isImage),
+            videos = this.data.fileList.filter(e => e.isVideo)
         col.add({
             data: {
                 when: db.serverDate(),
@@ -213,15 +215,25 @@ Page({
                 unit: this.data.activity.unit,
                 numericData: this.data.numberInput,
                 textContent: this.data.textInput,
-                images: []
+                images: [],
+                videos: []
             }
         }).then(r => {
-            this.uploadImgsToCloud(`WeRunDetails/${r._id}/img`)
+            this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
                 .then(uploadResult => {
                     console.log(uploadResult)
                     col.doc(r._id).update({
                         data: {
                             images: uploadResult.map((file, index) => file.fileID)
+                        }
+                    })
+                })
+            this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
+                .then(uploadResult => {
+                    console.log(uploadResult)
+                    col.doc(r._id).update({
+                        data: {
+                            videos: uploadResult.map((file, index) => file.fileID)
                         }
                     })
                 })
@@ -248,8 +260,8 @@ Page({
                 break;
             default:
                 wx.showToast({
-                  title: 'Error: ILLEGAL_EXERCISE_UNIT',
-                  icon: 'error'
+                    title: 'Error: ILLEGAL_EXERCISE_UNIT',
+                    icon: 'error'
                 })
                 return
         }
@@ -278,20 +290,21 @@ Page({
         })
     },
 
-    afterImgRead: function (e) {
+    afterFileRead(e) {
         console.log(e)
-        this.data.imgList.push(...e.detail.file);
+        this.data.fileList.push(...e.detail.file);
         this.setData({
-            imgList: this.data.imgList
+            fileList: this.data.fileList
         });
     },
 
-    uploadImgsToCloud(filePrefix) {
-        const {
-            imgList
-        } = this.data;
-        if (imgList.length) {
-            const uploadTasks = imgList.map((file, index) => wx.cloud.uploadFile({
+    fileDelete(e) {
+        this.fileList.splice(e.detail.index)
+    },
+
+    uploadFilesToCloud(fileList, filePrefix) {
+        if (fileList.length) {
+            const uploadTasks = fileList.map((file, index) => wx.cloud.uploadFile({
                 cloudPath: `${filePrefix}${index}`,
                 filePath: file.url
             }));

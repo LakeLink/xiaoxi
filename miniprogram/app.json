@@ -12,7 +12,7 @@
         "pages/updateRecordSuccess/index",
         "pages/sumRecord/index",
         "pages/sumRecordResult/index",
-        "pages/exercise-now/exercise-now",
+        "pages/exercise-now/create",
         "pages/feed/index",
         "pages/feed/good",
         "pages/feed/together"
@@ -23,6 +23,18 @@
         "navigationBarBackgroundColor": "#F6F6F6",
         "navigationBarTitleText": "小贝爱运动",
         "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "list": [{
+            "pagePath": "pages/index/index",
+            "text": "首页"
+        }, {
+            "pagePath": "pages/feed/index",
+            "text": "运动打卡"
+        }, {
+            "pagePath": "pages/feed/together",
+            "text": "运动搭子"
+        }]
     },
     "resolveAlias": {
         "~/*": "/*",
