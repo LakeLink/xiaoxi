@@ -1,0 +1,39 @@
+<!--pages/about/index.wxml-->
+<van-cell-group inset>
+    <van-cell>
+        <view slot="icon">
+            <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+                <image mode="aspectFit" class="avatar" src="{{avatarUrl}}"></image>
+            </button>
+        </view>
+        <view slot="title" style="margin-left: 20px; margin-top: 2px;">
+            <text class="main-title">{{ nickname }}</text>
+            <text class="second-title">{{ realname }}</text>
+        </view>
+    </van-cell>
+
+    <van-field model:value="{{bio}}" placeholder="说点什么" type="digit" label="Bio">
+    </van-field>
+
+    <van-field required clearable label="昵称">
+        <input slot="input" type="nickname" placeholder="请输入昵称" model:value="{{nickname}}" />
+    </van-field>
+
+    <van-field model:value="{{realname}}" required placeholder="请输入真实姓名" label="真实姓名"></van-field>
+    <van-field model:value="{{hobby}}" required placeholder="输入运动喜好" label="运动喜好">
+    </van-field>
+    <van-field required clearable label="书院">
+        <picker style="width: 100%; height: 100%;" slot="input" bindchange="onPickerChange" value="{{collegeIndex}}" range="{{collegeList}}">
+            {{college}}
+            <van-icon name="arrow-down"></van-icon>
+        </picker>
+    </van-field>
+    <van-field label="入学年份">
+        <picker style="width: 100%; height: 100%;" slot="input" model:value="{{year}}" mode="date" fields="year">
+            {{year}}
+            <van-icon name="arrow-down"></van-icon>
+        </picker>
+    </van-field>
+    <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">
+    </van-field>
+</van-cell-group>
