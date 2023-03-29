@@ -36,3 +36,10 @@
     font-size: large;
     display: block;
 }
+
+.add {
+    border-radius: 999px;
+    padding: 12px;
+    background: var(--button-primary-background-color, #07c160);
+    color: var(--button-primary-color, #fff);
+}
