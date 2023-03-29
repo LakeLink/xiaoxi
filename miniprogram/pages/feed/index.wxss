@@ -34,8 +34,11 @@
 }
 
 .add {
-    border-radius: 10px;
-    padding: 7px;
+    border-radius: 15px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
     background: var(--button-primary-background-color, #07c160);
     color: var(--button-primary-color, #fff);
 }
