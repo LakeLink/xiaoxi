@@ -1,7 +1,11 @@
 <!--pages/feed/index.wxml-->
 <view style="padding-bottom: 20px;">
-    <view wx:for="{{ weRunDetails }}" style="margin-bottom: 20px;">
-        <image src="{{ item.images[0] }}" mode="aspectFill" style="width: 100%; height: 200px;"></image>
+    <view wx:key="_id" wx:for="{{ weRunDetails }}" style="margin-bottom: 20px;">
+        <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
+            <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
+                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-id="{{index}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
+            </swiper-item>
+        </swiper>
         <view>
             <view class="flex-wrp" style="flex-direction:row;">
             </view>
@@ -24,7 +28,7 @@
             </view>
         </view>
     </view>
-    <text style="display: block;color: grey; text-align: center; white-space: pre;">————    已经到底了    ————</text>
+    <text style="display: block;color: grey; text-align: center; white-space: pre;">———— 已经到底了 ————</text>
 </view>
 
 

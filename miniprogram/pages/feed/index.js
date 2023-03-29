@@ -21,20 +21,31 @@ Page({
         user: "@wxj"
     },
 
+    async refresh() {
+        const db = wx.cloud.database()
+        const r = await db.collection('WeRunDetails').get()
+        r.data.forEach(e => {
+            e.when = dayjs(e.when).fromNow()
+        })
+        this.setData({
+            weRunDetails: r.data
+        })
+        console.log(this.data.weRunDetails)
+    },
+
+    onImgTap(e) {
+        wx.previewImage({
+          urls: this.data.weRunDetails[e.target.dataset.id].images,
+          current: this.data.weRunDetails[e.target.dataset.id].images[e.target.dataset.imgId]
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        const db = wx.cloud.database()
-        db.collection('WeRunDetails').get().then(r => {
-            r.data.forEach(e => {
-                e.when = dayjs(e.when).fromNow()
-            })
-            this.setData({
-                weRunDetails: r.data
-            })
-            console.log(this.data.weRunDetails)
-        })
+        console.log("onLoad")
+        // this.refresh()
     },
 
     /**
@@ -48,7 +59,8 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        console.log("onShow")
+        this.refresh()
     },
 
     /**
@@ -69,7 +81,10 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-
+        this.refresh().then(() => {
+            console.log("Finished")
+            wx.stopPullDownRefresh()
+        })
     },
 
     /**
