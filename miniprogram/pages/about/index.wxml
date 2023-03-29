@@ -12,7 +12,7 @@
         </view>
     </van-cell>
 
-    <van-field model:value="{{bio}}" placeholder="说点什么" type="digit" label="Bio">
+    <van-field model:value="{{bio}}" placeholder="说点什么" label="Bio">
     </van-field>
 
     <van-field required clearable label="昵称">
