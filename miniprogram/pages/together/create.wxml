@@ -1,0 +1,36 @@
+<!--pages/together/create.wxml-->
+<van-cell-group title="运动搭子" inset="true">
+    <van-cell required title="运动日期" is-link value="{{date}}" bind:click="openCalendar" />
+    <van-calendar show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
+
+    <picker mode="time" value="{{time}}" bindchange="onTimeChange">
+        <van-cell required title="开始时间" is-link value="{{ time }}" />
+    </picker>
+
+    <van-field required model:value="{{ sportsType }}" label="运动项目" placeholder="玩什么？"></van-field>
+
+    <van-field required model:value="{{ location }}" label="地点" placeholder="场地？校区？">
+    </van-field>
+
+    <van-field required model:value="{{ limit }}" label="人数" type="digit" placeholder="多少小伙伴？">
+    </van-field>
+
+    <view style="background-color: white; padding: 16px;">
+        <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}"></textarea>
+    </view>
+
+    <view style="background-color: white; padding: 16px;">
+        <van-uploader accept="image" multiple="true" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ fileList }}" max-count="9" />
+    </view>
+</van-cell-group>
+<button style="margin-top: 24px;" type="primary" bindtap="onSubmit">发送</button>
+<button style="margin-top: 16px;">存草稿</button>
+<!-- <view>
+    <form bindsubmit="bindSubmit">
+        <picker mode="time" bindchange="bindDateChange" value="{{date}}">
+            <view>
+                时间：{{date}}
+            </view>
+        </picker>
+    </form>
+</view> -->

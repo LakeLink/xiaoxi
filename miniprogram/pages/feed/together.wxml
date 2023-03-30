@@ -19,6 +19,6 @@
 </view>
 
 
-<navigator url="/pages/exercise-now/create">
+<navigator url="/pages/together/create">
     <van-icon class="add" size="20px" name="plus" />
 </navigator>

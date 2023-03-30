@@ -23,6 +23,19 @@
 * images (string[])
 * videos (string[])
 
+#### TogetherDetails
+
+* sportsType (string)
+* publishedAt (serverDate)
+* scheduledAt (Date)
+* location (string)
+* description (string)
+* limit (number)
+* images (string[])
+* partners (openid[])
+* waitList (openid[])
+
+
 ## 3rdparty 目录
 因为微信不懂 npm 构建，很多包中非直接引用的文件无法使用
 
