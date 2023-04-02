@@ -15,8 +15,8 @@
     <van-field model:value="{{bio}}" placeholder="说点什么" label="Bio">
     </van-field>
 
-    <van-field required clearable label="昵称">
-        <input slot="input" type="nickname" placeholder="请输入昵称" model:value="{{nickname}}" />
+    <van-field model:value="{{nickname}}"  required clearable label="昵称">
+       <input slot="input" type="nickname" placeholder="请输入昵称" model:value="{{nickname}}" /> 
     </van-field>
 
     <van-field model:value="{{realname}}" required placeholder="请输入真实姓名" label="真实姓名"></van-field>
@@ -41,3 +41,4 @@
     <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">
     </van-field>
 </van-cell-group>
+<button style="margin-top: 24px;" type="primary" bindtap="InfSubmit">保存</button>
