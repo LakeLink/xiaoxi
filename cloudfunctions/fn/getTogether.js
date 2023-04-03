@@ -38,10 +38,10 @@ exports.main = async (event, context) => {
         as: 'host'
     }).end()
     console.log(r)
-    return Promise.all(r.list.map(async e => {
+    return r.list.map(e => {
         e.isFull = e.partners.length >= e.limit
         e.alreadyJoined = e.partners.includes(OPENID) || e.waitList.includes(OPENID)
         e.host = e.host[0]
         return e
-    }))
+    })
 }
