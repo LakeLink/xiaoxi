@@ -13,11 +13,9 @@ Page({
      * 页面的初始数据
      */
     data: {
-        imgUrl: "https://blog.playo.co/wp-content/uploads/2019/02/shutterstock_794204539-scaled.jpg",
-        title: "羽毛球",
-        number_of_likes:"11",
-        content:"17号 艺哥和胡印良品约定大战三百回合，如果艺哥输了就得在书院献唱一曲。来观战的速报到👇",
-        user:"@wxj"
+        showPopup: false,
+        // waitListUserinfo: null,
+        popupIndex: null
     },
 
     async refresh() {
@@ -50,8 +48,8 @@ Page({
         }).then(r => {
             if (r.full) {
                 wx.showToast({
-                  title: '队伍已满，已加入到候补',
-                  icon: 'none'
+                    title: '队伍已满，已加入到候补',
+                    icon: 'none'
                 })
             }
             this.refresh()
@@ -60,10 +58,38 @@ Page({
 
     onImgTap(e) {
         wx.previewImage({
-          urls: this.data.togetherDetails[e.target.dataset.idx].images,
-          current: e.target.dataset.imgSrc
+            urls: this.data.togetherDetails[e.target.dataset.idx].images,
+            current: e.target.dataset.imgSrc
         })
     },
+
+    onPopupClose(e) {
+        this.setData({
+            showPopup: false
+        })
+    },
+
+    onTapOpenPopup(e) {
+        console.log(e.target.dataset.idx)
+        this.setData({
+            showPopup: true,
+            popupIndex: e.target.dataset.idx
+        })
+    },
+
+    // onTabChange(e) {
+    //     if (e.detail.index == 1) {
+    //         console.log(this.data.togetherDetails[this.data.popupIndex].waitList)
+    //         const db = wx.cloud.database()
+    //         const _ = db.command
+    //         const col = db.collection('Users')
+    //         col.aggregate().match({
+    //             _id: _.in(["oY_bj5cA6Cc8gfqkc35sOZtE3Nys"])
+    //         }).project({nickname: 1}).end().then(r => {
+    //             console.log(r)
+    //         })
+    //     }
+    // },
 
     /**
      * 生命周期函数--监听页面加载

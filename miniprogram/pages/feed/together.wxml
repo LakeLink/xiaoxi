@@ -1,4 +1,5 @@
 <!--pages/feed/together.wxml-->
+<!-- <page-meta page-style="{{ 'overflow: hidden;' }}" /> -->
 <view style="padding-bottom: 20px;">
     <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
         <text class="title">{{item.sportsType}} </text>
@@ -11,23 +12,57 @@
             </swiper-item>
         </swiper>
         <view class="action">
-            <view style="flex-grow: 8;">
+            <view style="margin-left: 8rpx; margin-right: 100rpx;">
                 <text style="color: grey; font-size: small;">{{item.deltaPublishedAt}}</text>
             </view>
-            <view style="flex-grow: 4;">
-                <text>{{item.partners.length + item.waitList.length}}人想去</text>
-            </view>
-            <view style="flex: auto;" wx:if="{{ !item.alreadyJoined }}">
-                <van-button wx:if="{{ !item.isFull }}" icon="smile-comment-o" type="primary" bind:click="onJoin" data-id="{{item._id}}">加我一个</van-button>
-                <van-button wx:if="{{ item.isFull }}" icon="smile-comment-o" type="secondary" bind:click="onJoin" data-id="{{item._id}}">加入候补</van-button>
-            </view>
-            <view style="flex: auto;" wx:if="{{ item.alreadyJoined }}">
-                已加入
+            <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
+                <button size="mini" style="margin: 0" bindtap="onTapOpenPopup" data-idx="{{index}}">{{item.partners.length + item.waitList.length}}人想去 / {{item.limit}}</button>
+                <view wx:if="{{ !item.alreadyJoined }}">
+                    <button wx:if="{{ item.unSatisfied }}" size="mini" type="primary" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                        <van-icon name="smile-comment-o"></van-icon>加我一个
+                    </button>
+                    <button wx:if="{{ !item.unSatisfied }}" size="mini" type="default" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                        <van-icon name="smile-comment-o"></van-icon>加入候补
+                    </button>
+                </view>
+                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;">
+                    已加入
+                </button>
             </view>
         </view>
     </view>
 </view>
 
+<van-popup position="bottom" closeable round show="{{ showPopup }}" bind:close="onPopupClose" >
+    <!-- 下划线显示不正确：https://vant-contrib.gitee.io/vant-weapp/#/tab#qian-tao-popup -->
+    <van-tabs wx:if="{{ showPopup }}">
+        <van-tab title="伙伴">
+            <scroll-view scroll-y style="height: 50vh">
+                <van-cell wx:for="{{ togetherDetails[popupIndex].partnerInfo }}">
+                    <view slot="icon">
+                        <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
+                    </view>
+                    <view slot="title" style="margin-left: 20px; margin-top: 2px;">
+                        <text class="main-title">{{ item.nickname }}</text>
+                        <text class="second-title">{{ item.realname }}</text>
+                    </view>
+                </van-cell>
+            </scroll-view>
+        </van-tab>
+        <van-tab title="候补">
+            <scroll-view scroll-y style="height: 50vh">
+                <van-cell wx:for="{{ togetherDetails[popupIndex].waitUserInfo }}">
+                    <view slot="icon">
+                        <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
+                    </view>
+                    <view slot="title" style="margin-left: 20px; margin-top: 2px;">
+                        <text class="main-title">{{ item.nickname }}</text>
+                        <text class="second-title">{{ item.realname }}</text>
+                    </view>
+                </van-cell>
+            </scroll-view></van-tab>
+    </van-tabs>
+</van-popup>
 
 <navigator url="/pages/together/create">
     <van-icon class="add" size="20px" name="plus" />

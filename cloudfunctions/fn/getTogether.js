@@ -21,9 +21,7 @@ exports.main = async (event, context) => {
     const r = await col.aggregate().lookup({
         from: 'Users',
         let: {
-            // openidList: $.setUnion(['$partners', '$waitList'])
-            p: '$partners',
-            w: '$waitList'
+            p: '$partners'
         },
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
                 nickname: true,
@@ -31,25 +29,43 @@ exports.main = async (event, context) => {
                 avatarUrl: true
             })
             .done(),
-        as: 'userList'
+        as: 'partnerInfo'
     }).lookup({
+        from: 'Users',
+        let: {
+            w: '$waitList'
+        },
+        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$w']))).project({
+                nickname: true,
+                realname: true,
+                avatarUrl: true
+            })
+            .done(),
+        as: 'waitUserInfo'
+    })
+    .lookup({
         from: 'Users',
         localField: '_openid',
         foreignField: '_id',
         as: 'host'
     }).addFields({
-        unsatisfied: $.gt(['$limit', $.size('$partners')])
+        unSatisfied: $.gt(['$limit', $.size('$partners')]),
+        expired: $.lte(['$scheduledAt', new Date()]),
+        alreadyJoined: $.or([$.in([OPENID, '$partners']), $.in([OPENID, '$waitList'])])
     }).sort({
         // 此处存在顺序
-        unsatisfied: -1,
-        scheduledAt: -1,
+        // 过期在后
+        expired: 1,
+        // 未过期：未满员在前
+        unSatisfied: -1,
+        // 未过期，未满员，近期（时间值小）在前
+        scheduledAt: 1,
         // Not likely to happen: Because `scheduledAt` actually has seconds part
-        publishedAt: -1,
+        publishedAt: 1,
     }).end()
     console.log(r)
     return r.list.map(e => {
-        e.isFull = e.partners.length >= e.limit
-        e.alreadyJoined = e.partners.includes(OPENID) || e.waitList.includes(OPENID)
+        // e.alreadyJoined = e.partners.includes(OPENID) || e.waitList.includes(OPENID)
         e.host = e.host[0]
         return e
     })

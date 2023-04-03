@@ -31,6 +31,9 @@
     align-items: baseline;
     margin-top: 10px;
 }
+.buttons {
+    height: 10rpx;
+}
 
 .description {
     font-size: large;
@@ -45,4 +48,18 @@
     padding: 10px;
     background: var(--button-primary-background-color, #07c160);
     color: var(--button-primary-color, #fff);
+}
+
+.main-title {
+    display: block;
+    font-weight: bold;
+    font-size: large;
+}
+.second-title {
+    display: block;
+    color: grey;
+}
+.avatar {
+    height: 50px;
+    width: 50px;
 }
