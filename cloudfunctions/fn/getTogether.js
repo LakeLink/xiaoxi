@@ -18,11 +18,30 @@ exports.main = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const r = await col.get()
+    const r = await col.aggregate().lookup({
+        from: 'Users',
+        let: {
+            // openidList: $.setUnion(['$partners', '$waitList'])
+            p: '$partners',
+            w: '$waitList'
+        },
+        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
+            nickname: true,
+            realname: true,
+            avatarUrl: true
+        }).done(),
+        as: 'userList'
+    }).lookup({
+        from: 'Users',
+        localField: '_openid',
+        foreignField: '_id',
+        as: 'host'
+    }).end()
     console.log(r)
-    return r.data.map(e => {
+    return Promise.all(r.list.map(async e => {
         e.isFull = e.partners.length >= e.limit
         e.alreadyJoined = e.partners.includes(OPENID) || e.waitList.includes(OPENID)
+        e.host = e.host[0]
         return e
-    })
+    }))
 }
