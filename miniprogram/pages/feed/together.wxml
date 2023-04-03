@@ -2,7 +2,7 @@
 <view style="padding-bottom: 20px;">
     <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
         <text class="title">{{item.sportsType}} </text>
-        <text class="author">@{{item._openid}}</text>
+        <text class="author">@{{item.host.nickname}}</text>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
         <rich-text class="content">{{item.description}} </rich-text>
         <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
