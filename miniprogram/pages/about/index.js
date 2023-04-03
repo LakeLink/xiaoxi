@@ -22,13 +22,33 @@ Page({
         const {
             avatarUrl
         } = e.detail
-        this.setData({
-            avatarUrl,
+        wx.showLoading({
+            title: '上传头像...'
         })
+        const regex = /[a-zA-Z0-9.]+$/;
+        
+        wx.cloud.uploadFile({
+            cloudPath: `Avatars/${new Date().getTime()}-${avatarUrl.match(regex)[0]}`,
+            filePath: avatarUrl
+        })
+        .catch(e => {
+            wx.hideLoading()
+            wx.showToast({
+                title: '头像上传失败',
+                icon: 'error'
+            })
+        })
+        .then(r => {
+            this.setData({
+                avatarUrl: r.fileID
+            })
+            wx.hideLoading()
+        })
+
     },
     onPickerChange: function (e) {
         //        const collegeIndex = e.detail.value, college = this.data.collegeList[e.detail.value] 
-        console.log('picker_college发送选择改变，携带值为', e.detail.value)
+        // console.log('picker_college发送选择改变，携带值为', e.detail.value)
         this.setData({
             collegeIndex: e.detail.value,
             college: this.data.collegeList[e.detail.value]
@@ -37,8 +57,17 @@ Page({
     onSubmit(e) {
         // console.log("submit event:", e.detail)
         // console.log("data:", this.data)
-        const { avatarUrl, bio, nickname, realname, hobby, collegeIndex, year, age } = this.data
-        if ( !avatarUrl || !nickname || !realname || !hobby || !collegeIndex) {
+        const {
+            avatarUrl,
+            bio,
+            nickname,
+            realname,
+            hobby,
+            collegeIndex,
+            year,
+            age
+        } = this.data
+        if (!avatarUrl || !nickname || !realname || !hobby || !collegeIndex) {
             wx.showToast({
                 title: '个人信息不完整',
                 icon: 'error'
@@ -48,63 +77,82 @@ Page({
                 name: 'fn',
                 data: {
                     type: 'saveUser',
-                    data: { avatarUrl, bio, nickname, realname, hobby, collegeIndex, year, age }
+                    data: {
+                        avatarUrl,
+                        bio,
+                        nickname,
+                        realname,
+                        hobby,
+                        collegeIndex,
+                        year,
+                        age
+                    }
                 }
+            }).then(r => {
+                if (r.result.created || r.result.updated) wx.showToast({
+                    title: '保存成功',
+                    icon: 'success'
+                })
+            }).catch(e => {
+                wx.showToast({
+                    title: '发生错误',
+                    icon: 'error'
+                })
             })
         }
         return
-        const db = wx.cloud.database()
-        const col = db.collection('WeUser_InfDetails')
-        wx.cloud.callFunction({
-            name: 'openid',
-            complete: res => {
-                //console.log('callFunction test result: ',res.result.userInfo.openId)
-                col.where({
-                    _openid: res.result.userInfo.openId,
-                }).count().then(ress => {
-                    console.log(ress)
-                    if (ress.total == 1) {
-                        col.where({
-                                _openid: res.result.userInfo.openId,
-                            })
-                            .update({
-                                data: {
-                                    posttime: db.serverDate(),
-                                    nickname: this.data.nickname,
-                                    realname: this.data.realname,
-                                    biography: this.data.bio,
-                                    hobby: this.data.hobby,
-                                    college: this.data.college,
-                                    collegeIndex: this.data.collegeIndex,
-                                    year: this.data.year,
-                                    age: this.data.age
-                                }
-                            }).then(ress => {
-                                console.log('text', ress)
-                            })
-                    } else {
-                        col.add({
-                            data: {
-                                posttime: db.serverDate(),
-                                nickname: this.data.nickname,
-                                realname: this.data.realname,
-                                biography: this.data.bio,
-                                hobby: this.data.hobby,
-                                college: this.data.college,
-                                collegeIndex: this.data.collegeIndex,
-                                year: this.data.year,
-                                age: this.data.age
-                            }
-                        }).then(res => {
-                            console.log(res)
-                        })
-                    }
+        // const db = wx.cloud.database()
+        // const col = db.collection('WeUser_InfDetails')
+        // wx.cloud.callFunction({
+        //     name: 'openid',
+        //     complete: res => {
+        //         //console.log('callFunction test result: ',res.result.userInfo.openId)
+        //         col.where({
+        //             _openid: res.result.userInfo.openId,
+        //         }).count().then(ress => {
+        //             console.log(ress)
+        //             if (ress.total == 1) {
+        //                 col.where({
+        //                         _openid: res.result.userInfo.openId,
+        //                     })
+        //                     .update({
+        //                         data: {
+        //                             posttime: db.serverDate(),
+        //                             nickname: this.data.nickname,
+        //                             realname: this.data.realname,
+        //                             biography: this.data.bio,
+        //                             hobby: this.data.hobby,
+        //                             college: this.data.college,
+        //                             collegeIndex: this.data.collegeIndex,
+        //                             year: this.data.year,
+        //                             age: this.data.age
+        //                         }
+        //                     }).then(ress => {
+        //                         console.log('text', ress)
+        //                     })
+        //             } else {
+        //                 col.add({
+        //                     data: {
+        //                         posttime: db.serverDate(),
+        //                         nickname: this.data.nickname,
+        //                         realname: this.data.realname,
+        //                         biography: this.data.bio,
+        //                         hobby: this.data.hobby,
+        //                         college: this.data.college,
+        //                         collegeIndex: this.data.collegeIndex,
+        //                         year: this.data.year,
+        //                         age: this.data.age
+        //                     }
+        //                 }).then(res => {
+        //                     console.log(res)
+        //                 })
+        //             }
 
-                })
+        //         })
 
-            }
+        //     }
 
-        })
+        // })
 
     },
     /**
