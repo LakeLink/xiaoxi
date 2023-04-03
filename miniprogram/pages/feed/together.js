@@ -58,6 +58,13 @@ Page({
         })
     },
 
+    onImgTap(e) {
+        wx.previewImage({
+          urls: this.data.togetherDetails[e.target.dataset.idx].images,
+          current: e.target.dataset.imgSrc
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
