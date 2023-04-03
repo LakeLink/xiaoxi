@@ -26,16 +26,25 @@ exports.main = async (event, context) => {
             w: '$waitList'
         },
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
-            nickname: true,
-            realname: true,
-            avatarUrl: true
-        }).done(),
+                nickname: true,
+                realname: true,
+                avatarUrl: true
+            })
+            .done(),
         as: 'userList'
     }).lookup({
         from: 'Users',
         localField: '_openid',
         foreignField: '_id',
         as: 'host'
+    }).addFields({
+        unsatisfied: $.gt(['$limit', $.size('$partners')])
+    }).sort({
+        // 此处存在顺序
+        unsatisfied: -1,
+        scheduledAt: -1,
+        // Not likely to happen: Because `scheduledAt` actually has seconds part
+        publishedAt: -1,
     }).end()
     console.log(r)
     return r.list.map(e => {
