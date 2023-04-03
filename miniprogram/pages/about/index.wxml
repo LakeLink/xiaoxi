@@ -3,8 +3,9 @@
     <van-cell>
         <view slot="icon">
             <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-                <image mode="aspectFit" class="avatar" src="{{avatarUrl}}"></image>
+                <image mode="aspectFit" class="avatar" src="{{avatarUrl ? avatarUrl : defaultAvatarUrl}}"></image>
             </button>
+            <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: grey;">点按修改头像</text>
         </view>
         <view slot="title" style="margin-left: 20px; margin-top: 2px;">
             <text class="main-title">{{ nickname }}</text>
@@ -41,4 +42,4 @@
     <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">
     </van-field>
 </van-cell-group>
-<button style="margin-top: 24px;" type="primary" bindtap="InfSubmit">保存</button>
+<button style="margin-top: 24px;" type="primary" bindtap="onSubmit">保存</button>
