@@ -1,19 +1,29 @@
 <!--pages/feed/together.wxml-->
-
-<view class="card">
-    <text class="title">{{title}} </text>
-    <text class="author">{{user}}</text>
-    <text class="description">2023.03.17 - 西湖大学（云谷校区）</text>
-    <rich-text class="content">{{content}} </rich-text>
-    <view class="action">
-        <view style="flex-grow: 8;">
-            <text style="color: grey; font-size: small;">3小时前</text>
-        </view>
-        <view style="flex-grow: 4;" >
-            <text>{{number_of_likes}}人想去</text>
-        </view>
-        <view style="flex: auto;">
-            <van-button icon="smile-comment-o" type="primary">加我一个</van-button>
+<view style="padding-bottom: 20px;">
+    <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
+        <text class="title">{{item.sportsType}} </text>
+        <text class="author">@{{item._openid}}</text>
+        <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
+        <rich-text class="content">{{item.description}} </rich-text>
+        <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
+            <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
+                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-id="{{index}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
+            </swiper-item>
+        </swiper>
+        <view class="action">
+            <view style="flex-grow: 8;">
+                <text style="color: grey; font-size: small;">{{item.deltaPublishedAt}}</text>
+            </view>
+            <view style="flex-grow: 4;">
+                <text>{{item.partners.length + item.waitList.length}}人想去</text>
+            </view>
+            <view style="flex: auto;" wx:if="{{ !item.alreadyJoined }}">
+                <van-button wx:if="{{ !item.isFull }}" icon="smile-comment-o" type="primary" bind:click="onJoin" data-id="{{item._id}}">加我一个</van-button>
+                <van-button wx:if="{{ item.isFull }}" icon="smile-comment-o" type="secondary" bind:click="onJoin" data-id="{{item._id}}">加入候补</van-button>
+            </view>
+            <view style="flex: auto;" wx:if="{{ item.alreadyJoined }}">
+                已加入
+            </view>
         </view>
     </view>
 </view>
