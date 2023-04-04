@@ -1,9 +1,9 @@
 /* pages/feed/index.wxss */
-.container {
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+.card {
+    margin: 10px;
+    background: white;
+    /* border:1px solid gray; */
+    border-radius: 8px;
 }
 
 .title {

@@ -1,29 +1,32 @@
 <!--pages/feed/index.wxml-->
 <view style="padding-bottom: 20px;">
-    <view wx:key="_id" wx:for="{{ weRunDetails }}" style="margin-bottom: 20px;">
+    <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" style="margin-bottom: 20px;">
         <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
-                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-id="{{index}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
+                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;  border-top-left-radius: 8px; border-top-right-radius: 8px;" data-id="{{index}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
             </swiper-item>
         </swiper>
-        <view>
-            <view class="flex-wrp" style="flex-direction:row;">
-            </view>
-            <view class="container">
-                <text class="title">{{item.exerciseType}} </text>
-                <text class="author">@{{item._openid}}</text>
-                <rich-text class="content">{{item.textContent}} </rich-text>
-                <view class="action">
-                    <view style="flex-grow: 2; color: red;">
-                        <van-icon name="like" />
-                        <text style="margin-left: 5px;">{{number_of_likes}}</text>
-                    </view>
-                    <view style="flex-grow: 2;">
-                        <van-icon name="share-o" /> 分享
-                    </view>
-                    <view style="flex-grow: 4; display: flex; justify-content: flex-end;">
-                        <text class="description">{{item.when}} - {{item.location}}</text>
-                    </view>
+        <view style="padding: 10px;">
+            <text class="title">{{item.exerciseType}} </text>
+            <text class="author">@{{item._openid}}</text>
+            <rich-text class="content">{{item.textContent}} </rich-text>
+
+            <view class="action">
+                <view style="margin-left: 2px;">
+                    <text style="color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
+                </view>
+                <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
+                    <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{index}}">
+                        <van-icon style="color: red;" name="like" />
+                        <text style="margin-left: 5px; color: pink;">11</text>
+                    </button>
+                    <button size="mini" bindtap="onComment" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                        <van-icon name="smile-comment-o"></van-icon>
+                        <text style="margin-left: 5px; color: grey;">2</text>
+                    </button>
+                    <button size="mini" bindtap="onShare" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                        <van-icon name="share-o" />
+                    </button>
                 </view>
             </view>
         </view>
