@@ -6,7 +6,7 @@
         <text class="author">@{{item.host.nickname}}</text>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
         <rich-text class="content">{{item.description}} </rich-text>
-        <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
+        <swiper wx:if="{{item.images.length}}" style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
                 <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-idx="{{index}}" data-imgSrc="{{imgItem}}" bindtap="onImgTap"></image>
             </swiper-item>
@@ -33,7 +33,7 @@
     </view>
 </view>
 
-<van-popup position="bottom" closeable round show="{{ showPopup }}" bind:close="onPopupClose" >
+<van-popup position="bottom" closeable round show="{{ showPopup }}" bind:close="onPopupClose">
     <!-- 下划线显示不正确：https://vant-contrib.gitee.io/vant-weapp/#/tab#qian-tao-popup -->
     <van-tabs wx:if="{{ showPopup }}">
         <van-tab title="伙伴">
@@ -60,7 +60,8 @@
                         <text class="second-title">{{ item.realname }}</text>
                     </view>
                 </van-cell>
-            </scroll-view></van-tab>
+            </scroll-view>
+        </van-tab>
     </van-tabs>
 </van-popup>
 
