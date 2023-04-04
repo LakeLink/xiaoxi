@@ -25,7 +25,7 @@
                         <van-icon name="smile-comment-o"></van-icon>加入候补
                     </button>
                 </view>
-                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;">
+                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuit" data-id="{{item._id}}">
                     已加入
                 </button>
             </view>

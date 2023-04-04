@@ -4,7 +4,6 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-// 获取openId云函数入口函数
 exports.join = async (event, context) => {
     // 获取基础信息
     const {
@@ -78,7 +77,6 @@ exports.join = async (event, context) => {
     }
 };
 
-// 获取openId云函数入口函数
 exports.get = async (event, context) => {
     // 获取基础信息
     const {
@@ -139,4 +137,26 @@ exports.get = async (event, context) => {
     console.log(r)
     r.list.forEach(e => e.host = e.host[0])
     return r.list
+}
+
+exports.quit = async (event, context) => {
+
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('TogetherDetails')
+    const _ = db.command
+    const $ = _.aggregate
+
+    return (await col.doc(event.id).update({
+        data: {
+            partners: _.pull(OPENID),
+            waitList: _.pull(OPENID)
+        }
+    })).stats
 }

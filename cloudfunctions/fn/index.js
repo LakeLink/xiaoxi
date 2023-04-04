@@ -9,6 +9,8 @@ exports.main = async function (event, context) {
             return await together.join(event, context)
         case 'getTogether':
             return await together.get(event, context)
+        case 'quitTogether':
+            return await together.quit(event, context)
         case 'getUser':
             return await user.read(event, context)
         case 'saveUser':

@@ -56,6 +56,36 @@ Page({
         })
     },
 
+    onQuit(e) {
+        wx.showModal({
+            title: '已加入',
+            content: '是否要退出该活动',
+            complete: (r) => {
+                if (r.confirm) {
+                    wx.cloud.callFunction({
+                        name: 'fn',
+                        data: {
+                            type: 'quitTogether',
+                            id: e.target.dataset.id
+                        }
+                    }).catch(e => wx.showToast({
+                        title: '数据错误',
+                        icon: 'error'
+                    })).then(r => {
+                        if (r.result.updated) {
+                            this.refresh()
+                        } else {
+                            wx.showToast({
+                                title: '记录未匹配',
+                                icon: 'error'
+                            })
+                        }
+                    })
+                }
+            }
+        })
+    },
+
     onImgTap(e) {
         wx.previewImage({
             urls: this.data.togetherDetails[e.target.dataset.idx].images,
