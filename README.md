@@ -22,6 +22,8 @@
 * location (string)
 * images (string[])
 * videos (string[])
+* likedBy (openid[])
+* comments ({author: openid, text: string, when: serverDate}[])
 
 #### TogetherDetails
 

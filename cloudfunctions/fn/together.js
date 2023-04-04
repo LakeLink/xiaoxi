@@ -116,8 +116,7 @@ exports.get = async (event, context) => {
             })
             .done(),
         as: 'waitUserInfo'
-    })
-    .lookup({
+    }).lookup({
         from: 'Users',
         localField: '_openid',
         foreignField: '_id',
@@ -138,9 +137,6 @@ exports.get = async (event, context) => {
         publishedAt: 1,
     }).end()
     console.log(r)
-    return r.list.map(e => {
-        // e.alreadyJoined = e.partners.includes(OPENID) || e.waitList.includes(OPENID)
-        e.host = e.host[0]
-        return e
-    })
+    r.list.forEach(e => e.host = e.host[0])
+    return r.list
 }
