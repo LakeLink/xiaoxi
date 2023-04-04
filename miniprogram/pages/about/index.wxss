@@ -12,3 +12,8 @@
     height: 50px;
     width: 50px;
 }
+.van-skeleton {
+    background-color: white;
+    --skeleton-padding: 16px;
+    --skeleton-row-height: 32px;
+}

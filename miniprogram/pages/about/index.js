@@ -17,6 +17,8 @@ Page({
         age: "",
         defaultAvatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
         avatarUrl: null,
+        skeletonRowWidth: [],
+        loading: true
     },
     onChooseAvatar(e) {
         const {
@@ -161,59 +163,6 @@ Page({
 
 
     onLoad(options) {
-        // const col = db.collection('WeUser_InfDetails')
-        // const da =this
-
-        // wx.cloud.callFunction({
-        //     name: 'openid',
-        //     complete: res => {
-        //       //console.log('callFunction test result: ',res.result.userInfo.openId)
-        //       col.where({
-        //         _openid: res.result.userInfo.openId,
-        //       }).count().then(ress=>{
-        //         console.log(ress)
-        //       })
-        //       col.where({
-        //         _openid: res.result.userInfo.openId,
-        //       })
-        //       .get({
-        //         success: function(ress) {
-        //           // res.data 是包含以上定义的两条记录的数组
-        //           //console.log('text',ress.data)
-        //           da.setData(ress.data[0])   
-        //           /*da.setData({
-        //                 nickname : ress.data[0].nickname,
-        //                 realname : ress.data[0].realname,
-        //                 bio : ress.data[0].biography,
-        //                 hobby : ress.data[0].hobby,
-        //                 college : ress.data[0].college,
-        //                 collegeIndex : ress.data[0].collegeIndex,
-        //                 year : ress.data[0].year,
-        //                 age : ress.data[0].age
-        //             })*/
-        //             /*
-        //             da.nickname = ress.data[0].nickname,
-        //             da.realname = ress.data[0].realname,
-        //             da.bio = ress.data[0].biography,
-        //             da.hobby = ress.data[0].hobby,
-        //             da.college = ress.data[0].college,
-        //             da.collegeIndex = ress.data[0].collegeIndex,
-        //             da.year = ress.data[0].year,
-        //             da.age = ress.data[0].age
-        //             console.log('text',ress.data[0].nickname,'datt',da)
-        //             */
-        //         }
-        //       })
-        //     }
-
-        //   })
-        //console.log('text','datt',da)
-    },
-
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady() {
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -221,8 +170,24 @@ Page({
             }
         }).then(r => {
             r.result.college = this.data.collegeList[r.result.collegeIndex]
-            this.setData(r.result)
+            this.setData({
+                loading: false,
+                ...r.result
+            })
         })
+        let skeletonRowWidth = []
+        for (let i = 0; i < 7; i++) {
+            skeletonRowWidth.push(`${(Math.random()*60+40).toFixed()}%`)        
+        }
+        this.setData({
+            skeletonRowWidth
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady() {
     },
 
     /**
