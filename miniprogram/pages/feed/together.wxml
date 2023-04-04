@@ -38,7 +38,7 @@
     <van-tabs wx:if="{{ showPopup }}">
         <van-tab title="伙伴">
             <scroll-view scroll-y style="height: 50vh">
-                <van-cell wx:for="{{ togetherDetails[popupIndex].partnerInfo }}">
+                <van-cell wx:key="_id" wx:for="{{ togetherDetails[popupIndex].partnerInfo }}">
                     <view slot="icon">
                         <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
                     </view>
@@ -51,7 +51,7 @@
         </van-tab>
         <van-tab title="候补">
             <scroll-view scroll-y style="height: 50vh">
-                <van-cell wx:for="{{ togetherDetails[popupIndex].waitUserInfo }}">
+                <van-cell wx:key="_id" wx:for="{{ togetherDetails[popupIndex].waitUserInfo }}">
                     <view slot="icon">
                         <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
                     </view>
