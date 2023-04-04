@@ -18,17 +18,10 @@ exports.join = async (event, context) => {
     const $ = _.aggregate
 
     let full = false
+    // https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-sdk-api/database/command/Command.addToSet.html
     let r = await col.where(_.and([{
                 _id: event.id
             },
-            // 没报名
-            _.nor([{
-                    partners: OPENID
-                },
-                {
-                    waitList: OPENID
-                }
-            ]),
             //人数没超
             _.expr(
                 $.lt([
@@ -39,23 +32,16 @@ exports.join = async (event, context) => {
         ]))
         .update({
             data: {
-                partners: _.push(OPENID)
+                partners: _.addToSet(OPENID)
             }
         })
         .then(r => {
             // 报满了
             if (!r || r.stats.updated == 0) {
+                full = true
                 return col.where(_.and([{
                         _id: event.id
                     },
-                    // 没报名
-                    _.nor([{
-                            partners: OPENID
-                        },
-                        {
-                            waitList: OPENID
-                        }
-                    ]),
                     //人数超了
                     _.expr(
                         $.gte([
@@ -66,7 +52,7 @@ exports.join = async (event, context) => {
                 ]))
                 .update({
                     data: {
-                        waitList: _.push(OPENID)
+                        waitList: _.addToSet(OPENID)
                     }
                 })
             } else return r

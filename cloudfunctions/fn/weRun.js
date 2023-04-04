@@ -19,15 +19,11 @@ exports.like = async (event, context) => {
 
     let r = await col.where(_.and([{
                 _id: event.id
-            },
-            // 没点过赞
-            {
-                likedBy: _.not(_.elemMatch(_.eq(OPENID)))
             }
         ]))
         .update({
             data: {
-                likedBy: _.push(OPENID)
+                likedBy: _.addToSet(OPENID)
             }
         })
     
