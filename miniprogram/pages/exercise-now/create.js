@@ -218,7 +218,9 @@ Page({
                 textContent: this.data.textInput,
                 location: this.data.location,
                 images: [],
-                videos: []
+                videos: [],
+                likedBy: [],
+                comments: []
             }
         }).then(r => {
             this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)

@@ -8,7 +8,7 @@
         </swiper>
         <view style="padding: 10px;">
             <text class="title">{{item.exerciseType}} </text>
-            <text class="author">@{{item._openid}}</text>
+            <text class="author">@{{item.authorInfo.nickname}}</text>
             <rich-text class="content">{{item.textContent}} </rich-text>
 
             <view class="action">
@@ -17,12 +17,18 @@
                 </view>
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
                     <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{index}}">
-                        <van-icon style="color: red;" name="like" />
-                        <text style="margin-left: 5px; color: pink;">11</text>
+                        <view wx:if="{{item.alreadyLiked}}">
+                            <van-icon style="color: red;" name="like" />
+                            <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: pink;">{{item.likedBy.length}}</text>
+                        </view>
+                        <view wx:else>
+                            <van-icon style="color: pink;" name="like" />
+                            <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: grey;">{{item.likedBy.length}}</text>
+                        </view>
                     </button>
-                    <button size="mini" bindtap="onComment" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                    <button size="mini" bindtap="onComment" data-id="{{item._id}}" style="margin: 0;">
                         <van-icon name="smile-comment-o"></van-icon>
-                        <text style="margin-left: 5px; color: grey;">2</text>
+                        <text wx:if="{{item.comments.length}}" style="margin-left: 5px; color: grey;">{{item.comments.length}}</text>
                     </button>
                     <button size="mini" bindtap="onShare" data-id="{{item._id}}" style="margin: 0; height: 100%;">
                         <van-icon name="share-o" />

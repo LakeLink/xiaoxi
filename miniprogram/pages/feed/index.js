@@ -17,13 +17,20 @@ Page({
     },
 
     async refresh() {
-        const db = wx.cloud.database()
-        const r = await db.collection('WeRunDetails').get()
-        r.data.forEach(e => {
+        let r = await wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getWeRunFeed'
+            }
+        })
+        // const db = wx.cloud.database()
+        // const r = await db.collection('WeRunDetails').get()
+        r.result.forEach(e => {
             e.when = dayjs(e.when).fromNow()
         })
+        console.log(r.result)
         this.setData({
-            weRunDetails: r.data
+            weRunDetails: r.result
         })
         console.log(this.data.weRunDetails)
     },
@@ -33,6 +40,21 @@ Page({
           urls: this.data.weRunDetails[e.target.dataset.id].images,
           current: this.data.weRunDetails[e.target.dataset.id].images[e.target.dataset.imgId]
         })
+    },
+
+    onLike(e) {
+        if (this.data.weRunDetails[e.currentTarget.dataset.idx].alreadyLiked) {
+            console.log(e)
+        }
+        else {
+            wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    type: 'likeWeRun',
+                    id: this.data.weRunDetails[e.currentTarget.dataset.idx]._id
+                }
+            }).then(() => this.refresh())
+        }
     },
 
     /**
