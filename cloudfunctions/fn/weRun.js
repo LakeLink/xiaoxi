@@ -34,6 +34,27 @@ exports.like = async (event, context) => {
     return r
 }
 
+exports.undoLike = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('WeRunDetails')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let r = await col.doc(event.id).update({
+        data: {
+            likedBy: _.pull(OPENID)
+        }
+    })
+    return r.stats
+}
+
 exports.getFeed = async (event, context) => {
     // 获取基础信息
     const {

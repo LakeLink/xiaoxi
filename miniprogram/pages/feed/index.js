@@ -44,7 +44,13 @@ Page({
 
     onLike(e) {
         if (this.data.weRunDetails[e.currentTarget.dataset.idx].alreadyLiked) {
-            console.log(e)
+            wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    type: 'undoLikeWeRun',
+                    id: this.data.weRunDetails[e.currentTarget.dataset.idx]._id
+                }
+            }).then(() => this.refresh())
         }
         else {
             wx.cloud.callFunction({

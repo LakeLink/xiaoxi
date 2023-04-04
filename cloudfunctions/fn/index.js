@@ -19,5 +19,7 @@ exports.main = async function (event, context) {
             return await weRun.getFeed(event, context)
         case 'likeWeRun':
             return await weRun.like(event, context)
+        case 'undoLikeWeRun':
+            return await weRun.undoLike(event, context)
     }
 }
