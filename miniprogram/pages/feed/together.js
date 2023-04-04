@@ -46,7 +46,7 @@ Page({
                 id: e.target.dataset.id
             }
         }).then(r => {
-            if (r.full) {
+            if (r.result.full) {
                 wx.showToast({
                     title: '队伍已满，已加入到候补',
                     icon: 'none'
