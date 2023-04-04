@@ -21,9 +21,8 @@
         "pages/together/create"
     ],
     "window": {
-        "backgroundColor": "#F6F6F6",
-        "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#F6F6F6",
+        "backgroundColor": "#F0F0F0",
+        "navigationBarBackgroundColor": "#F0F0F0",
         "navigationBarTitleText": "小贝爱运动",
         "navigationBarTextStyle": "black"
     },
