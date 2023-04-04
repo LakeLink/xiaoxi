@@ -17,14 +17,14 @@
                 </view>
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
                     <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{index}}">
-                        <view wx:if="{{item.alreadyLiked}}">
+                        <block wx:if="{{item.alreadyLiked}}">
                             <van-icon style="color: red;" name="like" />
                             <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: pink;">{{item.likedBy.length}}</text>
-                        </view>
-                        <view wx:else>
+                        </block>
+                        <block wx:else>
                             <van-icon style="color: pink;" name="like" />
                             <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: grey;">{{item.likedBy.length}}</text>
-                        </view>
+                        </block>
                     </button>
                     <button size="mini" bindtap="onComment" data-id="{{item._id}}" style="margin: 0;">
                         <van-icon name="smile-comment-o"></van-icon>

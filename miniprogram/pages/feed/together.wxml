@@ -17,14 +17,14 @@
             </view>
             <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
                 <button size="mini" style="margin: 0" bindtap="onTapOpenPopup" data-idx="{{index}}">{{item.partners.length + item.waitList.length}}人想去 / {{item.limit}}</button>
-                <view wx:if="{{ !item.alreadyJoined }}">
-                    <button wx:if="{{ item.unSatisfied }}" size="mini" type="primary" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                <block wx:if="{{ !item.alreadyJoined }}">
+                    <button wx:if="{{ item.unSatisfied }}" size="mini" type="primary" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0;">
                         <van-icon name="smile-comment-o"></van-icon>加我一个
                     </button>
-                    <button wx:if="{{ !item.unSatisfied }}" size="mini" type="default" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                    <button wx:else size="mini" type="default" bindtap="onJoin" data-id="{{item._id}}" style="margin: 0;">
                         <van-icon name="smile-comment-o"></van-icon>加入候补
                     </button>
-                </view>
+                </block>
                 <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuit" data-id="{{item._id}}">
                     已加入
                 </button>
