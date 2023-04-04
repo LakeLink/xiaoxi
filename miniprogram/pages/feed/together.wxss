@@ -31,9 +31,6 @@
     align-items: baseline;
     margin-top: 10px;
 }
-.buttons {
-    height: 10rpx;
-}
 
 .description {
     font-size: large;

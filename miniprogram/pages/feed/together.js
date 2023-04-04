@@ -34,6 +34,7 @@ Page({
         this.setData({
             togetherDetails: r.result
         })
+        wx.stopPullDownRefresh()
         console.log(this.data.togetherDetails)
     },
 
@@ -130,7 +131,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-
+        this.refresh()
     },
 
     /**

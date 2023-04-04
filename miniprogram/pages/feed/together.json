@@ -6,5 +6,6 @@
         "van-tabs": "@vant/weapp/tabs/index",
         "van-cell": "@vant/weapp/cell/index",
         "van-popup": "@vant/weapp/popup/index"
-    }
+    },
+    "enablePullDownRefresh": true
 }
