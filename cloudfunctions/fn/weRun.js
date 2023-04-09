@@ -39,7 +39,7 @@ exports.getFeed = async (event, context) => {
 }
 
 exports.updateStepInfo = async (event, context) => {
-    if (!event?.weRunData?.data) {
+    if (!event.weRunData.data) {
         throw new Error('No WeRunData found')
     }
 
@@ -59,7 +59,9 @@ exports.updateStepInfo = async (event, context) => {
         user: OPENID
     }).orderBy('timestamp', 'desc').limit(1).get()
 
-    const last = r.data?.[0]?.timestamp ?? 0
+    let last
+    if (r.data.length) last = r.data[0].timestamp
+    else last = 0
 
     for (e of event.weRunData.data.stepInfoList) {
         if (e.timestamp > last) {
