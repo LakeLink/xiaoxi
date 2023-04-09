@@ -111,6 +111,7 @@ Page({
                 unit: "time"
             },
         ],
+        minDateForCalendar: Date.now()-1000*60*60*24*30,
         numberInput: "",
         location: "",
         fileList: []
@@ -120,7 +121,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad() {
-        wx.cloud.init();
+        
     },
 
     /**
