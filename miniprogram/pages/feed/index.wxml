@@ -9,12 +9,26 @@
         <view style="padding: 10px;">
             <text class="title">{{item.exerciseType}} </text>
             <text class="author">@{{item.authorInfo.nickname}}</text>
+            <text style="margin-left: 12px; color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
             <rich-text class="content">{{item.textContent}} </rich-text>
 
-            <view class="action">
-                <view style="margin-left: 2px;">
-                    <text style="color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
+
+            <view wx:if="{{item.comments.length > 7 && !showAllComments}}" style="margin-top: 12px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{item.comments.length-7}} / {{item.comments.length}}</view>
+            <view style="margin-top: 8px;">
+                <view wx:for="{{item.comments}}" wx:for-item="c">
+                    <view wx:if="{{ index >= item.comments.length-7 || showAllComments }}">
+                        <text style="color: rgb(88, 183, 214);">{{item.commentUserInfo[c.userIndex].nickname}}：</text>
+                        <text>{{c.content}}</text>
+                    </view>
                 </view>
+            </view>
+
+            <view wx:if="{{showCommentInput}}" style="display: flex; align-items: center; margin-top: 8px">
+                <input style="background: #07070707; padding: 6px; margin-right: 4px; border-radius: 4px; flex-grow: 1;" focus="true" placeholder="说点什么..." model:value="{{newComment}}" />
+                <button data-id="{{item._id}}" bindtap="onSubmitComment" style="display: inline" size="mini" type="primary" loading="{{sendingComment}}">发送</button>
+            </view>
+
+            <view class="action">
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
                     <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{index}}">
                         <block wx:if="{{item.alreadyLiked}}">
@@ -34,19 +48,6 @@
                         <van-icon name="share-o" />
                     </button>
                 </view>
-            </view>
-
-            <view wx:if="{{item.comments.length > 7 && !showAllComments}}" style="margin-top: 2px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{item.comments.length-7}} / {{item.comments.length}}</view>
-            <view wx:for="{{item.comments}}" wx:for-item="c">
-                <view wx:if="{{ index >= item.comments.length-7 || showAllComments }}">
-                    <text style="color: rgb(88, 183, 214);">{{item.commentUserInfo[c.userIndex].nickname}}：</text>
-                    <text>{{c.content}}</text>
-                </view>
-            </view>
-
-            <view wx:if="{{showCommentInput}}" style="display: flex; align-items: center; margin-top: 8px">
-                <input style="background: #07070707; padding: 6px; margin-right: 4px; border-radius: 4px; flex-grow: 1;" focus="true" placeholder="说点什么..." model:value="{{newComment}}" />
-                <button data-id="{{item._id}}" bindtap="onSubmitComment" style="display: inline" size="mini" type="primary" loading="{{sendingComment}}">发送</button>
             </view>
         </view>
     </view>
