@@ -25,6 +25,12 @@
 * likedBy (openid[])
 * comments ({author: openid, content: string, when: serverDate}[])
 
+#### WeRunStepInfo
+
+* timestamp (Number, index, descending)
+* user (openid, index)
+* step (Number)
+
 #### TogetherDetails
 
 * sportsType (string)
@@ -35,7 +41,6 @@
 * limit (number)
 * images (string[])
 * partners (openid[])
-* waitList (openid[])
 
 
 ## 3rdparty 目录
