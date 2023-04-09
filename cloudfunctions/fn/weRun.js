@@ -124,7 +124,6 @@ exports.getFeed = async (event, context) => {
     }).end()
     r.list.forEach(e => e.authorInfo = e.authorInfo[0])
     r.list.forEach(e => {
-
         e.comments.forEach(c =>
             c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
         )

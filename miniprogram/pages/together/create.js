@@ -117,7 +117,9 @@ Page({
                     description: this.data.textInput,
                     limit: Number(this.data.limit),
                     images: [],
-                    partners: []
+                    partners: [],
+                    likedBy: [],
+                    comments: []
                 }
             })
             .catch(e => {

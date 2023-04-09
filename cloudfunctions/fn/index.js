@@ -5,6 +5,12 @@ const weRun = require('./weRun')
 // 云函数入口函数
 exports.main = async function (event, context) {
     switch (event.type) {
+        case 'commentTogether':
+            return await together.comment(event, context)
+        case 'likeTogether':
+            return await together.like(event, context)
+        case 'undoLikeTogether':
+            return await together.undoLike(event, context)
         case 'joinTogether':
             return await together.join(event, context)
         case 'getTogether':
