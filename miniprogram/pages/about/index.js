@@ -182,6 +182,14 @@ Page({
                   icon: 'error'
                 })
             })
+        } else { // Maybe want to disable it
+            this.setData({
+                showOpenSettingButton: true
+            })
+            wx.showToast({
+              title: '请打开设置页取消运动数据',
+              icon: 'error'
+            })
         }
     },
 
