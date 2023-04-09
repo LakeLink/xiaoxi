@@ -18,15 +18,14 @@ exports.like = async (event, context) => {
     const $ = _.aggregate
 
     let r = await col.where(_.and([{
-                _id: event.id
-            }
-        ]))
+            _id: event.id
+        }]))
         .update({
             data: {
                 likedBy: _.addToSet(OPENID)
             }
         })
-    
+
     return r
 }
 
@@ -46,6 +45,31 @@ exports.undoLike = async (event, context) => {
     let r = await col.doc(event.id).update({
         data: {
             likedBy: _.pull(OPENID)
+        }
+    })
+    return r.stats
+}
+
+exports.comment = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('WeRunDetails')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let r = await col.doc(event.id).update({
+        data: {
+            comments: _.push({
+                author: OPENID,
+                content: event.content,
+                when: db.serverDate()
+            })
         }
     })
     return r.stats
@@ -94,10 +118,17 @@ exports.getFeed = async (event, context) => {
             realname: true,
             avatarUrl: true
         }).done(),
-        as: 'commenterInfo'
+        as: 'commentUserInfo'
     }).addFields({
         alreadyLiked: $.in([OPENID, '$likedBy'])
     }).end()
     r.list.forEach(e => e.authorInfo = e.authorInfo[0])
+    r.list.forEach(e => {
+
+        e.comments.forEach(c =>
+            c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
+        )
+        // e.comments.sort((a, b) => a.when > b.when)
+    })
     return r.list
 }

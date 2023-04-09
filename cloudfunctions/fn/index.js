@@ -17,6 +17,8 @@ exports.main = async function (event, context) {
             return await user.save(event, context)
         case 'getWeRunFeed':
             return await weRun.getFeed(event, context)
+        case 'commentWeRun':
+            return await weRun.comment(event, context)
         case 'likeWeRun':
             return await weRun.like(event, context)
         case 'undoLikeWeRun':

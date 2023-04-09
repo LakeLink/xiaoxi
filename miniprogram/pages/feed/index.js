@@ -13,7 +13,11 @@ Page({
      * 页面的初始数据
      */
     data: {
-        weRunDetails: []
+        weRunDetails: [],
+        showCommentInput: false,
+        sendingComment: false,
+        showAllComments: false,
+        newComment: ''
     },
 
     async refresh() {
@@ -37,8 +41,8 @@ Page({
 
     onImgTap(e) {
         wx.previewImage({
-          urls: this.data.weRunDetails[e.target.dataset.id].images,
-          current: this.data.weRunDetails[e.target.dataset.id].images[e.target.dataset.imgId]
+            urls: this.data.weRunDetails[e.target.dataset.id].images,
+            current: this.data.weRunDetails[e.target.dataset.id].images[e.target.dataset.imgId]
         })
     },
 
@@ -51,8 +55,7 @@ Page({
                     id: this.data.weRunDetails[e.currentTarget.dataset.idx]._id
                 }
             }).then(() => this.refresh())
-        }
-        else {
+        } else {
             wx.cloud.callFunction({
                 name: 'fn',
                 data: {
@@ -61,6 +64,65 @@ Page({
                 }
             }).then(() => this.refresh())
         }
+    },
+
+    onShowEarlier(e) {
+        this.setData({
+            showAllComments: true
+        })
+    },
+
+    onComment(e) {
+        this.setData({
+            showCommentInput: !this.data.showCommentInput
+        })
+        // wx.cloud.callFunction({
+        //     name: 'fn',
+        //     data: {
+        //         type: 'commentWeRun',
+        //         id: this.data.weRunDetails[e.currentTarget.dataset.idx]._id,
+        //         content: 
+        //     }
+        // })
+    },
+
+    onSubmitComment(e) {
+        if (this.data.newComment.length == 0) {
+            wx.showToast({
+                title: '请输入评论',
+                icon: 'error'
+            })
+            return
+        }
+        this.setData({
+            sendingComment: true
+        })
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'commentWeRun',
+                id: e.target.dataset.id,
+                content: this.data.newComment
+            }
+        }).then((r) => {
+            if (r.result.updated == 1) {
+                this.setData({
+                    newComment: '',
+                    sendingComment: false
+                })
+                this.refresh()
+            } else {
+                throw new Error()
+            }
+        }).catch(e => {
+            this.setData({
+                sendingComment: false
+            })
+            wx.showToast({
+                title: '数据错误',
+                icon: 'error'
+            })
+        })
     },
 
     /**

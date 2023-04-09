@@ -23,7 +23,7 @@
 * images (string[])
 * videos (string[])
 * likedBy (openid[])
-* comments ({author: openid, text: string, when: serverDate}[])
+* comments ({author: openid, content: string, when: serverDate}[])
 
 #### TogetherDetails
 
