@@ -18,10 +18,12 @@ exports.main = async function (event, context) {
             return await together.get(event, context)
         case 'quitTogether':
             return await together.quit(event, context)
+
         case 'getUser':
             return await user.read(event, context)
         case 'saveUser':
             return await user.save(event, context)
+
         case 'getWeRunFeed':
             return await weRun.getFeed(event, context)
         case 'commentWeRun':
@@ -30,5 +32,10 @@ exports.main = async function (event, context) {
             return await quickAction.like(event, context, 'WeRunDetails')
         case 'undoLikeWeRun':
             return await quickAction.undoLike(event, context, 'WeRunDetails')
+
+        case 'updateWeRunStepInfo':
+            return await weRun.updateStepInfo(event, context)
+        case 'getTotalWeRunSteps':
+            return await weRun.getTotalSteps(event, context)
     }
 }

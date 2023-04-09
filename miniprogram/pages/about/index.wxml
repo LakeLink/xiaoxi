@@ -12,6 +12,7 @@
                 <text class="main-title">{{ nickname }}</text>
                 <text class="second-title">{{ realname }}</text>
             </view>
+            <text wx:if="{{totalSteps}}">近30天总步数：{{totalSteps}}</text>
         </van-cell>
 
         <van-field model:value="{{bio}}" placeholder="说点什么" label="Bio">
@@ -42,6 +43,11 @@
         </van-field>
         <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">
         </van-field>
+        <view style="width: 100%; background-color: white; display: flex; justify-content: space-between; align-items: center;">
+            <text style="margin-left: 14px;">同步微信运动步数</text>
+            <van-switch style="margin: 8px;" checked="{{ syncWeRunStepInfo }}" bind:change="onChangeSync" />
+        </view>
     </van-skeleton>
 </van-cell-group>
-<button style="margin-top: 24px;" type="primary" bindtap="onSubmit">保存</button>
+<button style="margin-top: 24px; margin-bottom: 12px" type="primary" bindtap="onSubmit">保存</button>
+<button wx:if="{{showOpenSettingButton}}" open-type="openSetting">打开设置页</button>

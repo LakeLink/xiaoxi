@@ -37,3 +37,60 @@ exports.getFeed = async (event, context) => {
     })
     return r.list
 }
+
+exports.updateStepInfo = async (event, context) => {
+    if (!event?.weRunData?.data) {
+        throw new Error('No WeRunData found')
+    }
+
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('WeRunStepInfo')
+    const _ = db.command
+    const $ = _.aggregate
+
+    const r = await col.where({
+        user: OPENID
+    }).orderBy('timestamp', 'desc').limit(1).get()
+
+    const last = r.data?.[0]?.timestamp ?? 0
+
+    for (e of event.weRunData.data.stepInfoList) {
+        if (e.timestamp > last) {
+            col.add({
+                data: {
+                    user: OPENID,
+                    ...e
+                }
+            })
+        }
+    }
+}
+
+exports.getTotalSteps = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('WeRunStepInfo')
+    const _ = db.command
+    const $ = _.aggregate
+
+    const r = await col.aggregate().match({
+        user: OPENID
+    }).group({
+        _id: null,
+        totalSteps: $.sum('$step')
+    }).end()
+    return r.list[0]
+}

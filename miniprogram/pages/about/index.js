@@ -18,7 +18,10 @@ Page({
         defaultAvatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
         avatarUrl: null,
         skeletonRowWidth: [],
-        loading: true
+        loading: true,
+        syncWeRunStepInfo: false,
+        showOpenSettingButton: false,
+        totalSteps: null
     },
     onChooseAvatar(e) {
         const {
@@ -28,24 +31,24 @@ Page({
             title: '上传头像...'
         })
         const regex = /[a-zA-Z0-9.]+$/;
-        
+
         wx.cloud.uploadFile({
-            cloudPath: `Avatars/${new Date().getTime()}-${avatarUrl.match(regex)[0]}`,
-            filePath: avatarUrl
-        })
-        .catch(e => {
-            wx.hideLoading()
-            wx.showToast({
-                title: '头像上传失败',
-                icon: 'error'
+                cloudPath: `Avatars/${new Date().getTime()}-${avatarUrl.match(regex)[0]}`,
+                filePath: avatarUrl
             })
-        })
-        .then(r => {
-            this.setData({
-                avatarUrl: r.fileID
+            .catch(e => {
+                wx.hideLoading()
+                wx.showToast({
+                    title: '头像上传失败',
+                    icon: 'error'
+                })
             })
-            wx.hideLoading()
-        })
+            .then(r => {
+                this.setData({
+                    avatarUrl: r.fileID
+                })
+                wx.hideLoading()
+            })
 
     },
     onPickerChange: function (e) {
@@ -157,6 +160,31 @@ Page({
         // })
 
     },
+
+    async refreshWeRunPermission() {
+        const r = await wx.getSetting();
+        this.setData({
+            syncWeRunStepInfo: r.authSetting['scope.werun'] ?? false
+        });
+    },
+
+    async onChangeSync() {
+        await this.refreshWeRunPermission()
+        if (!this.data.syncWeRunStepInfo) { // Maybe want to enable it
+            wx.authorize({
+                scope: 'scope.werun',
+            }).catch(async e => {
+                this.setData({
+                    showOpenSettingButton: true
+                })
+                wx.showToast({
+                  title: '请打开设置页授权运动数据',
+                  icon: 'error'
+                })
+            })
+        }
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -175,9 +203,22 @@ Page({
                 ...r.result
             })
         })
+
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getTotalWeRunSteps'
+            }
+        }).then(r => {
+            console.log(r)
+            this.setData({
+                totalSteps: r.result.totalSteps
+            })
+        })
+
         let skeletonRowWidth = []
         for (let i = 0; i < 7; i++) {
-            skeletonRowWidth.push(`${(Math.random()*60+40).toFixed()}%`)        
+            skeletonRowWidth.push(`${(Math.random()*60+40).toFixed()}%`)
         }
         this.setData({
             skeletonRowWidth
@@ -187,14 +228,13 @@ Page({
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady() {
-    },
+    onReady() {},
 
     /**
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        this.refreshWeRunPermission()
     },
 
     /**

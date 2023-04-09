@@ -14,5 +14,20 @@ App({
       });
     }
     this.globalData = {};
+
+    wx.getSetting().then(r => {
+        if (r.authSetting['scope.werun']) {
+            wx.getWeRunData().then(r => {
+                console.log(r)
+                wx.cloud.callFunction({
+                    name: 'fn',
+                    data: {
+                        type: 'updateWeRunStepInfo',
+                        weRunData: wx.cloud.CloudID(r.cloudID)
+                    }
+                })
+            })
+        }
+    });
   }
 });
