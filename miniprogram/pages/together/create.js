@@ -117,8 +117,7 @@ Page({
                     description: this.data.textInput,
                     limit: Number(this.data.limit),
                     images: [],
-                    partners: [],
-                    waitList: []
+                    partners: []
                 }
             })
             .catch(e => {

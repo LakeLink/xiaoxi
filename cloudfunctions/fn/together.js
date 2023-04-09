@@ -19,44 +19,13 @@ exports.join = async (event, context) => {
 
     let full = false
     // https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-sdk-api/database/command/Command.addToSet.html
-    let r = await col.where(_.and([{
-                _id: event.id
-            },
-            //人数没超
-            _.expr(
-                $.lt([
-                    $.size('$partners'),
-                    '$limit'
-                ])
-            )
-        ]))
+    let r = await col.doc(event.id)
         .update({
             data: {
                 partners: _.addToSet(OPENID)
             }
         })
-        .then(r => {
-            // 报满了
-            if (!r || r.stats.updated == 0) {
-                full = true
-                return col.where(_.and([{
-                        _id: event.id
-                    },
-                    //人数超了
-                    _.expr(
-                        $.gte([
-                            $.size('$partners'),
-                            '$limit'
-                        ])
-                    )
-                ]))
-                .update({
-                    data: {
-                        waitList: _.addToSet(OPENID)
-                    }
-                })
-            } else return r
-        })
+    await col.doc(event.id).get().then(r => full = r.data.partners.indexOf(OPENID) + 1 > r.data.limit)
     return {
         r,
         full
@@ -76,10 +45,15 @@ exports.get = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const r = await col.aggregate().lookup({
+    const r = await col.aggregate().addFields({
+        // partners: 0,
+        limitedPartners: $.slice(['$partners', '$limit']),
+        // if size == 0 then error pops up;
+        waitList: $.slice(['$partners', '$limit', $.max(1, $.size('$partners'))])
+    }).lookup({
         from: 'Users',
         let: {
-            p: '$partners'
+            p: '$limitedPartners'
         },
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
                 nickname: true,
@@ -88,19 +62,21 @@ exports.get = async (event, context) => {
             })
             .done(),
         as: 'partnerInfo'
-    }).lookup({
+    })
+    .lookup({
         from: 'Users',
         let: {
-            w: '$waitList'
+            p: '$waitList'
         },
-        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$w']))).project({
+        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
                 nickname: true,
                 realname: true,
                 avatarUrl: true
             })
             .done(),
         as: 'waitUserInfo'
-    }).lookup({
+    })
+    .lookup({
         from: 'Users',
         localField: '_openid',
         foreignField: '_id',
@@ -108,7 +84,7 @@ exports.get = async (event, context) => {
     }).addFields({
         unSatisfied: $.gt(['$limit', $.size('$partners')]),
         expired: $.lte(['$scheduledAt', new Date()]),
-        alreadyJoined: $.or([$.in([OPENID, '$partners']), $.in([OPENID, '$waitList'])])
+        alreadyJoined: $.in([OPENID, '$partners'])
     }).sort({
         // 此处存在顺序
         // 过期在后
@@ -119,6 +95,8 @@ exports.get = async (event, context) => {
         scheduledAt: 1,
         // Not likely to happen: Because `scheduledAt` actually has seconds part
         publishedAt: 1,
+    }).project({
+        partners: 0 // 不需要重复数据
     }).end()
     console.log(r)
     r.list.forEach(e => e.host = e.host[0])
@@ -141,8 +119,7 @@ exports.quit = async (event, context) => {
 
     return (await col.doc(event.id).update({
         data: {
-            partners: _.pull(OPENID),
-            waitList: _.pull(OPENID)
+            partners: _.pull(OPENID)
         }
     })).stats
 }
