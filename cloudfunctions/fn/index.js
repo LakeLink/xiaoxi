@@ -1,16 +1,17 @@
 const together = require('./together')
 const user = require('./user')
 const weRun = require('./weRun')
+const quickAction = require('./quickAction')
 
 // 云函数入口函数
 exports.main = async function (event, context) {
     switch (event.type) {
         case 'commentTogether':
-            return await together.comment(event, context)
+            return await quickAction.comment(event, context, 'TogetherDetails')
         case 'likeTogether':
-            return await together.like(event, context)
+            return await quickAction.like(event, context, 'TogetherDetails')
         case 'undoLikeTogether':
-            return await together.undoLike(event, context)
+            return await quickAction.undoLike(event, context, 'TogetherDetails')
         case 'joinTogether':
             return await together.join(event, context)
         case 'getTogether':
@@ -24,10 +25,10 @@ exports.main = async function (event, context) {
         case 'getWeRunFeed':
             return await weRun.getFeed(event, context)
         case 'commentWeRun':
-            return await weRun.comment(event, context)
+            return await quickAction.comment(event, context, 'WeRunDetails')
         case 'likeWeRun':
-            return await weRun.like(event, context)
+            return await quickAction.like(event, context, 'WeRunDetails')
         case 'undoLikeWeRun':
-            return await weRun.undoLike(event, context)
+            return await quickAction.undoLike(event, context, 'WeRunDetails')
     }
 }

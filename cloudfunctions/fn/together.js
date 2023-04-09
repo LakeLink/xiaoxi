@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk');
+const quickAction = require('./quickAction')
 
 cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
@@ -45,7 +46,7 @@ exports.get = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const r = await col.aggregate().addFields({
+    const agg = col.aggregate().addFields({
         // partners: 0,
         limitedPartners: $.slice(['$partners', '$limit']),
         // if size == 0 then error pops up;
@@ -79,34 +80,7 @@ exports.get = async (event, context) => {
         localField: '_openid',
         foreignField: '_id',
         as: 'host'
-    }).lookup({
-        from: 'Users',
-        let: {
-            l: '$likedBy'
-        },
-        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$l']))).project({
-            nickname: true,
-            realname: true,
-            avatarUrl: true
-        }).done(),
-        as: 'likedUserInfo'
-    }).lookup({
-        from: 'Users',
-        let: {
-            c: $.map({
-                input: '$comments',
-                as: 't',
-                in: '$$t.author'
-            })
-        },
-        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$c']))).project({
-            nickname: true,
-            realname: true,
-            avatarUrl: true
-        }).done(),
-        as: 'commentUserInfo'
     }).addFields({
-        alreadyLiked: $.in([OPENID, '$likedBy']),
         unSatisfied: $.gt(['$limit', $.size('$partners')]),
         expired: $.lte(['$scheduledAt', new Date()]),
         alreadyJoined: $.in([OPENID, '$partners'])
@@ -122,7 +96,10 @@ exports.get = async (event, context) => {
         publishedAt: 1,
     }).project({
         partners: 0 // 不需要重复数据
-    }).end()
+    })
+
+    const r = await quickAction.lookupLikedAndComments(agg, _, $, OPENID).end()
+
     console.log(r)
     r.list.forEach(e => e.host = e.host[0])
     r.list.forEach(e => {
@@ -154,75 +131,3 @@ exports.quit = async (event, context) => {
         }
     })).stats
 }
-
-exports.like = async (event, context) => {
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('TogetherDetails')
-    const _ = db.command
-    const $ = _.aggregate
-
-    let r = await col.where(_.and([{
-            _id: event.id
-        }]))
-        .update({
-            data: {
-                likedBy: _.addToSet(OPENID)
-            }
-        })
-
-    return r
-}
-
-exports.undoLike = async (event, context) => {
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('TogetherDetails')
-    const _ = db.command
-    const $ = _.aggregate
-
-    let r = await col.doc(event.id).update({
-        data: {
-            likedBy: _.pull(OPENID)
-        }
-    })
-    return r.stats
-}
-
-exports.comment = async (event, context) => {
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('TogetherDetails')
-    const _ = db.command
-    const $ = _.aggregate
-
-    let r = await col.doc(event.id).update({
-        data: {
-            comments: _.push({
-                author: OPENID,
-                content: event.content,
-                when: db.serverDate()
-            })
-        }
-    })
-    return r.stats
-}
-
