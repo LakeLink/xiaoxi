@@ -1,0 +1,17 @@
+<!--components/comments.wxml-->
+<view wx:if="{{comments.length > 7 && !showAllComments}}" style="margin-top: 12px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{comments.length-7}} / {{comments.length}}</view>
+<view style="margin-top: 8px;">
+    <view wx:for="{{comments}}" wx:for-item="c">
+        <view wx:if="{{ index >= comments.length-7 || showAllComments }}">
+            <popup-user-name-avatar avatarUrl="{{userInfo[c.userIndex].avatarUrl}}" nickname="{{userInfo[c.userIndex].nickname}}" realname="{{userInfo[c.userIndex].realname}}" showPopup="{{showPopup}}">
+                <text style="color: rgb(88, 183, 214);">{{userInfo[c.userIndex].nickname}}：</text>
+                <text>{{c.content}}</text>
+            </popup-user-name-avatar>
+        </view>
+    </view>
+</view>
+
+<view wx:if="{{showInput}}" style="display: flex; align-items: center; margin-top: 8px">
+    <input style="background: #07070707; padding: 6px; margin-right: 4px; border-radius: 4px; flex-grow: 1;" focus="true" placeholder="说点什么..." model:value="{{newComment}}" />
+    <button bindtap="onSubmitComment" style="display: inline" size="mini" type="primary" loading="{{sending}}">发送</button>
+</view>

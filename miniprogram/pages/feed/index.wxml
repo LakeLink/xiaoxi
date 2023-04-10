@@ -1,41 +1,21 @@
 <!--pages/feed/index.wxml-->
-<view style="padding-bottom: 20px;">
-    <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" style="margin-bottom: 20px;">
+<view style="padding-bottom: 20px;" bindtap="onTapToplevel">
+    <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" wx:for-index="weRunIdx" style="margin-bottom: 20px;">
         <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
-                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;  border-top-left-radius: 8px; border-top-right-radius: 8px;" data-id="{{index}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
+                <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;  border-top-left-radius: 8px; border-top-right-radius: 8px;" data-id="{{weRunIdx}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>
             </swiper-item>
         </swiper>
         <view style="padding: 10px;">
             <text class="title">{{item.exerciseType}} </text>
-            <text class="author">@{{item.authorInfo.nickname}}</text>
+            
+            <popup-user-name-avatar style="display: inline-block" avatarUrl="{{item.authorInfo.avatarUrl}}" nickname="{{ item.authorInfo.nickname }}" realname="{{ item.authorInfo.realname }}" showPopup="{{showPopup}}">
+                <text class="author">@{{item.authorInfo.nickname}}</text>
+            </popup-user-name-avatar>
             <text style="margin-left: 12px; color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
             <rich-text class="content">{{item.textContent}} </rich-text>
 
-
-            <view wx:if="{{item.comments.length > 7 && !showAllComments}}" style="margin-top: 12px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{item.comments.length-7}} / {{item.comments.length}}</view>
-            <view style="margin-top: 8px;">
-                <view wx:for="{{item.comments}}" wx:for-item="c">
-                    <view wx:if="{{ index >= item.comments.length-7 || showAllComments }}" style="position: relative;">
-                        <text bindtap="onTapCommentUser" data-idx="{{index}}" style="color: rgb(88, 183, 214);">{{item.commentUserInfo[c.userIndex].nickname}}：</text>
-                        <text>{{c.content}}</text>
-                        <view wx:if="{{ 10 == index }}" style="position: absolute; top: 25px; z-index: 10; display: flex; background-color: #f0f0f0; width: fit-content; padding: 6px; border-radius: 6px;">
-                            <view>
-                                <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.commentUserInfo[c.userIndex].avatarUrl}}"></image>
-                            </view>
-                            <view style="margin-left: 20px; margin-top: 2px;">
-                                <text class="user-nickname">{{ item.commentUserInfo[c.userIndex].nickname }}</text>
-                                <text class="user-realname">{{ item.commentUserInfo[c.userIndex].realname }}</text>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-
-            <view wx:if="{{showCommentInput}}" style="display: flex; align-items: center; margin-top: 8px">
-                <input style="background: #07070707; padding: 6px; margin-right: 4px; border-radius: 4px; flex-grow: 1;" focus="true" placeholder="说点什么..." model:value="{{newComment}}" />
-                <button data-id="{{item._id}}" bindtap="onSubmitComment" style="display: inline" size="mini" type="primary" loading="{{sendingComment}}">发送</button>
-            </view>
+            <comments bind:submit="onSubmitComment" data-idx="{{index}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showPopup}}" show-input="{{showCommentInput == index}}" sending="{{sendingComment}}"></comments>
 
             <view class="action">
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">

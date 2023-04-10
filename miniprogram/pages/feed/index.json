@@ -1,6 +1,8 @@
 {
     "usingComponents": {
-        "van-icon": "@vant/weapp/icon/index"
+        "van-icon": "@vant/weapp/icon/index",
+        "popup-user-name-avatar": "/components/popup-user-name-avatar",
+        "comments": "/components/comments"
     },
     "enablePullDownRefresh": true
 }

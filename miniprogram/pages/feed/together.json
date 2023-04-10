@@ -5,7 +5,9 @@
         "van-tab": "@vant/weapp/tab/index",
         "van-tabs": "@vant/weapp/tabs/index",
         "van-cell": "@vant/weapp/cell/index",
-        "van-popup": "@vant/weapp/popup/index"
+        "van-popup": "@vant/weapp/popup/index",
+        "popup-user-name-avatar": "/components/popup-user-name-avatar",
+        "comments": "/components/comments"
     },
     "enablePullDownRefresh": true
 }

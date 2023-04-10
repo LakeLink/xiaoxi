@@ -16,9 +16,7 @@ Page({
         weRunDetails: [],
         showCommentInput: false,
         sendingComment: false,
-        showAllComments: false,
-        newComment: '',
-        showCommentUserDetail: 0
+        showPopup: false
     },
 
     async refresh() {
@@ -73,28 +71,7 @@ Page({
         })
     },
 
-    onComment(e) {
-        this.setData({
-            showCommentInput: !this.data.showCommentInput
-        })
-        // wx.cloud.callFunction({
-        //     name: 'fn',
-        //     data: {
-        //         type: 'commentWeRun',
-        //         id: this.data.weRunDetails[e.currentTarget.dataset.idx]._id,
-        //         content: 
-        //     }
-        // })
-    },
-
     onSubmitComment(e) {
-        if (this.data.newComment.length == 0) {
-            wx.showToast({
-                title: '请输入评论',
-                icon: 'error'
-            })
-            return
-        }
         this.setData({
             sendingComment: true
         })
@@ -102,13 +79,12 @@ Page({
             name: 'fn',
             data: {
                 type: 'commentWeRun',
-                id: e.target.dataset.id,
-                content: this.data.newComment
+                id: this.data.weRunDetails[e.target.dataset.idx]._id,
+                content: e.detail.newComment
             }
         }).then((r) => {
             if (r.result.updated == 1) {
                 this.setData({
-                    newComment: '',
                     sendingComment: false
                 })
                 this.refresh()
@@ -123,6 +99,12 @@ Page({
                 title: '数据错误',
                 icon: 'error'
             })
+        })
+    },
+
+    onTapToplevel(e) {
+        this.setData({
+            showPopup: false
         })
     },
 

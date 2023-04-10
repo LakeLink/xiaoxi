@@ -14,8 +14,11 @@ Page({
      */
     data: {
         showPopup: false,
+        showUserPopup: false,
         // waitListUserinfo: null,
-        popupIndex: null
+        popupIndex: null,
+        showCommentInput: -1,
+        showHostDetail: false
     },
 
     async refresh() {
@@ -120,7 +123,7 @@ Page({
     //         })
     //     }
     // },
-        onLike(e) {
+    onLike(e) {
         if (this.data.togetherDetails[e.currentTarget.dataset.idx].alreadyLiked) {
             wx.cloud.callFunction({
                 name: 'fn',
@@ -140,34 +143,7 @@ Page({
         }
     },
 
-    onShowEarlier(e) {
-        this.setData({
-            showAllComments: true
-        })
-    },
-
-    onComment(e) {
-        this.setData({
-            showCommentInput: !this.data.showCommentInput
-        })
-        // wx.cloud.callFunction({
-        //     name: 'fn',
-        //     data: {
-        //         type: 'commentTogether',
-        //         id: this.data.togetherDetails[e.currentTarget.dataset.idx]._id,
-        //         content: 
-        //     }
-        // })
-    },
-
     onSubmitComment(e) {
-        if (this.data.newComment.length == 0) {
-            wx.showToast({
-                title: '请输入评论',
-                icon: 'error'
-            })
-            return
-        }
         this.setData({
             sendingComment: true
         })
@@ -175,13 +151,12 @@ Page({
             name: 'fn',
             data: {
                 type: 'commentTogether',
-                id: e.target.dataset.id,
-                content: this.data.newComment
+                id: this.data.togetherDetails[e.target.dataset.idx]._id,
+                content: e.detail.newComment
             }
         }).then((r) => {
             if (r.result.updated == 1) {
                 this.setData({
-                    newComment: '',
                     sendingComment: false
                 })
                 this.refresh()
@@ -196,6 +171,27 @@ Page({
                 title: '数据错误',
                 icon: 'error'
             })
+        })
+    },
+
+    onComment(e) {
+        console.log(e)
+        this.setData({
+            showCommentInput: this.data.showCommentInput == -1 ? e.currentTarget.dataset.idx : -1
+        })
+        // wx.cloud.callFunction({
+        //     name: 'fn',
+        //     data: {
+        //         type: 'commentTogether',
+        //         id: this.data.togetherDetails[e.currentTarget.dataset.idx]._id,
+        //         content: 
+        //     }
+        // })
+    },
+
+    onTapToplevel(e) {
+        this.setData({
+            showUserPopup: false
         })
     },
 
