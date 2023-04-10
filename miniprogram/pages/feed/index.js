@@ -17,7 +17,8 @@ Page({
         showCommentInput: false,
         sendingComment: false,
         showAllComments: false,
-        newComment: ''
+        newComment: '',
+        showCommentUserDetail: 0
     },
 
     async refresh() {

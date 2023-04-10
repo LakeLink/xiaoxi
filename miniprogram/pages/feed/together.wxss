@@ -44,15 +44,16 @@
     color: var(--button-primary-color, #fff);
 }
 
-.main-title {
+.user-nickname {
     display: block;
     font-weight: bold;
     font-size: large;
 }
-.second-title {
+.user-realname {
     display: block;
     color: grey;
 }
+
 .avatar {
     height: 50px;
     width: 50px;

@@ -16,9 +16,18 @@
             <view wx:if="{{item.comments.length > 7 && !showAllComments}}" style="margin-top: 12px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{item.comments.length-7}} / {{item.comments.length}}</view>
             <view style="margin-top: 8px;">
                 <view wx:for="{{item.comments}}" wx:for-item="c">
-                    <view wx:if="{{ index >= item.comments.length-7 || showAllComments }}">
-                        <text style="color: rgb(88, 183, 214);">{{item.commentUserInfo[c.userIndex].nickname}}：</text>
+                    <view wx:if="{{ index >= item.comments.length-7 || showAllComments }}" style="position: relative;">
+                        <text bindtap="onTapCommentUser" data-idx="{{index}}" style="color: rgb(88, 183, 214);">{{item.commentUserInfo[c.userIndex].nickname}}：</text>
                         <text>{{c.content}}</text>
+                        <view wx:if="{{ 10 == index }}" style="position: absolute; top: 25px; z-index: 10; display: flex; background-color: #f0f0f0; width: fit-content; padding: 6px; border-radius: 6px;">
+                            <view>
+                                <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.commentUserInfo[c.userIndex].avatarUrl}}"></image>
+                            </view>
+                            <view style="margin-left: 20px; margin-top: 2px;">
+                                <text class="user-nickname">{{ item.commentUserInfo[c.userIndex].nickname }}</text>
+                                <text class="user-realname">{{ item.commentUserInfo[c.userIndex].realname }}</text>
+                            </view>
+                        </view>
                     </view>
                 </view>
             </view>

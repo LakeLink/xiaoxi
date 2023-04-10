@@ -80,8 +80,8 @@
                         <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
                     </view>
                     <view slot="title" style="margin-left: 20px; margin-top: 2px;">
-                        <text class="main-title">{{ item.nickname }}</text>
-                        <text class="second-title">{{ item.realname }}</text>
+                        <text class="user-nickname">{{ item.nickname }}</text>
+                        <text class="user-realname">{{ item.realname }}</text>
                     </view>
                 </van-cell>
             </scroll-view>
@@ -93,8 +93,8 @@
                         <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{item.avatarUrl}}"></image>
                     </view>
                     <view slot="title" style="margin-left: 20px; margin-top: 2px;">
-                        <text class="main-title">{{ item.nickname }}</text>
-                        <text class="second-title">{{ item.realname }}</text>
+                        <text class="user-nickname">{{ item.nickname }}</text>
+                        <text class="user-realname">{{ item.realname }}</text>
                     </view>
                 </van-cell>
             </scroll-view>
