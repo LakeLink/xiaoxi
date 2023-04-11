@@ -10,3 +10,7 @@
     margin-left: 6px;
     color: grey;
 }
+.bio {
+    /* color: darkgrey */
+    color: #4d4d4d
+}

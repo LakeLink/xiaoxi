@@ -10,7 +10,7 @@
             <view style="margin-top: 4px;">
                 <text>{{user.hobby}}</text>
                 <span style="padding: 6px;">|</span>
-                <text>{{user.bio}}</text>
+                <text class="bio">“{{user.bio}}”</text>
             </view>
         </view>
     </view>
