@@ -1,11 +1,12 @@
 /* components/userAvatarWithName.wxss */
 
 .user-nickname {
-    display: block;
+    /* display: block; */
     font-weight: bold;
     font-size: large;
 }
 .user-realname {
-    display: block;
+    /* display: block; */
+    margin-left: 6px;
     color: grey;
 }

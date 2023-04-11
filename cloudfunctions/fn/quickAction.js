@@ -13,7 +13,10 @@ exports.lookupLikedAndComments = (agg, _, $, OPENID) =>
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$l']))).project({
             nickname: true,
             realname: true,
-            avatarUrl: true
+            avatarUrl: true,
+            collegeIndex: true,
+            hobby: true,
+            bio: true
         }).done(),
         as: 'likedUserInfo'
     }).lookup({
@@ -28,7 +31,10 @@ exports.lookupLikedAndComments = (agg, _, $, OPENID) =>
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$c']))).project({
             nickname: true,
             realname: true,
-            avatarUrl: true
+            avatarUrl: true,
+            collegeIndex: true,
+            hobby: true,
+            bio: true
         }).done(),
         as: 'commentUserInfo'
     }).addFields({

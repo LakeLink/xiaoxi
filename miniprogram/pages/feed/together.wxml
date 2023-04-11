@@ -2,8 +2,8 @@
 <!-- <page-meta page-style="{{ 'overflow: hidden;' }}" /> -->
 <view style="padding-bottom: 20px;" bindtap="onTapToplevel">
     <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
-        <text class="title">{{item.sportsType}} </text>
-        <popup-user-name-avatar style="display: inline-block" avatarUrl="{{item.host.avatarUrl}}" nickname="{{ item.host.nickname }}" realname="{{ item.host.realname }}" model:showPopup="{{showUserPopup}}">
+        <popup-user-name-avatar user="{{item.host}}" showPopup="{{showUserPopup}}">
+            <text class="title">{{item.sportsType}} </text>
             <text class="author">@{{item.host.nickname}}</text>
         </popup-user-name-avatar>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>

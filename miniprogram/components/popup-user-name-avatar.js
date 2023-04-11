@@ -4,10 +4,7 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        avatarUrl: String,
-        nickname: String,
-        realname: String,
-        
+        user: Object,
         showPopup: false
     },
 
@@ -21,26 +18,11 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        onTapCommentUser(e) {
+        onTapSlot(e) {
             console.log(e)
             this.setData({
                 showPopup: true
             })
-        },
-    
-        onTapAuthor(e) {
-            this.setData({
-                showAuthorDetail: true
-            })
-        },
-    
-        onTapToplevel(e) {
-            if (this.data.showCommentUserDetail || this.data.showAuthorDetail) {
-                this.setData({
-                    showCommentUserDetail: null,
-                    showAuthorDetail: false
-                })
-            }
         },
     
         IdontKnowHowToDisableIt() {},

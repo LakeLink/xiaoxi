@@ -12,7 +12,7 @@ Page({
         hobby: "",
         college: "请选择",
         collegeIndex: null,
-        collegeList: ["α", "β", "γ", "δ", "教职工"],
+        collegeList: ["α", "β", "γ", "δ", "教职工", "博士生"],
         year: "",
         age: "",
         defaultAvatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
