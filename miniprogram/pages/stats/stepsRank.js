@@ -10,7 +10,8 @@ Page({
         rank: [],
         ec: {
             lazyLoad: true
-        }
+        },
+        collegeList: ["α", "β", "γ", "δ", "教", "博"]
     },
 
     async loadRank(chart) {
