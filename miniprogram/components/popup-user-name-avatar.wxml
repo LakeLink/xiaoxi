@@ -4,10 +4,10 @@
     <slot catchtap="onTapSlot"></slot>
     <view catchtap="IdontKnowHowToDisableIt" wx:if="{{showPopup}}" style="position: absolute; top: 25px; z-index: 10; background-color: #f0f0f0; border-radius: 6px; width: max-content; display: flex; padding: 8px;">
         <image style="width: 50px; height: 50px; padding: 0;" mode="aspectFit" class="avatar" src="{{user.avatarUrl}}"></image>
-        
+
         <view style="margin-left: 10px;">
             <text class="user-nickname">{{ user.nickname }}</text>
-        <text class="college">{{ collegeList[user.collegeIndex] }}</text>
+            <text class="college">{{ collegeList[user.collegeIndex] }}</text>
             <text class="user-realname">{{ user.realname }}</text>
             <view style="margin-top: 4px;">
                 <text>{{user.hobby}}</text>
