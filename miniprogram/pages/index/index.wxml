@@ -1,6 +1,0 @@
-<view class="title">小贝爱运动 POC</view>
-<van-cell-group inset>
-  <van-cell title="运动打卡" url="/pages/exercise-now/create" is-link/>
-  <van-cell title="详情展示" url="/pages/feed/index" is-link/>
-  <van-cell title="Together®" url="/pages/feed/together" is-link/>
-</van-cell-group>
