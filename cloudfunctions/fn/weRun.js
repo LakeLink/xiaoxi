@@ -117,6 +117,14 @@ exports.rankTotalSteps = async (event, context) => {
     }).group({
         _id: '$user',
         totalSteps: $.sum('$step')
+    }).lookup({
+        from: 'Users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'info'
+    }).project({
+        info: $.arrayElemAt(['$info', 0]),
+        totalSteps: true
     }).end()
     return r.list
 }

@@ -25,6 +25,10 @@
                 "text": "运动搭子"
             },
             {
+                "pagePath": "pages/stats/stepsRank",
+                "text": "排行榜"
+            },
+            {
                 "pagePath": "pages/about/index",
                 "text": "About"
             }
