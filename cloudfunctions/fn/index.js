@@ -5,6 +5,7 @@ const quickAction = require('./quickAction')
 
 // 云函数入口函数
 exports.main = async function (event, context) {
+    console.log(event)
     switch (event.type) {
         case 'commentTogether':
             return await quickAction.comment(event, context, 'TogetherDetails')
@@ -35,7 +36,9 @@ exports.main = async function (event, context) {
 
         case 'updateWeRunStepInfo':
             return await weRun.updateStepInfo(event, context)
-        case 'getTotalWeRunSteps':
+        case 'getWeRunTotalSteps':
             return await weRun.getTotalSteps(event, context)
+        case 'rankWeRunTotalSteps':
+            return await weRun.rankTotalSteps(event, context)
     }
 }

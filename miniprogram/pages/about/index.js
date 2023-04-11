@@ -215,7 +215,7 @@ Page({
         wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getTotalWeRunSteps'
+                type: 'getWeRunTotalSteps'
             }
         }).then(r => {
             console.log(r)

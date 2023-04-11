@@ -5,7 +5,8 @@
         "pages/feed/together",
         "pages/about/me",
         "pages/about/index",
-        "pages/together/create"
+        "pages/together/create",
+        "pages/stats/stepsRank"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",

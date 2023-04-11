@@ -89,10 +89,34 @@ exports.getTotalSteps = async (event, context) => {
     const $ = _.aggregate
 
     const r = await col.aggregate().match({
+        timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 31)
+    }).match({
         user: OPENID
     }).group({
         _id: null,
         totalSteps: $.sum('$step')
     }).end()
     return r.list[0]
+}
+
+exports.rankTotalSteps = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('WeRunStepInfo')
+    const _ = db.command
+    const $ = _.aggregate
+
+    const r = await col.aggregate().match({
+        timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 31)
+    }).group({
+        _id: '$user',
+        totalSteps: $.sum('$step')
+    }).end()
+    return r.list
 }

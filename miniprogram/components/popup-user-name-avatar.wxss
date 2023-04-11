@@ -24,7 +24,7 @@
     margin-left: 1px;
     vertical-align: text-top;
     position:relative;
-    top: -3px;
+    top: -4px;
     font-size: smaller;
     color: yellowgreen
 }
