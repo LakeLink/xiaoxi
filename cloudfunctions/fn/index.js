@@ -19,6 +19,8 @@ exports.main = async function (event, context) {
             return await together.get(event, context)
         case 'quitTogether':
             return await together.quit(event, context)
+        case 'createTogetherActivityId':
+            return await together.createActivityId(event, context)
 
         case 'getUser':
             return await user.read(event, context)

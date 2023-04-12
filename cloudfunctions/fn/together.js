@@ -18,7 +18,6 @@ exports.join = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let full = false
     // https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-sdk-api/database/command/Command.addToSet.html
     let r = await col.doc(event.id)
         .update({
@@ -26,10 +25,43 @@ exports.join = async (event, context) => {
                 partners: _.addToSet(OPENID)
             }
         })
-    await col.doc(event.id).get().then(r => full = r.data.partners.indexOf(OPENID) + 1 > r.data.limit)
+    const doc = await col.doc(event.id).get().then(r => r.data)
+    // doc.activityIds.forEach(e => {
+    //     if (doc.limit < doc.partners.length) {
+    //         cloud.openapi.setUpdatableMsg({
+    //             activityId: e,
+    //             targetState: 1,
+    //             templateInfo: {
+    //                 parameterList: [{
+    //                     name: 'member_count',
+    //                     value: r.result.current
+    //                 }, {
+    //                     name: 'room_limit',
+    //                     value: r.result.limit
+    //                 }],
+    //                 templateInfo: '21B034D08C5615B9889CE362BB957B1EE69A584B'
+    //             }
+    //         })
+    //     } else {
+    //         cloud.openapi.setUpdatableMsg({
+    //             activityId: e,
+    //             targetState: 0,
+    //             templateInfo: {
+    //                 parameterList: [{
+    //                     name: 'member_count',
+    //                     value: r.result.current
+    //                 }, {
+    //                     name: 'room_limit',
+    //                     value: r.result.limit
+    //                 }],
+    //                 templateInfo: '21B034D08C5615B9889CE362BB957B1EE69A584B'
+    //             }
+    //         })
+    //     }
+    // });
     return {
         r,
-        full
+        full: doc.partners.indexOf(OPENID) + 1 > r.data.limit
     }
 };
 
@@ -130,4 +162,37 @@ exports.quit = async (event, context) => {
             partners: _.pull(OPENID)
         }
     })).stats
+}
+
+exports.createActivityId = async (event, context) => {
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('TogetherDetails')
+    const _ = db.command
+    const $ = _.aggregate
+
+    const r = await cloud.openapi.updatableMessage.createActivityId({
+        "openid": OPENID
+    })
+    console.log(r)
+    await col.doc(event.id).update({
+        data: {
+            activityIds: _.push({
+                activityId: r.activityId,
+                expirationTime: r.expirationTime
+            })
+        }
+    })
+    const doc = await col.doc(event.id).get().then(r => r.data)
+    // console.log(doc)
+    return {
+        activityId: r.activityId,
+        limit: doc.limit,
+        current: doc.partners.length
+    }
 }
