@@ -14,7 +14,7 @@ Page({
      */
     data: {
         weRunDetails: [],
-        showCommentInput: false,
+        showCommentInput: -1,
         sendingComment: false,
         showPopup: false,
         ads: null
@@ -72,6 +72,21 @@ Page({
         })
     },
 
+    onComment(e) {
+        console.log(e)
+        this.setData({
+            showCommentInput: this.data.showCommentInput == -1 ? e.currentTarget.dataset.idx : -1
+        })
+        // wx.cloud.callFunction({
+        //     name: 'fn',
+        //     data: {
+        //         type: 'commentTogether',
+        //         id: this.data.togetherDetails[e.currentTarget.dataset.idx]._id,
+        //         content: 
+        //     }
+        // })
+    },
+
     onSubmitComment(e) {
         this.setData({
             sendingComment: true
@@ -105,7 +120,8 @@ Page({
 
     onTapToplevel(e) {
         this.setData({
-            showPopup: false
+            showPopup: false,
+            // showCommentInput: -1
         })
     },
 

@@ -21,11 +21,11 @@
             <text style="margin-left: 12px; color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
             <rich-text class="content">{{item.textContent}} </rich-text>
 
-            <comments bind:submit="onSubmitComment" data-idx="{{index}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showPopup}}" show-input="{{showCommentInput == index}}" sending="{{sendingComment}}"></comments>
+            <comments bind:submit="onSubmitComment" data-idx="{{weRunIdx}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showPopup}}" show-input="{{showCommentInput == weRunIdx}}" sending="{{sendingComment}}"></comments>
 
             <view class="action">
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
-                    <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{index}}">
+                    <button size="mini" style="margin: 0" bindtap="onLike" data-idx="{{weRunIdx}}">
                         <block wx:if="{{item.alreadyLiked}}">
                             <van-icon style="color: red;" name="like" />
                             <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: pink;">{{item.likedBy.length}}</text>
@@ -35,7 +35,7 @@
                             <text wx:if="{{item.likedBy.length}}" style="margin-left: 5px; color: grey;">{{item.likedBy.length}}</text>
                         </block>
                     </button>
-                    <button size="mini" bindtap="onComment" data-id="{{item._id}}" style="margin: 0;">
+                    <button size="mini" bindtap="onComment" data-idx="{{weRunIdx}}" style="margin: 0;">
                         <van-icon name="smile-comment-o"></van-icon>
                         <text wx:if="{{item.comments.length}}" style="margin-left: 5px; color: grey;">{{item.comments.length}}</text>
                     </button>
