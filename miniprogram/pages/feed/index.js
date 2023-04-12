@@ -16,7 +16,8 @@ Page({
         weRunDetails: [],
         showCommentInput: false,
         sendingComment: false,
-        showPopup: false
+        showPopup: false,
+        ads: null
     },
 
     async refresh() {
@@ -108,6 +109,13 @@ Page({
         })
     },
 
+    onAdTap(e) {
+        wx.previewImage({
+            urls: this.data.ads,
+            current: this.data.ads[e.target.dataset.imgid]
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -120,7 +128,16 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getAds'
+            }
+        }).then(r => {
+            this.setData({
+                ads: r.result
+            })
+        })
     },
 
     /**

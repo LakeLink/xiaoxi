@@ -42,5 +42,8 @@ exports.main = async function (event, context) {
             return await weRun.getTotalSteps(event, context)
         case 'rankWeRunTotalSteps':
             return await weRun.rankTotalSteps(event, context)
+        
+        case 'getAds':
+            return ["cloud://miniprogram-6gjjtiee3da042a9.6d69-miniprogram-6gjjtiee3da042a9-1316898046/Ads/IMG_20221021_131649.jpg"]
     }
 }
