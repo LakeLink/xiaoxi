@@ -31,7 +31,7 @@ Page({
             console.log(y)
             var option = {
                 title: {
-                    text: '31天步数排行榜'
+                    text: '30天步数排行榜'
                 },
                 xAxis: {
                     data: rankForChart.map(e => '@' + e.info.nickname)
@@ -40,7 +40,7 @@ Page({
                     axisLabel: {
                         margin: 2,
                         formatter: function (v, idx) {
-                            return v >= 1000 ? (v / 1000).toFixed() + 'k' : v
+                            return v >= 10000 ? (v / 10000).toFixed() + 'w' : v
                         }
                     },
                     min: Math.min(...y) * 0.9,
