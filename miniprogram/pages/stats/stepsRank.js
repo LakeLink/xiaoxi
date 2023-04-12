@@ -7,7 +7,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        rank: [],
+        rankForList: [],
         ec: {
             lazyLoad: true
         },
@@ -21,21 +21,20 @@ Page({
                 type: 'rankWeRunTotalSteps'
             }
         }).then(r => {
+            const [rankForList, rankForChart] = [r.result, r.result.slice(0, 3)]
 
             this.setData({
-                rank: r.result
+                rankForList
             })
 
-            console.log(this.data.rank)
-
-            const y = r.result.map(e => e.totalSteps)
+            const y = rankForChart.map(e => e.totalSteps)
             console.log(y)
             var option = {
                 title: {
                     text: '31天步数排行榜'
                 },
                 xAxis: {
-                    data: r.result.map(e => '@' + e.info.nickname)
+                    data: rankForChart.map(e => '@' + e.info.nickname)
                 },
                 yAxis: {
                     axisLabel: {
