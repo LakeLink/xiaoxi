@@ -1,4 +1,4 @@
-// pages/feed/index.js
+// pages/feed/moment.js
 const dayjs = require('dayjs')
 
 const relativeTime = require('@3rdparty/dayjs/plugin/relativeTime')

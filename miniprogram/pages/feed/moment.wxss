@@ -1,4 +1,4 @@
-/* pages/feed/index.wxss */
+/* pages/feed/moment.wxss */
 .card {
     margin: 10px;
     background: white;

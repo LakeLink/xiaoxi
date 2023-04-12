@@ -1,6 +1,6 @@
 <!--pages/exercise-now/exercise-now.wxml-->
 
-<van-cell-group title="运动打卡" inset="true">
+<van-cell-group title="运动瞬间" inset="true">
     <van-cell required title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
     <van-calendar min-date="{{minDateForCalendar}}" show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
 
@@ -46,7 +46,7 @@
         <van-uploader accept="media" multiple="true" upload-text="图片也需要" max-duration="30" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ fileList }}" max-count="9" />
     </view>
 </van-cell-group>
-<button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享到微信运动</button>
+<button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享运动瞬间</button>
 <button style="margin-top: 16px;" bindtap="onBack">Back</button>
 <!-- <view>
     <form bindsubmit="bindSubmit">

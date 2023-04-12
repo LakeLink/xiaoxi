@@ -1,4 +1,4 @@
-<!--pages/feed/index.wxml-->
+<!--pages/feed/moment.wxml-->
 <view style="padding-bottom: 20px;" bindtap="onTapToplevel">
     <swiper wx:if="{{ads}}" style="background-color: white; margin: 8px; border-radius: 8px; height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
         <swiper-item wx:for="{{ads}}" wx:for-index="imgId" wx:for-item="imgItem" style=" border-radius: 8px;">
@@ -49,7 +49,7 @@
     <text style="display: block;color: grey; text-align: center; white-space: pre;">———— 已经到底了 ————</text>
 </view>
 
-<navigator url="/pages/exercise-now/create">
+<navigator url="/pages/moment/create">
     <van-icon class="add" size="20px" name="plus" />
 </navigator>
 
