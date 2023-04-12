@@ -29,9 +29,11 @@ Page({
                 type: 'getTogether'
             }
         })
+        // console.log()
+        if (this.id) r.result.unshift(r.result.find(e => e._id == this.id))
         console.log(r)
         r.result.forEach(e => {
-            e.myScheduledAt = dayjs(e.scheduledAt).format("YYYY/M/D HH:mm")
+            e.myScheduledAt = dayjs(e.scheduledAt).format("YY/M/D HH:mm")
             e.deltaPublishedAt = dayjs(e.publishedAt).fromNow()
         })
         this.setData({
@@ -189,6 +191,39 @@ Page({
         // })
     },
 
+    async onShare(e) {
+        // console.log(e)
+        // let r = await wx.cloud.callFunction({
+        //     name: 'fn',
+        //     data: {
+        //         type: 'createTogetherActivityId',
+        //         id: e.currentTarget.dataset.id
+        //     }
+        // })
+        // console.log(r)
+        // await wx.updateShareMenu({
+        //     isUpdatableMessage: true,
+        //     activityId: r.result.activityId,
+        //     templateInfo: {
+        //         parameterList: [{
+        //             name: 'member_count',
+        //             value: r.result.current
+        //         }, {
+        //             name: 'room_limit',
+        //             value: r.result.limit
+        //         }],
+        //         templateInfo: '21B034D08C5615B9889CE362BB957B1EE69A584B'
+        //     }
+        // })
+        // await wx.showShareMenu({
+        //         menus: ['shareAppMessage', 'shareTimeline']
+        //     })
+        // wx.showToast({
+        //     title: '可在右上方分享'
+        // })
+
+    },
+
     onTapToplevel(e) {
         this.setData({
             showUserPopup: false
@@ -199,7 +234,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-
+        if (options.id) this.id = options.id
     },
 
     /**
@@ -234,6 +269,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
+        this.id = null;
         this.refresh().then(() =>
             wx.stopPullDownRefresh())
     },
@@ -248,7 +284,17 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage() {
-
+    onShareAppMessage(e) {
+        console.log(e)
+        if (e.from == 'button') return {
+            title: '小西爱运动',
+            path: `pages/feed/together?id=${e.target.dataset.id}`
+        }
+        else {
+            return {
+                title: '小西按运动',
+                page: 'pages/feed/together'
+            }
+        }
     }
 })
