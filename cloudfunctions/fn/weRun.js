@@ -24,6 +24,8 @@ exports.getFeed = async (event, context) => {
         localField: '_openid',
         foreignField: '_id',
         as: 'authorInfo'
+    }).sort({
+        when: -1
     })
 
     let r = await quickAction.lookupLikedAndComments(agg, _, $, OPENID).end()
