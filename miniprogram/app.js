@@ -29,5 +29,19 @@ App({
             })
         }
     });
+
+    wx.cloud.callFunction({
+        name: 'fn',
+        data: {
+            type: 'getUser'
+        }
+    }).then(r => {
+        if (!r.result) {
+            wx.showToast({
+              title: '请前往`About`完善个人信息',
+              icon: 'error'
+            })
+        }
+    })
   }
 });

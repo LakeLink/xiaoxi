@@ -23,6 +23,7 @@ Page({
         showOpenSettingButton: false,
         totalSteps: null
     },
+
     onChooseAvatar(e) {
         const {
             avatarUrl
@@ -30,27 +31,30 @@ Page({
         wx.showLoading({
             title: '上传头像...'
         })
-        const regex = /[a-zA-Z0-9.]+$/;
-
-        wx.cloud.uploadFile({
-                cloudPath: `Avatars/${new Date().getTime()}-${avatarUrl.match(regex)[0]}`,
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getUserAvatarPath'
+            }
+        }).then(r => {
+            wx.cloud.uploadFile({
+                cloudPath: r.result,
                 filePath: avatarUrl
-            })
-            .catch(e => {
-                wx.hideLoading()
-                wx.showToast({
-                    title: '头像上传失败',
-                    icon: 'error'
-                })
-            })
-            .then(r => {
+            }).then(r => {
                 this.setData({
                     avatarUrl: r.fileID
                 })
                 wx.hideLoading()
             })
-
+        }).catch(e => {
+            wx.hideLoading()
+            wx.showToast({
+                title: '头像上传失败',
+                icon: 'error'
+            })
+        })
     },
+
     onPickerChange: function (e) {
         //        const collegeIndex = e.detail.value, college = this.data.collegeList[e.detail.value] 
         // console.log('picker_college发送选择改变，携带值为', e.detail.value)
@@ -178,8 +182,8 @@ Page({
                     showOpenSettingButton: true
                 })
                 wx.showToast({
-                  title: '请打开设置页授权运动数据',
-                  icon: 'error'
+                    title: '请打开设置页授权运动数据',
+                    icon: 'error'
                 })
             })
         } else { // Maybe want to disable it
@@ -187,18 +191,13 @@ Page({
                 showOpenSettingButton: true
             })
             wx.showToast({
-              title: '请打开设置页取消运动数据',
-              icon: 'error'
+                title: '请打开设置页取消运动数据',
+                icon: 'error'
             })
         }
     },
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
-
-
-    onLoad(options) {
+    async refresh() {
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -210,6 +209,10 @@ Page({
                 loading: false,
                 ...r.result
             })
+        }).catch(e => {
+            this.setData({
+                loading: false
+            })
         })
 
         wx.cloud.callFunction({
@@ -218,11 +221,18 @@ Page({
                 type: 'getWeRunTotalSteps'
             }
         }).then(r => {
-            console.log(r)
             this.setData({
                 totalSteps: r.result.totalSteps
             })
         })
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+
+
+    onLoad(options) {
 
         let skeletonRowWidth = []
         for (let i = 0; i < 7; i++) {
@@ -243,6 +253,7 @@ Page({
      */
     onShow() {
         this.refreshWeRunPermission()
+        this.refresh()
     },
 
     /**
