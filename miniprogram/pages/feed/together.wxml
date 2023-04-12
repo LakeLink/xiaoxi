@@ -1,7 +1,7 @@
 <!--pages/feed/together.wxml-->
 <!-- <page-meta page-style="{{ 'overflow: hidden;' }}" /> -->
 <view style="padding-bottom: 20px;" bindtap="onTapToplevel">
-    <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
+    <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="{{queryId == item._id ? 'margin-bottom: 20px; border: 2px dashed orange' : 'margin-bottom: 20px;'}}">
         <popup-user-name-avatar user="{{item.host}}" showPopup="{{showUserPopup}}">
             <text class="title">{{item.sportsType}} </text>
             <text class="{{'college-' + item.host.collegeIndex}}">@{{item.host.nickname}}</text>

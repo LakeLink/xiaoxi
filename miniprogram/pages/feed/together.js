@@ -26,11 +26,11 @@ Page({
         const r = await wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getTogether'
+                type: 'getTogether',
             }
         })
         // console.log()
-        if (this.id) r.result.unshift(r.result.find(e => e._id == this.id))
+        if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
         console.log(r)
         r.result.forEach(e => {
             e.myScheduledAt = dayjs(e.scheduledAt).format("YY/M/D HH:mm")
@@ -234,7 +234,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        if (options.id) this.id = options.id
+        if (options.id) this.setData({ queryId: options.id })
     },
 
     /**
@@ -269,7 +269,9 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-        this.id = null;
+        this.setData({
+            queryId: null
+        })
         this.refresh().then(() =>
             wx.stopPullDownRefresh())
     },
