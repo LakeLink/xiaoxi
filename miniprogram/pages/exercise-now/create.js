@@ -8,7 +8,9 @@ Page({
         openCalendar: false,
         date: "",
         textInput: "",
-        activity: null,
+        shareToWeRun: true,
+        weRunActivity: null,
+        activity: "",
         /*
         运动类型	typeId	支持传入单位
         锻炼	1001	time/calorie
@@ -111,7 +113,7 @@ Page({
                 unit: "time"
             },
         ],
-        minDateForCalendar: Date.now()-1000*60*60*24*30,
+        minDateForCalendar: Date.now() - 1000 * 60 * 60 * 24 * 30,
         numberInput: "",
         location: "",
         fileList: []
@@ -121,7 +123,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad() {
-        
+
     },
 
     /**
@@ -194,28 +196,37 @@ Page({
         })
     },
 
-    bindActivityChange(e) {
+    bindWeRunActivityChange(e) {
         console.log('picker event:', e)
         this.setData({
-            activity: this.data.activities[e.detail.value]
+            weRunActivity: this.data.activities[e.detail.value]
         })
     },
 
-    bindSubmit(e) {
-        console.log("submit event:", e)
-        console.log(this.data)
+    onBack(e) {
+        wx.navigateBack();
+    },
+
+    async bindSubmit(e) {
         const db = wx.cloud.database()
         const col = db.collection('WeRunDetails')
 
+        if (!this.data.date || !this.data.location || !this.data.fileList.length || !(this.data.shareToWeRun ? this.data.weRunActivity && this.data.numberInput : this.data.activity)) {
+            wx.showToast({
+                title: '信息不完整',
+                icon: 'error'
+            })
+            return
+        }
+
         let images = this.data.fileList.filter(e => e.type == "image"),
             videos = this.data.fileList.filter(e => e.type == "video")
-        col.add({
+        await col.add({
             data: {
                 when: db.serverDate(),
-                exerciseType: this.data.activity.name,
-                exerciseTypeId: this.data.activity.typeId,
-                unit: this.data.activity.unit,
-                numericData: this.data.numberInput,
+                exerciseType: this.data.shareToWeRun ? this.data.weRunActivity.name : this.data.activity,
+                unit: this.data.shareToWeRun ? this.data.activity.unit : undefined,
+                numericData: this.data.shareToWeRun ? this.data.numberInput : undefined,
                 textContent: this.data.textInput,
                 location: this.data.location,
                 images: [],
@@ -223,8 +234,8 @@ Page({
                 likedBy: [],
                 comments: []
             }
-        }).then(r => {
-            this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
+        }).then(async r => {
+            if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
                 .then(uploadResult => {
                     console.log(uploadResult)
                     col.doc(r._id).update({
@@ -233,7 +244,7 @@ Page({
                         }
                     })
                 })
-            this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
+            if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
                 .then(uploadResult => {
                     console.log(uploadResult)
                     col.doc(r._id).update({
@@ -243,49 +254,51 @@ Page({
                     })
                 })
         })
-        let recordList = []
-        switch (this.data.activity.unit) {
-            case "number":
-                recordList.push({
-                    typeId: this.data.activity.typeId,
-                    number: parseInt(this.data.numberInput)
-                })
-                break;
-            case "distance":
-                recordList.push({
-                    typeId: this.data.activity.typeId,
-                    distance: Math.round(parseFloat(this.data.numberInput) * 1000)
-                })
-                break;
-            case "time":
-                recordList.push({
-                    typeId: this.data.activity.typeId,
-                    time: parseInt(this.data.numberInput)
-                })
-                break;
-            default:
+
+        if (this.data.shareToWeRun) {
+            let recordList = []
+            switch (this.data.weRunActivity.unit) {
+                case "number":
+                    recordList.push({
+                        typeId: this.data.weRunActivity.typeId,
+                        number: parseInt(this.data.numberInput)
+                    })
+                    break;
+                case "distance":
+                    recordList.push({
+                        typeId: this.data.weRunActivity.typeId,
+                        distance: Math.round(parseFloat(this.data.numberInput) * 1000)
+                    })
+                    break;
+                case "time":
+                    recordList.push({
+                        typeId: this.data.weRunActivity.typeId,
+                        time: parseInt(this.data.numberInput)
+                    })
+                    break;
+                default:
+                    wx.showToast({
+                        title: 'Error: ILLEGAL_EXERCISE_UNIT',
+                        icon: 'error'
+                    })
+                    return
+            }
+
+            await wx.shareToWeRun({
+                recordList
+            }).catch(e => {
                 wx.showToast({
-                    title: 'Error: ILLEGAL_EXERCISE_UNIT',
+                    title: '推送到微信运动时发生错误',
                     icon: 'error'
                 })
-                return
+            })
         }
 
-        wx.shareToWeRun({
-            recordList,
-            success(res) {
-                wx.showToast({
-                    title: '打卡成功'
-                })
-            },
-            fail(res) {
-                wx.showToast({
-                    title: '打卡失败',
-                    icon: 'error'
-                })
-                console.log(res)
-            }
+        wx.showToast({
+            title: '打卡成功',
+            icon: 'success'
         })
+        wx.navigateBack()
     },
 
     bindNumberInput: function (e) {
@@ -311,7 +324,7 @@ Page({
         });
     },
 
-    uploadFilesToCloud(fileList, filePrefix) {
+    async uploadFilesToCloud(fileList, filePrefix) {
         if (fileList.length) {
             const uploadTasks = fileList.map((file, index) => wx.cloud.uploadFile({
                 cloudPath: `${filePrefix}${index}`,
@@ -333,5 +346,11 @@ Page({
                     return data
                 })
         }
+    },
+
+    onChange(e) {
+        this.setData({
+            shareToWeRun: e.detail
+        })
     }
 })

@@ -1,41 +1,53 @@
 <!--pages/exercise-now/exercise-now.wxml-->
 
 <van-cell-group title="运动打卡" inset="true">
-    <van-cell title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
+    <van-cell required title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
     <van-calendar min-date="{{minDateForCalendar}}" show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
 
-    <van-field model:value="{{ location }}" label="地点" input-align="right">
+    <van-field required model:value="{{ location }}" label="地点" input-align="right">
     </van-field>
 
-    <picker mode="selector" bindchange="bindActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
-        <van-cell title="运动项目" value="{{ activity.name }}" is-link></van-cell>
-    </picker>
+    <van-cell>
+        <text style="height: 100%; vertical-align: middle;" slot="title">同步到微信运动</text>
+        <van-switch size="24px" checked="{{ shareToWeRun }}" bind:change="onChange" />
+    </van-cell>
 
-    <view wx:if='{{activity.unit == "distance"}}'>
-        <van-field model:value="{{ numberInput }}" label="运动距离" type="digit" input-align="right">
-            <label slot="right-icon">千米</label>
+    <block wx:if="{{shareToWeRun}}">
+        <picker mode="selector" bindchange="bindWeRunActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
+            <van-cell required title="运动项目" value="{{ weRunActivity.name }}" is-link></van-cell>
+        </picker>
+
+        <view wx:if='{{weRunActivity.unit == "distance"}}'>
+            <van-field model:value="{{ numberInput }}" label="运动距离" type="digit" input-align="right">
+                <label slot="right-icon">千米</label>
+            </van-field>
+        </view>
+        <view wx:elif='{{weRunActivity.unit == "time"}}'>
+            <van-field model:value="{{ numberInput }}" label="运动时长" type="number" input-align="right">
+                <label slot="right-icon">分钟</label>
+            </van-field>
+        </view>
+        <view wx:elif='{{weRunActivity.unit == "number"}}'>
+            <van-field model:value="{{ numberInput }}" label="数量" type="number" input-align="right">
+                <label slot="right-icon">个</label>
+            </van-field>
+        </view>
+    </block>
+
+    <block wx:else>
+        <van-field required label="运动项目" input-align="right" model:value="{{activity}}">
         </van-field>
-    </view>
-    <view wx:elif='{{activity.unit == "time"}}'>
-        <van-field model:value="{{ numberInput }}" label="运动时长" type="number" input-align="right">
-            <label slot="right-icon">分钟</label>
-        </van-field>
-    </view>
-    <view wx:elif='{{activity.unit == "number"}}'>
-        <van-field model:value="{{ numberInput }}" label="数量" type="number" input-align="right">
-            <label slot="right-icon">个</label>
-        </van-field>
-    </view>
+    </block>
 
     <view style="background-color: white; padding: 16px;">
-        <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}" ></textarea>
+        <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}"></textarea>
     </view>
     <view style="background-color: white; padding: 16px;">
-        <van-uploader accept="media" multiple="true" upload-text="" max-duration="30" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ fileList }}" max-count="9" />
+        <van-uploader accept="media" multiple="true" upload-text="图片也需要" max-duration="30" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ fileList }}" max-count="9" />
     </view>
 </van-cell-group>
 <button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享到微信运动</button>
-<button style="margin-top: 16px;">Back</button>
+<button style="margin-top: 16px;" bindtap="onBack">Back</button>
 <!-- <view>
     <form bindsubmit="bindSubmit">
         <picker mode="time" bindchange="bindDateChange" value="{{date}}">
