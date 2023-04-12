@@ -13,7 +13,7 @@
             </swiper-item>
         </swiper>
         <view style="padding: 10px;">
-            <popup-user-name-avatar user="{{item.authorInfo}}" showPopup="{{showPopup}}">
+            <popup-user-name-avatar style="display: inline-block" user="{{item.authorInfo}}" showPopup="{{showPopup}}">
 
                 <text class="title">{{item.exerciseType}} </text>
                 <text class="author">@{{item.authorInfo.nickname}}</text>
