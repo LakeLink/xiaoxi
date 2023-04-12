@@ -48,3 +48,6 @@
 
 根据需要，从 `node_modules` 中拷贝需要的文件
 
+### EChart
+
+https://echarts.apache.org/zh/builder.html : 从这里下载裁剪版EChart

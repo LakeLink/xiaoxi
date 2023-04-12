@@ -33,8 +33,14 @@ Page({
                 title: {
                     text: '30天步数排行榜'
                 },
+                textStyle: {
+                    color: 'black'
+                },
                 xAxis: {
-                    data: rankForChart.map(e => e.info.nickname)
+                    data: rankForChart.map(e => e.info.nickname),
+                    axisTick: {
+                        show: false
+                    }
                 },
                 yAxis: {
                     axisLabel: {
