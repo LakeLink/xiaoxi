@@ -4,7 +4,7 @@
     <view wx:for="{{comments}}" wx:for-item="c">
         <view wx:if="{{ index >= comments.length-7 || showAllComments }}">
             <popup-user-name-avatar user="{{userInfo[c.userIndex]}}" showPopup="{{showPopup}}">
-                <text style="color: rgb(88, 183, 214);">{{userInfo[c.userIndex].nickname}}：</text>
+                <text class="{{'~college-' + userInfo[c.userIndex].collegeIndex}}">{{userInfo[c.userIndex].nickname}}：</text>
                 <text>{{c.content}}</text>
             </popup-user-name-avatar>
         </view>

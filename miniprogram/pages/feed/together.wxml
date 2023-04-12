@@ -4,7 +4,7 @@
     <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="margin-bottom: 20px;">
         <popup-user-name-avatar user="{{item.host}}" showPopup="{{showUserPopup}}">
             <text class="title">{{item.sportsType}} </text>
-            <text class="author">@{{item.host.nickname}}</text>
+            <text class="{{'college-' + item.host.collegeIndex}}">@{{item.host.nickname}}</text>
         </popup-user-name-avatar>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
         <rich-text class="content">{{item.description}} </rich-text>

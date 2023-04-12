@@ -28,3 +28,27 @@ page {
   flex-direction: column;
   justify-content: flex-start;
 } */
+
+.college-0 {
+    color: #cc8f66
+}
+
+.college-1 {
+    color: #66cc66
+}
+
+.college-2 {
+    color: #cc6688
+}
+
+.college-3 {
+    color: #6697cc
+}
+
+.college-4 {
+    color: #00498F
+}
+
+.college-5 {
+    color: #F18B1C
+}

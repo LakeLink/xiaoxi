@@ -11,10 +11,6 @@
     font-weight: bold;
 }
 
-.author {
-    color: green;
-}
-
 .content {
     display: block;
     width: 100%;

@@ -12,7 +12,7 @@
 
             <view style="margin-left: 10px;">
                 <text class="user-nickname">{{ item.info.nickname }}</text>
-                <text class="college">{{ collegeList[item.info.collegeIndex] }}</text>
+                <text class="{{'college ' + 'college-' + item.info.collegeIndex}}">{{ collegeList[item.info.collegeIndex] }}</text>
                 <text class="user-realname">{{ item.info.realname }}</text>
                 <view style="margin-top: 4px;">
                     <!-- <text>{{item.info.hobby}}</text> -->

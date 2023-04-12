@@ -9,7 +9,7 @@
                 <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: grey;">点按修改头像</text>
             </view>
             <view slot="title" style="margin-left: 20px; margin-top: 2px;">
-                <text class="main-title">{{ nickname }}</text>
+                <text class="{{'main-title  ~college-' + collegeIndex}}">{{ nickname }}</text>
                 <text class="second-title">{{ realname }}</text>
             </view>
             <text wx:if="{{totalSteps}}">近30天总步数：{{totalSteps}}</text>

@@ -48,5 +48,4 @@ ec-canvas {
     top: -4px;
     left: 1px;
     font-size: smaller;
-    color: yellowgreen
 }
