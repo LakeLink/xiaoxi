@@ -34,7 +34,7 @@ Page({
                     text: '30天步数排行榜'
                 },
                 xAxis: {
-                    data: rankForChart.map(e => '@' + e.info.nickname)
+                    data: rankForChart.map(e => e.info.nickname)
                 },
                 yAxis: {
                     axisLabel: {
