@@ -31,3 +31,14 @@ exports.save = async (event, context) => {
         data: event.data
     }).then(r => r.stats)
 }
+
+exports.getAvatarPath = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+
+    return `Avatars/${OPENID}`
+}
