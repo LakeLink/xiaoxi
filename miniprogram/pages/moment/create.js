@@ -219,6 +219,9 @@ Page({
             return
         }
 
+        wx.showLoading({
+            title: '正在上传',
+        })
         let images = this.data.fileList.filter(e => e.type == "image"),
             videos = this.data.fileList.filter(e => e.type == "video")
         await col.add({
@@ -253,6 +256,13 @@ Page({
                         }
                     })
                 })
+        }).catch(e => {
+            wx.hideLoading()
+            wx.showToast({
+                title: '数据错误',
+                icon: 'error'
+            })
+            throw e
         })
 
         if (this.data.shareToWeRun) {
@@ -278,7 +288,7 @@ Page({
                     break;
                 default:
                     wx.showToast({
-                        title: 'Error: ILLEGAL_EXERCISE_UNIT',
+                        title: '单位数据异常',
                         icon: 'error'
                     })
                     return
@@ -287,10 +297,12 @@ Page({
             await wx.shareToWeRun({
                 recordList
             }).catch(e => {
+                wx.hideLoading()
                 wx.showToast({
                     title: '推送到微信运动时发生错误',
                     icon: 'error'
                 })
+                throw e
             })
         }
 
