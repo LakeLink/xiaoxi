@@ -61,80 +61,74 @@ Page({
         })
     },
 
-    onQuitOrEdit(e) {
+    onQuit(e) {
         const item = this.data.togetherDetails[e.currentTarget.dataset.idx]
+        wx.showModal({
+            title: '已加入',
+            content: '是否要退出该活动',
+            complete: (r) => {
+                if (r.confirm) {
+                    wx.cloud.callFunction({
+                        name: 'fn',
+                        data: {
+                            type: 'quitTogether',
+                            id: item._id
+                        }
+                    }).catch(e => wx.showToast({
+                        title: '数据错误',
+                        icon: 'error'
+                    })).then(r => {
+                        if (r.result.updated) {
+                            this.refresh()
+                        } else {
+                            wx.showToast({
+                                title: '记录未匹配',
+                                icon: 'error'
+                            })
+                        }
+                    })
+                }
+            }
+        })
+    },
 
-        function quit() {
-            wx.showModal({
-                title: '已加入',
-                content: '是否要退出该活动',
-                complete: (r) => {
-                    if (r.confirm) {
-                        wx.cloud.callFunction({
-                            name: 'fn',
-                            data: {
-                                type: 'quitTogether',
-                                id: item._id
-                            }
-                        }).catch(e => wx.showToast({
-                            title: '数据错误',
-                            icon: 'error'
-                        })).then(r => {
-                            if (r.result.updated) {
-                                this.refresh()
-                            } else {
-                                wx.showToast({
-                                    title: '记录未匹配',
-                                    icon: 'error'
+    onEdit(e) {
+        const item = this.data.togetherDetails[e.currentTarget.dataset.idx]
+        wx.showActionSheet({
+            itemList: ['编辑', '删除'],
+        }).then(r => {
+            console.log(r)
+            switch (r.tapIndex) {
+                case 0:
+                    wx.navigateTo({
+                        url: `/pages/together/create?edit=${item._id}`,
+                    })
+                    break
+                case 1:
+                    wx.showModal({
+                        title: '！！！',
+                        content: '是否要删除该活动',
+                        complete: r => {
+                            if (r.confirm) {
+                                const col = wx.cloud.database().collection('TogetherDetails')
+                                col.doc(item._id).remove().then(r => {
+                                    this.refresh()
+                                    wx.showToast({
+                                        title: '已删除',
+                                        icon: 'success'
+                                    })
+                                }).catch(e => {
+                                    wx.showToast({
+                                        title: '数据错误',
+                                        icon: 'error'
+                                    })
                                 })
                             }
-                        })
-                    }
-                }
-            })
-        }
-        function edit() {}
-        console.log(item)
-        if (item.mine) {
-            wx.showActionSheet({
-                itemList: ['退出', '编辑', '删除'],
-            }).then(r => {
-                console.log(r)
-                switch(r.tapIndex) {
-                    case 0:
-                        quit()
-                        break
-                    case 1:
-                        wx.navigateTo({
-                          url: `/pages/together/create?edit=${item._id}`,
-                        })
-                        break
-                    case 2:
-                        wx.showModal({
-                            title: '！！！',
-                            content: '是否要删除该活动',
-                            complete: r => {
-                                if (r.confirm) {
-                                    const col = wx.cloud.database().collection('TogetherDetails')
-                                    col.doc(item._id).remove().then(r => {
-                                        this.refresh()
-                                        wx.showToast({
-                                            title: '已删除',
-                                            icon: 'success'
-                                        })
-                                    }).catch(e => {
-                                        wx.showToast({
-                                            title: '数据错误',
-                                            icon: 'error'
-                                        })
-                                    })
-                                }
-                            }
-                        })
-                        break
-                }
-            })
-        } else quit()
+                        }
+                    })
+                    break
+            }
+        })
     },
 
     onImgTap(e) {

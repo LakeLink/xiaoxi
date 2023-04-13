@@ -3,7 +3,7 @@
 <view style="padding-bottom: 20px;" bindtap="onTapToplevel">
     <view class="card" wx:key="_id" wx:for="{{ togetherDetails }}" style="{{queryId == item._id ? 'margin-bottom: 20px; border: 2px dashed orange' : 'margin-bottom: 20px;'}}">
         <popup-user-name-avatar user="{{item.host}}" showPopup="{{showUserPopup}}">
-            <text class="title">{{item.sportsType}} </text>
+            <text class="title">{{item.sportsType}}</text>
             <text class="{{'college-' + item.host.collegeIndex}}">@{{item.host.nickname}}</text>
         </popup-user-name-avatar>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
@@ -14,9 +14,7 @@
             </swiper-item>
         </swiper>
         <view class="action">
-            <view style="margin-left: 8px; margin-right: 50px;">
-                <text style="color: grey; font-size: small;">{{item.deltaPublishedAt}}</text>
-            </view>
+            <text style="margin-right: 10px; color: grey; font-size: small;">{{item.deltaPublishedAt}}</text>
             <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
                 <button size="mini" style="margin: 0" bindtap="onTapOpenPopup" data-idx="{{index}}">{{item.limitedPartners.length + item.waitList.length}}人想去 / {{item.limit}}</button>
                 <block wx:if="{{ !item.alreadyJoined }}">
@@ -27,12 +25,8 @@
                         <van-icon name="smile-comment-o"></van-icon>加入候补
                     </button>
                 </block>
-                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuitOrEdit" data-idx="{{index}}">
+                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuit" data-idx="{{index}}">
                     已加入
-                    <block wx:if="{{item.mine}}">
-                        <van-icon name="delete-o"></van-icon>
-                        <van-icon name="edit"></van-icon>
-                    </block>
                 </button>
             </view>
         </view>
@@ -57,6 +51,10 @@
                 </button>
                 <button size="mini" bindtap="onShare" open-type="share" data-id="{{item._id}}" style="margin: 0; height: 100%;">
                     <van-icon name="share-o" />
+                </button>
+                <button size="mini" type="default" bindtap="onEdit" data-idx="{{index}}" style="margin: 0; padding: 0 4px 0;" wx:if="{{item.mine}}">
+                    <van-icon name="delete-o"></van-icon>
+                    <van-icon name="edit"></van-icon>
                 </button>
             </view>
         </view>
