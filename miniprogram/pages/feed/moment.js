@@ -29,6 +29,7 @@ Page({
         })
         // const db = wx.cloud.database()
         // const r = await db.collection('WeRunDetails').get()
+        if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
         r.result.forEach(e => {
             e.when = dayjs(e.when).fromNow()
         })
@@ -137,6 +138,10 @@ Page({
      */
     onLoad(options) {
         console.log("onLoad")
+        
+        if (options.id) this.setData({
+            queryId: options.id
+        })
         // this.refresh()
     },
 
@@ -199,6 +204,16 @@ Page({
      * 用户点击右上角分享
      */
     onShareAppMessage() {
-
+        console.log(e)
+        if (e.from == 'button') return {
+            title: '小西爱运动',
+            path: `pages/feed/moment?id=${e.target.dataset.id}`
+        }
+        else {
+            return {
+                title: '小西按运动',
+                page: 'pages/feed/moment'
+            }
+        }
     }
 })
