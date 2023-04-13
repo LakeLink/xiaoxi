@@ -246,7 +246,7 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage() {
+    onShareAppMessage(e) {
         console.log(e)
         if (e.from == 'button') return {
             title: '小西爱运动',
