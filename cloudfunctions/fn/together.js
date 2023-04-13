@@ -133,7 +133,10 @@ exports.get = async (event, context) => {
     const r = await quickAction.lookupLikedAndComments(agg, _, $, OPENID).end()
 
     console.log(r)
-    r.list.forEach(e => e.host = e.host[0])
+    r.list.forEach(e => {
+        e.host = e.host[0]
+        e.mine = e.host._id == OPENID
+    })
     r.list.forEach(e => {
         e.comments.forEach(c =>
             c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)

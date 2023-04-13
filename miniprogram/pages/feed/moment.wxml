@@ -6,7 +6,7 @@
         </swiper-item>
     </swiper>
 
-    <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" wx:for-index="weRunIdx" style="margin-bottom: 20px;">
+    <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" wx:for-index="weRunIdx" style="{{queryId == item._id ? 'margin-bottom: 20px; border: 2px dashed orange' : 'margin-bottom: 20px;'}}">
         <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem" style="border-top-left-radius: 8px; border-top-right-radius: 8px;">
                 <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-id="{{weRunIdx}}" data-imgId="{{imgId}}" bindtap="onImgTap"></image>

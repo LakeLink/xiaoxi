@@ -72,10 +72,14 @@ Page({
         wx.showLoading({
             title: '正在上传图片',
         })
-        const uploadTasks = fileList.map((file, index) => wx.cloud.uploadFile({
-            cloudPath: `${filePrefix}${index}`,
-            filePath: file.url
-        }));
+        const uploadTasks = fileList.map((file, index) => {
+            if (!file.url.startsWith('cloud')) {
+                return wx.cloud.uploadFile({
+                    cloudPath: `${filePrefix}${index}`,
+                    filePath: file.url
+                })
+            } else return { fileID: file.url }
+        });
         return Promise.all(uploadTasks)
             .catch(e => {
                 wx.hideLoading()
@@ -91,7 +95,7 @@ Page({
             })
     },
 
-    onSubmit() {
+    async onSubmit() {
         if (!this.data.sportsType || !this.data.location || !this.data.limit) {
             wx.showToast({
                 title: '信息不完整',
@@ -108,7 +112,8 @@ Page({
         }
         const db = wx.cloud.database()
         const col = db.collection("TogetherDetails")
-        col.add({
+        if (this.edit) {
+            col.doc(this.edit).update({
                 data: {
                     sportsType: this.data.sportsType,
                     publishedAt: db.serverDate(),
@@ -116,39 +121,59 @@ Page({
                     location: this.data.location,
                     description: this.data.textInput,
                     limit: Number(this.data.limit),
-                    images: [],
-                    partners: [],
-                    likedBy: [],
-                    comments: []
                 }
             })
-            .catch(e => {
-                console.log(e)
-                wx.showToast({
-                    title: '数据错误',
-                    icon: 'error'
-                })
-            })
-            .then(async r => {
-                if (this.data.fileList > 0) {
-                    this.uploadFilesToCloud(this.data.fileList, `TogetherDetails/${r._id}/img`)
-                        .then(uploadResult => {
-                            console.log(uploadResult)
-                            return col.doc(r._id).update({
-                                data: {
-                                    images: uploadResult.map(file => file.fileID)
-                                }
-                            })
+            if (this.data.fileList.length > 0) {
+                await this.uploadFilesToCloud(this.data.fileList, `TogetherDetails/${this.edit}/img`)
+                    .then(uploadResult => {
+                        console.log(uploadResult)
+                        return col.doc(this.edit).update({
+                            data: {
+                                images: uploadResult.map(file => file?.fileID)
+                            }
                         })
-                }
-            })
-            .then(() => {
-                wx.showToast({
-                    title: '发送成功',
-                    icon: 'success'
-                });
-                wx.navigateBack()
-            })
+                    })
+            }
+        } else {
+            await col.add({
+                    data: {
+                        sportsType: this.data.sportsType,
+                        publishedAt: db.serverDate(),
+                        scheduledAt: this.realDate,
+                        location: this.data.location,
+                        description: this.data.textInput,
+                        limit: Number(this.data.limit),
+                        images: [],
+                        partners: [],
+                        likedBy: [],
+                        comments: []
+                    }
+                }).catch(e => {
+                    console.log(e)
+                    wx.showToast({
+                        title: '数据错误',
+                        icon: 'error'
+                    })
+                })
+                .then(async r => {
+                    if (this.data.fileList > 0) {
+                        await this.uploadFilesToCloud(this.data.fileList, `TogetherDetails/${r._id}/img`)
+                            .then(uploadResult => {
+                                console.log(uploadResult)
+                                return col.doc(r._id).update({
+                                    data: {
+                                        images: uploadResult.map(file => file.fileID)
+                                    }
+                                })
+                            })
+                    }
+                })
+        }
+        wx.showToast({
+            title: '发送成功',
+            icon: 'success'
+        });
+        wx.navigateBack()
     },
 
     /**
@@ -156,6 +181,34 @@ Page({
      */
     onLoad(options) {
         this.realDate = new Date()
+        this.edit = options.edit
+
+        if (this.edit) {
+            const col = wx.cloud.database().collection('TogetherDetails')
+            col.doc(this.edit).get().then(item => {
+                const {
+                    description,
+                    limit,
+                    location,
+                    scheduledAt,
+                    sportsType,
+                    images
+                } = item.data
+                this.realData = scheduledAt
+                this.setData({
+                    textInput: description,
+                    limit,
+                    location,
+                    sportsType,
+                    fileList: images.map((v) => {
+                        return {
+                            type: 'image',
+                            url: v
+                        }
+                    })
+                })
+            })
+        }
         console.log(this.realDate)
         this.setData({
             date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`,

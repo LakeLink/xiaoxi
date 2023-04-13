@@ -27,8 +27,12 @@
                         <van-icon name="smile-comment-o"></van-icon>加入候补
                     </button>
                 </block>
-                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuit" data-id="{{item._id}}">
+                <button wx:if="{{ item.alreadyJoined }}" size="mini" style="margin: 0;" bindtap="onQuitOrEdit" data-idx="{{index}}">
                     已加入
+                    <block wx:if="{{item.mine}}">
+                        <van-icon name="delete-o"></van-icon>
+                        <van-icon name="edit"></van-icon>
+                    </block>
                 </button>
             </view>
         </view>

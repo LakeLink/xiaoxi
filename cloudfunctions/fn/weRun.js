@@ -127,6 +127,8 @@ exports.rankTotalSteps = async (event, context) => {
     }).project({
         info: $.arrayElemAt(['$info', 0]),
         totalSteps: true
+    }).sort({
+        totalSteps: -1
     }).end()
     return r.list
 }
