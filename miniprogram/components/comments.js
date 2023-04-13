@@ -45,5 +45,13 @@ Component({
                 newComment: this.data.newComment
             })
         },
+
+        onReply(e) {
+            const c = this.properties.comments[e.target.dataset.idx]
+            this.setData({
+                showInput: true,
+                newComment: `回复 ${this.properties.userInfo[c.userIndex].nickname}: `
+            })
+        }
     }
 })

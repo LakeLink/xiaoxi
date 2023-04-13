@@ -3,10 +3,10 @@
 <view style="margin-top: 8px;">
     <view wx:for="{{comments}}" wx:for-item="c">
         <view wx:if="{{ index >= comments.length-7 || showAllComments }}">
-            <popup-user-name-avatar user="{{userInfo[c.userIndex]}}" showPopup="{{showPopup}}">
+            <popup-user-name-avatar style="display: inline-block" user="{{userInfo[c.userIndex]}}" showPopup="{{showPopup}}">
                 <text class="{{'~college-' + userInfo[c.userIndex].collegeIndex}}">{{userInfo[c.userIndex].nickname}}：</text>
-                <text>{{c.content}}</text>
             </popup-user-name-avatar>
+            <text bindtap="onReply" data-idx="{{index}}">{{c.content}}</text>
         </view>
     </view>
 </view>
