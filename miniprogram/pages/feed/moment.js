@@ -17,7 +17,9 @@ Page({
         showCommentInput: -1,
         sendingComment: false,
         showPopup: false,
-        ads: null
+        ads: null,
+        // only parent -> child, no child -> parent; This is how it works (Vue style)
+        onlyForResetNewComment: ''
     },
 
     async refresh() {
@@ -102,7 +104,8 @@ Page({
         }).then((r) => {
             if (r.result.updated == 1) {
                 this.setData({
-                    sendingComment: false
+                    sendingComment: false,
+                    onlyForResetNewComment: ''
                 })
                 this.refresh()
             } else {

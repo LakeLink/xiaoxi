@@ -12,15 +12,15 @@ Component({
         userInfo: Object,
         showPopup: false,
         showInput: false,
-        sending: false
+        sending: false,
+        newComment: ''
     },
 
     /**
      * 组件的初始数据
      */
     data: {
-        showAllComments: false,
-        newComment: ''
+        showAllComments: false
     },
 
     /**

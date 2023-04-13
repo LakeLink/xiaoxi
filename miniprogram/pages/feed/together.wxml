@@ -31,7 +31,7 @@
             </view>
         </view>
 
-        <comments bind:submit="onSubmitComment" data-idx="{{index}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showUserPopup}}" show-input="{{showCommentInput == index}}" sending="{{sendingComment}}"></comments>
+        <comments bind:submit="onSubmitComment" data-idx="{{index}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showUserPopup}}" show-input="{{showCommentInput == index}}" sending="{{sendingComment}}" new-comment="{{onlyForResetNewComment}}"></comments>
 
         <view class="action">
             <view style="flex-grow: 1; display:flex; justify-content:space-around; ">

@@ -199,7 +199,8 @@ Page({
         }).then((r) => {
             if (r.result.updated == 1) {
                 this.setData({
-                    sendingComment: false
+                    sendingComment: false,
+                    onlyForResetNewComment: ''
                 })
                 this.refresh()
             } else {
