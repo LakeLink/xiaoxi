@@ -15,7 +15,7 @@
         <view style="padding: 10px;">
             <popup-user-name-avatar style="display: inline-block" user="{{item.authorInfo}}" showPopup="{{showPopup}}">
 
-                <text class="title">{{item.exerciseType}} </text>
+                <text class="title">{{item.exerciseType}}</text>
                 <text class="{{'college-' + item.authorInfo.collegeIndex}}">@{{item.authorInfo.nickname}}</text>
             </popup-user-name-avatar>
             <text style="margin-left: 12px; color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
