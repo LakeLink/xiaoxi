@@ -230,6 +230,9 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
+        this.setData({
+            queryId: null
+        })
         this.refresh().then(() => {
             console.log("Finished")
             wx.stopPullDownRefresh()
