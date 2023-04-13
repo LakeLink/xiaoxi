@@ -61,7 +61,7 @@ exports.join = async (event, context) => {
     // });
     return {
         r,
-        full: doc.partners.indexOf(OPENID) + 1 > r.data.limit
+        full: doc.partners.indexOf(OPENID) + 1 > r.limit
     }
 };
 
