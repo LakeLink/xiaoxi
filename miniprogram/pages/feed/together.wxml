@@ -7,7 +7,7 @@
             <text class="{{'college-' + item.host.collegeIndex}}">@{{item.host.nickname}}</text>
         </popup-user-name-avatar>
         <text class="description">{{item.myScheduledAt}} - {{item.location}}</text>
-        <rich-text class="content">{{item.description}} </rich-text>
+        <text class="content">{{item.description}}</text>
         <swiper wx:if="{{item.images.length}}" style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.images}}" wx:for-index="imgId" wx:for-item="imgItem">
                 <image src="{{imgItem}}" mode="aspectFill" style="width: 100%;" data-idx="{{index}}" data-imgSrc="{{imgItem}}" bindtap="onImgTap"></image>
