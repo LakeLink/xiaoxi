@@ -100,14 +100,22 @@ exports.comment = async (event, context, collection) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let r = await col.doc(event.id).update({
-        data: {
-            comments: _.push({
-                author: OPENID,
-                content: event.content,
-                when: db.serverDate()
-            })
-        }
-    })
-    return r.stats
+    return await cloud.openapi.security.msgSecCheck({
+        content: event.content,
+        version: 2,
+        scene: 2,
+        openid: OPENID
+    }).then(r => {
+        console.log(r)
+        if (r.result.suggest == 'risky') throw new Error('Risky comment')
+        else return col.doc(event.id).update({
+            data: {
+                comments: _.push({
+                    author: OPENID,
+                    content: event.content,
+                    when: db.serverDate()
+                })
+            }
+        })
+    }).then(r => r.stats)
 }
