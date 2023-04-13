@@ -1,5 +1,13 @@
 # Cloud Dev
 
+## TODO
+
+* swiper item: indicator dots style
+* database schema description
+* header image style
+* notification
+* bonus buttons
+
 ## Storage System
 
 ### Path
@@ -41,6 +49,7 @@
 * limit (number)
 * images (string[])
 * partners (openid[])
+* comments ({author: openid, content: string, when: serverDate}[])
 
 
 ## 3rdparty 目录
