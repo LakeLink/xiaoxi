@@ -17,7 +17,7 @@
                 <view style="margin-top: 4px;">
                     <!-- <text>{{item.info.hobby}}</text> -->
                     <!-- <span style="padding: 6px;">|</span> -->
-                    <text class="bio">“{{item.info.bio}}”</text>
+                    <text class="bio">"{{item.info.bio}}"</text>
                 </view>
             </view>
         </view>

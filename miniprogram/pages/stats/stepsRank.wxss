@@ -35,7 +35,8 @@ ec-canvas {
 
 .bio {
     /* color: darkgrey */
-    color: #4d4d4d
+    color: #4d4d4d;
+    font-size: small;
 }
 
 .college {
