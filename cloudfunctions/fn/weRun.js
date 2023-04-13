@@ -30,7 +30,10 @@ exports.getFeed = async (event, context) => {
 
     let r = await quickAction.lookupLikedAndComments(agg, _, $, OPENID).end()
 
-    r.list.forEach(e => e.authorInfo = e.authorInfo[0])
+    r.list.forEach(e => {
+        e.authorInfo = e.authorInfo[0]
+        e.mine = e._openid == OPENID
+    })
     r.list.forEach(e => {
         e.comments.forEach(c =>
             c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)

@@ -42,6 +42,10 @@
                     <button size="mini" bindtap="onShare" open-type="share" data-id="{{item._id}}" style="margin: 0; height: 100%;">
                         <van-icon name="share-o" />
                     </button>
+                    <button size="mini" type="default" bindtap="onEdit" data-idx="{{weRunIdx}}" style="margin: 0; padding: 0 4px 0;" wx:if="{{item.mine}}">
+                        <van-icon name="delete-o"></van-icon>
+                        <van-icon name="edit"></van-icon>
+                    </button>
                 </view>
             </view>
         </view>

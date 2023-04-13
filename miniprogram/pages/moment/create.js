@@ -122,8 +122,47 @@ Page({
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad() {
+    onLoad(options) {
+        this.edit = options.edit
+        this.realDate = new Date()
 
+        if (this.edit) {
+            const col = wx.cloud.database().collection('WeRunDetails')
+            col.doc(this.edit).get().then(item => {
+                const {
+                    when,
+                    exerciseType,
+                    numericData,
+                    textContent,
+                    location,
+                    images,
+                    videos,
+                } = item.data
+                this.realData = when
+                this.setData({
+                    activity: exerciseType,
+                    numberInput: numericData,
+                    textInput: textContent,
+                    shareToWeRun: false,
+                    location,
+                    fileList: images.map((v) => {
+                        return {
+                            type: 'image',
+                            url: v
+                        }
+                    }).concat(videos.map(v => {
+                        return {
+                            type: 'video',
+                            url: v
+                        }
+                    }))
+                })
+            })
+        }
+        console.log(this.realDate)
+        this.setData({
+            date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`
+        })
     },
 
     /**
@@ -189,10 +228,10 @@ Page({
 
     confirmDate(e) {
         console.log(e)
-        var date = new Date(e.detail);
+        this.realDate = e.detail
         this.setData({
             isCalendarOpen: false,
-            date: `${date.getMonth() + 1}/${date.getDate()}`
+            date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`
         })
     },
 
@@ -219,51 +258,88 @@ Page({
             return
         }
 
-        wx.showLoading({
-            title: '正在上传',
-        })
         let images = this.data.fileList.filter(e => e.type == "image"),
             videos = this.data.fileList.filter(e => e.type == "video")
-        await col.add({
-            data: {
-                when: db.serverDate(),
-                exerciseType: this.data.shareToWeRun ? this.data.weRunActivity.name : this.data.activity,
-                unit: this.data.shareToWeRun ? this.data.activity.unit : undefined,
-                numericData: this.data.shareToWeRun ? this.data.numberInput : undefined,
-                textContent: this.data.textInput,
-                location: this.data.location,
-                images: [],
-                videos: [],
-                likedBy: [],
-                comments: []
-            }
-        }).then(async r => {
-            if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
+
+        if (this.edit) {
+            console.log(this.edit)
+            await col.doc(this.edit).update({
+                data: {
+                    when: this.realDate,
+                    exerciseType: this.data.shareToWeRun ? this.data.weRunActivity.name : this.data.activity,
+                    unit: this.data.shareToWeRun ? this.data.activity.unit : undefined,
+                    numericData: this.data.shareToWeRun ? this.data.numberInput : undefined,
+                    textContent: this.data.textInput,
+                    location: this.data.location
+                }
+            }).catch(e => {
+                wx.showToast({
+                    title: '数据错误',
+                    icon: 'error'
+                })
+                throw e
+            })
+
+            if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${this.edit}/img`)
                 .then(uploadResult => {
                     console.log(uploadResult)
-                    col.doc(r._id).update({
+                    col.doc(this.edit).update({
                         data: {
                             images: uploadResult.map((file, index) => file.fileID)
                         }
                     })
                 })
-            if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
+            if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${this.edit}/video`)
                 .then(uploadResult => {
                     console.log(uploadResult)
-                    col.doc(r._id).update({
+                    col.doc(this.edit).update({
                         data: {
                             videos: uploadResult.map((file, index) => file.fileID)
                         }
                     })
                 })
-        }).catch(e => {
-            wx.hideLoading()
-            wx.showToast({
-                title: '数据错误',
-                icon: 'error'
+        } else {
+            await col.add({
+                data: {
+                    when: this.realDate,
+                    exerciseType: this.data.shareToWeRun ? this.data.weRunActivity.name : this.data.activity,
+                    unit: this.data.shareToWeRun ? this.data.activity.unit : undefined,
+                    numericData: this.data.shareToWeRun ? this.data.numberInput : undefined,
+                    textContent: this.data.textInput,
+                    location: this.data.location,
+                    images: [],
+                    videos: [],
+                    likedBy: [],
+                    comments: []
+                }
+            }).then(async r => {
+                if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
+                    .then(uploadResult => {
+                        console.log(uploadResult)
+                        col.doc(r._id).update({
+                            data: {
+                                images: uploadResult.map((file, index) => file.fileID)
+                            }
+                        })
+                    })
+                if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
+                    .then(uploadResult => {
+                        console.log(uploadResult)
+                        col.doc(r._id).update({
+                            data: {
+                                videos: uploadResult.map((file, index) => file.fileID)
+                            }
+                        })
+                    })
+            }).catch(e => {
+                wx.showToast({
+                    title: '数据错误',
+                    icon: 'error'
+                })
+                throw e
             })
-            throw e
-        })
+
+        }
 
         if (this.data.shareToWeRun) {
             let recordList = []
@@ -337,27 +413,32 @@ Page({
     },
 
     async uploadFilesToCloud(fileList, filePrefix) {
-        if (fileList.length) {
-            const uploadTasks = fileList.map((file, index) => wx.cloud.uploadFile({
-                cloudPath: `${filePrefix}${index}`,
-                filePath: file.url
-            }));
-            return Promise.all(uploadTasks)
-                .catch(e => {
-                    wx.showToast({
-                        title: '上传失败',
-                        icon: 'none'
-                    });
-                    console.log(e);
+        wx.showLoading({
+            title: '正在上传',
+        })
+        const uploadTasks = fileList.map((file, index) => {
+            if (!file.url.startsWith('cloud')) {
+                return wx.cloud.uploadFile({
+                    cloudPath: `${filePrefix}${index}`,
+                    filePath: file.url
                 })
-                .then(data => {
-                    wx.showToast({
-                        title: '上传成功',
-                        icon: 'none'
-                    });
-                    return data
-                })
-        }
+            } else return {
+                fileID: file.url
+            }
+        });
+        return Promise.all(uploadTasks)
+            .catch(e => {
+                wx.hideLoading()
+                wx.showToast({
+                    title: '上传失败',
+                    icon: 'none'
+                });
+                console.log(e);
+            })
+            .then(data => {
+                wx.hideLoading()
+                return data
+            })
     },
 
     onChange(e) {

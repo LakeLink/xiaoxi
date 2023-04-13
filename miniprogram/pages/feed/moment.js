@@ -119,6 +119,46 @@ Page({
         })
     },
 
+    onEdit(e) {
+        const item = this.data.weRunDetails[e.currentTarget.dataset.idx]
+        wx.showActionSheet({
+            itemList: ['编辑', '删除'],
+        }).then(r => {
+            console.log(r)
+            switch (r.tapIndex) {
+                case 0:
+                    wx.navigateTo({
+                        url: `/pages/moment/create?edit=${item._id}`,
+                    })
+                    break
+                case 1:
+                    wx.showModal({
+                        title: '！！！',
+                        content: '是否要删除该活动',
+                        complete: r => {
+                            if (r.confirm) {
+                                const col = wx.cloud.database().collection('WeRunDetails')
+                                col.doc(item._id).remove().then(r => {
+                                    this.refresh()
+                                    wx.showToast({
+                                        title: '已删除',
+                                        icon: 'success'
+                                    })
+                                }).catch(e => {
+                                    wx.showToast({
+                                        title: '数据错误',
+                                        icon: 'error'
+                                    })
+                                })
+                            }
+                        }
+                    })
+                    break
+            }
+        })
+    },
+
+
     onTapToplevel(e) {
         this.setData({
             showPopup: false,
@@ -138,7 +178,7 @@ Page({
      */
     onLoad(options) {
         console.log("onLoad")
-        
+
         if (options.id) this.setData({
             queryId: options.id
         })

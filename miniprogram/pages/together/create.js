@@ -70,7 +70,7 @@ Page({
 
     async uploadFilesToCloud(fileList, filePrefix) {
         wx.showLoading({
-            title: '正在上传图片',
+            title: '正在上传',
         })
         const uploadTasks = fileList.map((file, index) => {
             if (!file.url.startsWith('cloud')) {
