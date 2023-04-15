@@ -49,7 +49,7 @@
                     <van-icon name="smile-comment-o"></van-icon>
                     <text wx:if="{{item.comments.length}}" style="margin-left: 5px; color: grey;">{{item.comments.length}}</text>
                 </button>
-                <button size="mini" bindtap="onShare" open-type="share" data-id="{{item._id}}" style="margin: 0; height: 100%;">
+                <button size="mini" bindtap="onShare" open-type="share" data-idx="{{index}}" style="margin: 0; height: 100%;">
                     <van-icon name="share-o" />
                 </button>
                 <button size="mini" type="default" bindtap="onEdit" data-idx="{{index}}" style="margin: 0; padding: 0 4px 0;" wx:if="{{item.mine}}">
