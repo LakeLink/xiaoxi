@@ -82,12 +82,12 @@ exports.get = async (event, context) => {
     let agg = col.aggregate()
     if (await quickAction.invitedUser(OPENID)) {
         agg = agg.match({
-            _id: event.id
+            _id: event.id ? event.id : undefined
         })
     } else {
         agg = agg.match({
             _openid: OPENID,
-            _id: event.id
+            _id: event.id ? event.id : undefined
         })
     }
     agg = agg.addFields({
