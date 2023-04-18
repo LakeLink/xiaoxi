@@ -1,3 +1,7 @@
+const dayjs = require('dayjs')
+require('dayjs/locale/zh-cn')
+dayjs.locale('zh-cn')
+
 const together = require('./together')
 const user = require('./user')
 const weRun = require('./weRun')
@@ -21,6 +25,8 @@ exports.main = async function (event, context) {
             return await together.quit(event, context)
         case 'createTogetherActivityId':
             return await together.createActivityId(event, context)
+        case 'afterDeleteTogether':
+            return await together.afterDelete(event, context)
 
         case 'getUser':
             return await user.read(event, context)

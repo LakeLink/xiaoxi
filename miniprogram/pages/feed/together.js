@@ -59,6 +59,12 @@ Page({
             }
             this.refresh()
         })
+        wx.requestSubscribeMessage({
+            tmplIds: [
+                'qHaLq87tBwA8RWHuAw7ZqW9pETn0pvx_OPYRe4uJN10', // 候补
+                'Denmjkfh0o9B8LlimVu31V5GooHI2mM64ucAXj_3d1Y' // 活动取消
+            ]
+        }).then(r => console.log(r))
     },
 
     onQuit(e) {
@@ -112,6 +118,16 @@ Page({
                             if (r.confirm) {
                                 const col = wx.cloud.database().collection('TogetherDetails')
                                 col.doc(item._id).remove().then(r => {
+                                    wx.cloud.callFunction({
+                                        name: 'fn',
+                                        data: {
+                                            type: 'afterDeleteTogether',
+                                            location: item.location,
+                                            sportsType: item.sportsType,
+                                            scheduledAt: item.scheduledAt,
+                                            partners: item.partnerInfo.map(v => v._id)
+                                        }
+                                    })
                                     this.refresh()
                                     wx.showToast({
                                         title: '已删除',
@@ -335,11 +351,14 @@ Page({
      */
     onShareAppMessage(e) {
         console.log(e)
-        if (e.from == 'button') return {
-            title: '小西爱运动',
-            path: `pages/feed/together?id=${e.target.dataset.id}`
-        }
-        else {
+        if (e.from == 'button') {
+            const item = this.data.togetherDetails[e.target.dataset.idx]
+            return {
+                title: `小西爱运动：${item.sportsType} ${item.description}`,
+                path: `pages/feed/together?id=${item._id}`,
+                imageUrl: item.images[0]
+            }
+        } else {
             return {
                 title: '小西按运动',
                 page: 'pages/feed/together'

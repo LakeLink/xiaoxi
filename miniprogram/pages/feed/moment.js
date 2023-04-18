@@ -247,11 +247,14 @@ Page({
      */
     onShareAppMessage(e) {
         console.log(e)
-        if (e.from == 'button') return {
-            title: '小西爱运动',
-            path: `pages/feed/moment?id=${e.target.dataset.id}`
-        }
-        else {
+        if (e.from == 'button') {
+            const item = this.data.weRunDetails[e.target.dataset.idx]
+            return {
+                title: `小西爱运动：${item.exerciseType} ${item.textContent}`,
+                path: `pages/feed/moment?id=${item._id}`,
+                imageUrl: item.images[0]
+            }
+        } else {
             return {
                 title: '小西按运动',
                 page: 'pages/feed/moment'
