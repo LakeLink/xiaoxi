@@ -186,6 +186,21 @@ Page({
                     icon: 'error'
                 })
             })
+            .then(this.refreshWeRunPermission)
+            .then(() => {
+                if (r.authSetting['scope.werun']) {
+                    wx.getWeRunData().then(r => {
+                        console.log(r)
+                        wx.cloud.callFunction({
+                            name: 'fn',
+                            data: {
+                                type: 'updateWeRunStepInfo',
+                                weRunData: wx.cloud.CloudID(r.cloudID)
+                            }
+                        })
+                    })
+                }
+            })
         } else { // Maybe want to disable it
             this.setData({
                 showOpenSettingButton: true

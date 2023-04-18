@@ -30,6 +30,7 @@ App({
                 })
             }
         });
+
         wx.cloud.callFunction({
             name: 'fn',
             data: {

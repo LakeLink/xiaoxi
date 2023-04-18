@@ -296,7 +296,7 @@ Page({
             queryId: options.id
         })
 
-        if (options.mine && !getApp().globalData.cachedUser?.invited) this.setData({
+        if (!getApp().globalData.cachedUser?.invited) this.setData({
             mine: true
         })
     },

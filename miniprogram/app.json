@@ -1,8 +1,8 @@
 {
     "pages": [
+        "pages/feed/moment",
         "pages/index/index",
         "pages/moment/create",
-        "pages/feed/moment",
         "pages/feed/together",
         "pages/about/me",
         "pages/about/index",
@@ -20,6 +20,14 @@
             {
                 "pagePath": "pages/index/index",
                 "text": "首页"
+            },
+            {
+                "pagePath": "pages/feed/moment",
+                "text": "运动打卡"
+            },
+            {
+                "pagePath": "pages/feed/together",
+                "text": "运动搭子"
             },
             {
                 "pagePath": "pages/stats/stepsRank",
