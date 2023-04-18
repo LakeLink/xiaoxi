@@ -1,7 +1,8 @@
 {
     "pages": [
-        "pages/feed/moment",
+        "pages/index/index",
         "pages/moment/create",
+        "pages/feed/moment",
         "pages/feed/together",
         "pages/about/me",
         "pages/about/index",
@@ -17,12 +18,8 @@
     "tabBar": {
         "list": [
             {
-                "pagePath": "pages/feed/moment",
-                "text": "运动瞬间"
-            },
-            {
-                "pagePath": "pages/feed/together",
-                "text": "运动搭子"
+                "pagePath": "pages/index/index",
+                "text": "首页"
             },
             {
                 "pagePath": "pages/stats/stepsRank",

@@ -4,6 +4,14 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
+exports.invitedUser = async OPENID => {
+    const db = cloud.database()
+    const col = db.collection('Users')
+    let u = await col.doc(OPENID).get().catch(e => null)
+    if (u) return u.special
+    else return false
+}
+
 exports.lookupLikedAndComments = (agg, _, $, OPENID) =>
     agg.lookup({
         from: 'Users',

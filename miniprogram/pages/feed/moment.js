@@ -26,12 +26,13 @@ Page({
         let r = await wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getWeRunFeed'
+                type: 'getWeRunFeed',
+                id: this.data.queryId
             }
         })
         // const db = wx.cloud.database()
         // const r = await db.collection('WeRunDetails').get()
-        if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
+        // if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
         r.result.forEach(e => {
             e.when = dayjs(e.when).fromNow()
         })
@@ -185,6 +186,11 @@ Page({
         if (options.id) this.setData({
             queryId: options.id
         })
+
+        console.log(getApp().globalData)
+        if (options.mine && !getApp().globalData.cachedUser?.invited) this.setData({
+            mine: true
+        })
         // this.refresh()
     },
 
@@ -192,16 +198,6 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'getAds'
-            }
-        }).then(r => {
-            this.setData({
-                ads: r.result
-            })
-        })
     },
 
     /**

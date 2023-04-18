@@ -19,7 +19,19 @@ exports.getFeed = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let agg = col.aggregate().lookup({
+    let agg = col.aggregate()
+    if (await quickAction.specialUser(OPENID)) {
+        agg = agg.match({
+            _id: event.id
+        })
+    } else {
+        agg = agg.match({
+            _openid: OPENID,
+            _id: event.id
+        })
+    }
+
+    agg = agg.lookup({
         from: 'Users',
         localField: '_openid',
         foreignField: '_id',

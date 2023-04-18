@@ -78,7 +78,18 @@ exports.get = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const agg = col.aggregate().addFields({
+    let agg = col.aggregate()
+    if (await quickAction.invitedUser(OPENID)) {
+        agg = agg.match({
+            _id: event.id
+        })
+    } else {
+        agg = agg.match({
+            _openid: OPENID,
+            _id: event.id
+        })
+    }
+    agg = agg.addFields({
         // partners: 0,
         limitedPartners: $.slice(['$partners', '$limit']),
         // if size == 0 then error pops up;
@@ -135,7 +146,7 @@ exports.get = async (event, context) => {
     console.log(r)
     r.list.forEach(e => {
         e.host = e.host[0]
-        e.mine = e.host._id == OPENID
+        e.mine = e._openid == OPENID
     })
     r.list.forEach(e => {
         e.comments.forEach(c =>

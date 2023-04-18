@@ -27,10 +27,10 @@ Page({
             name: 'fn',
             data: {
                 type: 'getTogether',
+                id: this.data.queryId
             }
         })
         // console.log()
-        if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
         console.log(r)
         r.result.forEach(e => {
             e.myScheduledAt = dayjs(e.scheduledAt).format("YY/M/D HH:mm")
@@ -277,6 +277,10 @@ Page({
     onLoad(options) {
         if (options.id) this.setData({
             queryId: options.id
+        })
+
+        if (options.mine && !getApp().globalData.cachedUser?.invited) this.setData({
+            mine: true
         })
     },
 
