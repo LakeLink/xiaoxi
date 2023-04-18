@@ -61,8 +61,9 @@ Page({
         })
         wx.requestSubscribeMessage({
             tmplIds: [
-                'qHaLq87tBwA8RWHuAw7ZqW9pETn0pvx_OPYRe4uJN10', // 候补
-                'Denmjkfh0o9B8LlimVu31V5GooHI2mM64ucAXj_3d1Y' // 活动取消
+                'RdCfwdri-Etwwd_INtUpagcZd28Ovs-dflwE0GLhsv0', // 候补
+                'aH2yD7DNu37aUJo8R85l-PYiTqSpi1EWLZ8HM1GyORQ', // 活动取消
+                '1sNdWGOOafcONMUYyNj5d0f2Zk_8QI4GLbRQIaIaXI8' // 活动开始提醒
             ]
         }).then(r => console.log(r))
     },

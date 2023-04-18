@@ -182,7 +182,7 @@ exports.quit = async (event, context) => {
 
     if (r.updated && item.partners.length > item.limit && item.partners.indexOf(OPENID) < item.limit) {
         cloud.openapi.subscribeMessage.send({
-            templateId: 'Denmjkfh0o9B8LlimVu31V5GooHI2mM64ucAXj_3d1Y',
+            templateId: 'RdCfwdri-Etwwd_INtUpagcZd28Ovs-dflwE0GLhsv0',
             page: `pages/feed/together?id=${item._id}`,
             touser: OPENID,
             data: {
@@ -241,7 +241,7 @@ exports.afterDelete = async (event, context) => {
     console.log(event)
     event.partners.forEach(e => {
         cloud.openapi.subscribeMessage.send({
-            templateId: 'qHaLq87tBwA8RWHuAw7ZqW9pETn0pvx_OPYRe4uJN10',
+            templateId: 'aH2yD7DNu37aUJo8R85l-PYiTqSpi1EWLZ8HM1GyORQ',
             page: 'pages/feed/together',
             touser: e,
             data: {
@@ -250,9 +250,6 @@ exports.afterDelete = async (event, context) => {
                 },
                 date2: {
                     value: dayjs(event.scheduledAt).format('YYYY/MM/DD HH:mm')
-                },
-                thing3: {
-                    value: event.location
                 },
                 thing11: {
                     value: '发起者已取消该活动，去看看别的吧'
