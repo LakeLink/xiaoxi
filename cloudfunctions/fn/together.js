@@ -79,13 +79,15 @@ exports.get = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
+    let filtered = true
     let agg = col.aggregate()
     if (event.id) {
         agg = agg.match({
             _id: event.id
         })
     } else {
-        if (!await quickAction.invitedUser(OPENID)) {
+        filtered = !await quickAction.invitedUser(OPENID)
+        if (filtered) {
             agg = agg.match({
                 _openid: OPENID
             })
@@ -157,7 +159,7 @@ exports.get = async (event, context) => {
         )
         // e.comments.sort((a, b) => a.when > b.when)
     })
-    return r.list
+    return { list: r.list, filtered }
 }
 
 exports.quit = async (event, context) => {

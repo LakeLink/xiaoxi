@@ -37,14 +37,11 @@ App({
                 type: 'getUser',
                 q: options.query
             }
-        }).then(r => {
-            if (!r.result.exist) {
-                wx.showToast({
-                    title: '请前往`About`完善个人信息',
-                    icon: 'error'
-                })
-            }
-            this.globalData.cachedUser = r.result
+        }).catch(e => {
+            wx.showToast({
+                title: '请前往`About`完善个人信息',
+                icon: 'error'
+            })
         })
     }
 });

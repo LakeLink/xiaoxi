@@ -14,7 +14,6 @@ exports.read = async (event, context) => {
     const db = cloud.database()
     const col = db.collection('Users')
 
-    let invited
     if (event.q && event.q.invite == 'westlake') {
         invited = true
         db.collection('InvitedUsers').doc(OPENID).set({
@@ -22,14 +21,9 @@ exports.read = async (event, context) => {
                 invited
             }
         })
-    } else {
-        invited = await db.collection('InvitedUsers').doc(OPENID).get().catch(e => console.error(e)).then(r => r ? r.data.invited : false)
     }
 
-    return col.doc(OPENID).get().catch(e => console.error(e)).then(r => {
-        if (r) return { ...r.data, invited, exist: true }
-        else return { invited, exist: false }
-    })
+    return col.doc(OPENID).get().then(r => r.data)
 }
 
 exports.save = async (event, context) => {

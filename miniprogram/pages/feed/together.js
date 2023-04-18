@@ -18,7 +18,8 @@ Page({
         // waitListUserinfo: null,
         popupIndex: null,
         showCommentInput: -1,
-        showHostDetail: false
+        showHostDetail: false,
+        filtered: false
     },
 
     async refresh() {
@@ -29,15 +30,16 @@ Page({
                 type: 'getTogether',
                 id: this.data.queryId
             }
-        })
+        }).then(r => r.result)
         // console.log()
         console.log(r)
-        r.result.forEach(e => {
+        r.list.forEach(e => {
             e.myScheduledAt = dayjs(e.scheduledAt).format("YY/M/D HH:mm")
             e.deltaPublishedAt = dayjs(e.publishedAt).fromNow()
         })
         this.setData({
-            togetherDetails: r.result
+            togetherDetails: r.list,
+            filtered: r.filtered
         })
         console.log(this.data.togetherDetails)
     },
@@ -294,10 +296,6 @@ Page({
     onLoad(options) {
         if (options.id) this.setData({
             queryId: options.id
-        })
-
-        if (!getApp().globalData.cachedUser?.invited) this.setData({
-            mine: true
         })
     },
 

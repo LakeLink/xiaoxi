@@ -19,7 +19,8 @@ Page({
         showPopup: false,
         ads: null,
         // only parent -> child, no child -> parent; This is how it works (Vue style)
-        onlyForResetNewComment: ''
+        onlyForResetNewComment: '',
+        filtered: false
     },
 
     async refresh() {
@@ -29,16 +30,17 @@ Page({
                 type: 'getWeRunFeed',
                 id: this.data.queryId
             }
-        })
+        }).then(r => r.result)
         // const db = wx.cloud.database()
         // const r = await db.collection('WeRunDetails').get()
         // if (this.data.queryId) r.result.unshift(r.result.find(e => e._id == this.data.queryId))
-        r.result.forEach(e => {
+        r.list.forEach(e => {
             e.when = dayjs(e.when).fromNow()
         })
-        console.log(r.result)
+        console.log(r)
         this.setData({
-            weRunDetails: r.result
+            weRunDetails: r.list,
+            filtered: r.filtered
         })
         console.log(this.data.weRunDetails)
     },
@@ -187,10 +189,6 @@ Page({
             queryId: options.id
         })
 
-        console.log(getApp().globalData)
-        if (!getApp().globalData.cachedUser?.invited) this.setData({
-            mine: true
-        })
         // this.refresh()
     },
 
