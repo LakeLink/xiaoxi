@@ -10,10 +10,10 @@ Component({
         //大写变小写，横线变驼峰
         comments: Object,
         userInfo: Object,
-        showPopup: false,
-        showInput: false,
-        sending: false,
-        newComment: ''
+        showPopup: Boolean,
+        showInput: Boolean,
+        sending: Boolean,
+        newComment: String
     },
 
     /**
