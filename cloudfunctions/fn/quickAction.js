@@ -4,11 +4,12 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-exports.invitedUser = async OPENID => {
+exports.invitedUser = async (id) => {
     const db = cloud.database()
     const col = db.collection('Users')
-    let u = await col.doc(OPENID).get().catch(e => null)
-    if (u) return u.special
+    let u = await col.doc(id).get().then(r => r.data).catch(e => null)
+
+    if (u) return u.invited
     else return false
 }
 
