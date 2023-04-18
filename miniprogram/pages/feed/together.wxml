@@ -60,6 +60,7 @@
             </view>
         </view>
     </view>
+    <text style="display: block;color: grey; text-align: center; white-space: pre;">———— 已经到底了 ————</text>
 </view>
 
 <van-popup position="bottom" closeable round show="{{ showPopup }}" bind:close="onPopupClose">
