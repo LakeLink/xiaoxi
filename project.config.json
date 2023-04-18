@@ -44,7 +44,7 @@
         "ignoreDevUnusedFiles": false,
         "condition": false
     },
-    "appid": "wx2bba79a5fb7d25b4",
+    "appid": "wxb5e5e58949b8b027",
     "projectname": "quickstart-wx-cloud",
     "libVersion": "2.14.1",
     "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
