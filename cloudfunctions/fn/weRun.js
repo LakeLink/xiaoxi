@@ -20,15 +20,16 @@ exports.getFeed = async (event, context) => {
     const $ = _.aggregate
 
     let agg = col.aggregate()
-    if (await quickAction.invitedUser(OPENID)) {
+    if (event.id) {
         agg = agg.match({
-            _id: event.id  ? event.id : undefined
+            _id: event.id
         })
     } else {
-        agg = agg.match({
-            _openid: OPENID,
-            _id: event.id ? event.id : undefined
-        })
+        if (!await quickAction.invitedUser(OPENID)) {
+            agg = agg.match({
+                _openid: OPENID
+            })
+        }
     }
 
     agg = agg.lookup({
