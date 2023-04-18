@@ -224,6 +224,7 @@ Page({
                 loading: false,
                 ...r.result
             })
+            getApp().globalData.cachedUser = r.result
         }).catch(e => {
             this.setData({
                 loading: false

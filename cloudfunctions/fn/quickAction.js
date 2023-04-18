@@ -6,9 +6,8 @@ cloud.init({
 
 exports.invitedUser = async (id) => {
     const db = cloud.database()
-    const col = db.collection('Users')
-    let u = await col.doc(id).get().then(r => r.data).catch(e => null)
-
+    const col = db.collection('InvitedUsers')
+    let u = await col.doc(id).get().then(r => r.data).catch(e => console.error(e))
     if (u) return u.invited
     else return false
 }

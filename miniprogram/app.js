@@ -38,14 +38,13 @@ App({
                 q: options.query
             }
         }).then(r => {
-            if (!r.result) {
+            if (!r.result.exist) {
                 wx.showToast({
                     title: '请前往`About`完善个人信息',
                     icon: 'error'
                 })
-            } else {
-                this.globalData.cachedUser = r.result
             }
+            this.globalData.cachedUser = r.result
         })
     }
 });
