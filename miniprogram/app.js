@@ -1,6 +1,6 @@
 // app.js
 App({
-    onLaunch: function () {
+    onLaunch(options) {
         if (!wx.cloud) {
             console.error('请使用 2.2.3 或以上的基础库以使用云能力');
         } else {
@@ -30,11 +30,11 @@ App({
                 })
             }
         });
-
         wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getUser'
+                type: 'getUser',
+                q: options.query
             }
         }).then(r => {
             if (!r.result) {
@@ -44,7 +44,6 @@ App({
                 })
             } else {
                 this.globalData.cachedUser = r.result
-                console.log('getUser:', r)
             }
         })
     }

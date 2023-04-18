@@ -14,6 +14,14 @@ exports.read = async (event, context) => {
     const db = cloud.database()
     const col = db.collection('Users')
 
+    if (event.q && event.q.invite == 'westlake') {
+        col.doc(OPENID).update({
+            data: {
+                invited: true
+            }
+        })
+    }
+
     return col.doc(OPENID).get().then(r => r.data).catch(e => null)
 }
 
