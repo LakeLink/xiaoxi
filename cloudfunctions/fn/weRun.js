@@ -20,7 +20,7 @@ exports.getFeed = async (event, context) => {
     const $ = _.aggregate
 
     let agg = col.aggregate()
-    if (await quickAction.specialUser(OPENID)) {
+    if (await quickAction.invitedUser(OPENID)) {
         agg = agg.match({
             _id: event.id
         })
