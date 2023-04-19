@@ -6,6 +6,6 @@
 </swiper>
 
 <van-cell-group title="首页" inset>
-    <van-cell title="运动打卡" is-link link-type="switchTab" url="/pages/feed/moment?mine=true"></van-cell>
+    <van-cell title="运动瞬间" is-link link-type="switchTab" url="/pages/feed/moment?mine=true"></van-cell>
     <van-cell title="运动搭子" is-link link-type="switchTab" url="/pages/feed/together?mine=true"></van-cell>
 </van-cell-group>

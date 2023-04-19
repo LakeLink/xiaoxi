@@ -1,6 +1,6 @@
 <!--pages/exercise-now/exercise-now.wxml-->
 
-<van-cell-group title="运动瞬间" inset="true">
+<van-cell-group title="运动打卡" inset="true">
     <van-cell required title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
     <van-calendar min-date="{{minDateForCalendar}}" show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
 

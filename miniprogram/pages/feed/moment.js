@@ -250,13 +250,13 @@ Page({
         if (e.from == 'button') {
             const item = this.data.weRunDetails[e.target.dataset.idx]
             return {
-                title: `小西爱运动：${item.exerciseType} ${item.textContent}`,
+                title: `运动瞬间：${item.exerciseType} ${item.textContent}`,
                 path: `pages/feed/moment?id=${item._id}`,
                 imageUrl: item.media.find(v => v.type == 'image')?.fileID
             }
         } else {
             return {
-                title: '小西爱运动',
+                title: '运动瞬间',
                 page: 'pages/feed/moment'
             }
         }

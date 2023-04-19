@@ -1,6 +1,6 @@
 <!--pages/feed/moment.wxml-->
 <view style="padding: 20px 0;" bindtap="onTapToplevel">
-    <text wx:if="{{filtered}}" style="margin-left: 20px; font-size: large; font-weight: bold;">我的运动打卡</text>
+    <text wx:if="{{filtered}}" style="margin-left: 20px; font-size: large; font-weight: bold;">我的运动打卡记录</text>
     <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" wx:for-index="weRunIdx" style="{{queryId == item._id ? 'margin-bottom: 20px; border: 2px dashed orange' : 'margin-bottom: 20px;'}}">
         <swiper style=" height: 200px;" indicator-dots="{{ item.media.length > 1 }}">
             <swiper-item wx:for="{{item.media}}" wx:for-index="mediaIdx" wx:for-item="mediaItem" style="border-top-left-radius: 8px; border-top-right-radius: 8px;">

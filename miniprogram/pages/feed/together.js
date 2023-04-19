@@ -356,13 +356,13 @@ Page({
         if (e.from == 'button') {
             const item = this.data.togetherDetails[e.target.dataset.idx]
             return {
-                title: `小西爱运动：${item.sportsType} ${item.description}`,
+                title: `运动搭子：${item.sportsType} ${item.description}`,
                 path: `pages/feed/together?id=${item._id}`,
                 imageUrl: item.images[0]
             }
         } else {
             return {
-                title: '小西爱运动',
+                title: '运动搭子',
                 page: 'pages/feed/together'
             }
         }
