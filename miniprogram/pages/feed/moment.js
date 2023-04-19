@@ -246,13 +246,13 @@ Page({
      * 用户点击右上角分享
      */
     onShareAppMessage(e) {
-        console.log(e)
+        // console.log(e)
         if (e.from == 'button') {
             const item = this.data.weRunDetails[e.target.dataset.idx]
             return {
                 title: `小西爱运动：${item.exerciseType} ${item.textContent}`,
                 path: `pages/feed/moment?id=${item._id}`,
-                imageUrl: item.images[0]
+                imageUrl: item.media.find(v => v.type == 'image')?.fileID
             }
         } else {
             return {
