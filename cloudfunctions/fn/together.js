@@ -82,6 +82,7 @@ exports.get = async (event, context) => {
     let filtered = true
     let agg = col.aggregate()
     if (event.id) {
+        filtered = false
         agg = agg.match({
             _id: event.id
         })
