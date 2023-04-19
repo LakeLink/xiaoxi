@@ -4,8 +4,8 @@
     <view class="card" wx:key="_id" wx:for="{{ weRunDetails }}" wx:for-index="weRunIdx" style="{{queryId == item._id ? 'margin-bottom: 20px; border: 2px dashed orange' : 'margin-bottom: 20px;'}}">
         <swiper style=" height: 200px;" indicator-dots="{{ item.images.length > 1 }}">
             <swiper-item wx:for="{{item.media}}" wx:for-index="mediaIdx" wx:for-item="mediaItem" style="border-top-left-radius: 8px; border-top-right-radius: 8px;">
-                <image wx:if="{{mediaItem.type == 'image'}}" src="{{mediaItem.fileID}}" mode="aspectFill" style="width: 100%; height: 100%;" data-id="{{weRunIdx}}" data-img-idx="{{mediaIdx}}" bindtap="onImgTap"></image>
-                <video wx:if="{{mediaItem.type == 'video'}}" src="{{mediaItem.fileID}}" mode="aspectFill" style="width: 100%; height: 100%;" data-id="{{weRunIdx}}" data-video-idx="{{mediaIdx}}"></video>
+                <image wx:if="{{mediaItem.type == 'image'}}" src="{{mediaItem.fileID}}" lazy-load="true" mode="aspectFill" style="width: 100%; height: 100%;" data-id="{{weRunIdx}}" data-img-idx="{{mediaIdx}}" bindtap="onImgTap"></image>
+                <video wx:if="{{mediaItem.type == 'video'}}" src="{{mediaItem.fileID}}" show-mute-btn="true" loop="true" mode="aspectFill" style="width: 100%; height: 100%;" data-id="{{weRunIdx}}" data-video-idx="{{mediaIdx}}"></video>
             </swiper-item>
         </swiper>
         <view style="padding: 10px;">

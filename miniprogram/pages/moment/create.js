@@ -8,7 +8,7 @@ Page({
         openCalendar: false,
         date: "",
         textInput: "",
-        shareToWeRun: true,
+        shareToWeRun: false,
         weRunActivity: null,
         activity: "",
         /*

@@ -42,7 +42,8 @@
     <view style="background-color: white; padding: 16px;">
         <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}"></textarea>
     </view>
-    <view style="background-color: white; padding: 16px;">
+    <view style="background-color: white; padding: 16px; position: relative">
+        <text style="vertical-align: top; color: red; position: absolute; left: 8px;">*</text>
         <van-uploader accept="media" multiple="true" max-duration="15" compressed="false" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ mediaList }}" max-count="9" />
     </view>
 </van-cell-group>
