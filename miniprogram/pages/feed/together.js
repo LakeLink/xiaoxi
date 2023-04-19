@@ -294,9 +294,11 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
+        this.init = true
         if (options.id) this.setData({
             queryId: options.id
         })
+        this.refresh()
     },
 
     /**
@@ -310,7 +312,8 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-        this.refresh()
+        if (this.init) this.init = false
+        else this.refresh()
     },
 
     /**
