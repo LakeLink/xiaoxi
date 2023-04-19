@@ -182,9 +182,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        this.realDate = new Date()
         this.edit = options.edit
-
         if (this.edit) {
             const col = wx.cloud.database().collection('TogetherDetails')
             col.doc(this.edit).get().then(item => {
@@ -196,7 +194,7 @@ Page({
                     sportsType,
                     images
                 } = item.data
-                this.realData = scheduledAt
+                this.realDate = scheduledAt
                 this.setData({
                     textInput: description,
                     limit,
@@ -207,15 +205,19 @@ Page({
                             type: 'image',
                             url: v
                         }
-                    })
+                    }),
+                    date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`,
+                    time: `${this.realDate.getHours()}:${this.realDate.getMinutes()}`
                 })
+            })
+        } else {
+            this.realDate = new Date()
+            this.setData({
+                date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`,
+                time: `${this.realDate.getHours()}:${this.realDate.getMinutes()}`
             })
         }
         console.log(this.realDate)
-        this.setData({
-            date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`,
-            time: `${this.realDate.getHours()}:${this.realDate.getMinutes()}`
-        })
     },
 
     /**

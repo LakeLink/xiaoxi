@@ -124,8 +124,6 @@ Page({
      */
     onLoad(options) {
         this.edit = options.edit
-        this.realDate = new Date()
-
         if (this.edit) {
             const col = wx.cloud.database().collection('WeRunDetails')
             col.doc(this.edit).get().then(item => {
@@ -135,34 +133,30 @@ Page({
                     numericData,
                     textContent,
                     location,
-                    images,
-                    videos,
+                    media
                 } = item.data
-                this.realData = when
+                this.realDate = when
                 this.setData({
                     activity: exerciseType,
                     numberInput: numericData,
                     textInput: textContent,
                     shareToWeRun: false,
                     location,
-                    mediaList: images.map((v) => {
+                    mediaList: media.map((v) => {
                         return {
-                            type: 'image',
-                            url: v
+                            type: v.type,
+                            url: v.fileID
                         }
-                    }).concat(videos.map(v => {
-                        return {
-                            type: 'video',
-                            url: v
-                        }
-                    }))
+                    }),
+                    date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`
                 })
             })
+        } else {
+            this.realDate = new Date()
+            this.setData({
+                date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`
+            })
         }
-        console.log(this.realDate)
-        this.setData({
-            date: `${this.realDate.getMonth() + 1}/${this.realDate.getDate()}`
-        })
     },
 
     /**
