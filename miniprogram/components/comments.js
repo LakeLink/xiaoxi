@@ -34,6 +34,20 @@ Component({
         },
 
         onSubmitComment(e) {
+            if (!getApp().globalData.userExist) {
+                wx.showModal({
+                    title: '个人信息',
+                    content: '你尚未完善个人信息',
+                    complete: (res) => {
+                        if (res.confirm) {
+                            wx.switchTab({
+                                url: '/pages/about/index',
+                            })
+                        }
+                    }
+                })
+                return
+            }
             if (this.data.newComment.length == 0) {
                 wx.showToast({
                     title: '请输入评论',

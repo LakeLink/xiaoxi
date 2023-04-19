@@ -37,6 +37,8 @@ App({
                 type: 'getUser',
                 q: options.query
             }
+        }).then(r => {
+            this.globalData.userExist = true
         }).catch(e => {
             wx.showToast({
                 title: '请前往`About`完善个人信息',

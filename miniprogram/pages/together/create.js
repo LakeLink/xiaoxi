@@ -78,7 +78,9 @@ Page({
                     cloudPath: `${filePrefix}${index}`,
                     filePath: file.url
                 })
-            } else return { fileID: file.url }
+            } else return {
+                fileID: file.url
+            }
         });
         return Promise.all(uploadTasks)
             .catch(e => {
@@ -219,7 +221,25 @@ Page({
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady() {},
+    onReady() {
+        if (!getApp().globalData.userExist) {
+            wx.showModal({
+                title: '个人信息',
+                content: '你尚未完善个人信息',
+                complete: (res) => {
+                    if (res.confirm) {
+                        wx.switchTab({
+                            url: '/pages/about/index',
+                        })
+                    }
+                    if (res.cancel) {
+                        wx.navigateBack()
+                    }
+                }
+            })
+            return
+        }
+    },
 
     /**
      * 生命周期函数--监听页面显示

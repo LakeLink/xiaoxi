@@ -102,6 +102,7 @@ Page({
                     title: '保存成功',
                     icon: 'success'
                 })
+                getApp().globalData.userExist = true
             }).catch(e => {
                 wx.showToast({
                     title: '发生错误',
@@ -216,7 +217,8 @@ Page({
         wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getUser'
+                type: 'getUser',
+                q: this.query
             }
         }).then(r => {
             r.result.college = this.data.collegeList[r.result.collegeIndex]
@@ -224,10 +226,12 @@ Page({
                 loading: false,
                 ...r.result
             })
+            getApp().globalData.userExist = true
         }).catch(e => {
             this.setData({
                 loading: false
             })
+            getApp().globalData.userExist = false
         })
 
         wx.cloud.callFunction({
@@ -248,6 +252,7 @@ Page({
 
 
     onLoad(options) {
+        this.query = options
 
         let skeletonRowWidth = []
         for (let i = 0; i < 7; i++) {
