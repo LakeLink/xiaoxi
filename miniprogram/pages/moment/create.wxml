@@ -43,7 +43,7 @@
         <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}"></textarea>
     </view>
     <view style="background-color: white; padding: 16px;">
-        <van-uploader accept="media" multiple="true" upload-text="图片也需要" max-duration="30" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ fileList }}" max-count="9" />
+        <van-uploader accept="media" multiple="true" max-duration="15" compressed="false" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ mediaList }}" max-count="9" />
     </view>
 </van-cell-group>
 <button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享运动瞬间</button>

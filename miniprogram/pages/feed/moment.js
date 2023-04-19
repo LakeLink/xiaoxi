@@ -47,8 +47,8 @@ Page({
 
     onImgTap(e) {
         wx.previewImage({
-            urls: this.data.weRunDetails[e.target.dataset.id].images,
-            current: this.data.weRunDetails[e.target.dataset.id].images[e.target.dataset.imgId]
+            urls: this.data.weRunDetails[e.target.dataset.id].media.filter(e => e.type == 'image').map(e => e.fileID),
+            current: this.data.weRunDetails[e.target.dataset.id].media[e.target.dataset.imgIdx].fileID
         })
     },
 

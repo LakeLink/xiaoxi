@@ -116,7 +116,7 @@ Page({
         minDateForCalendar: Date.now() - 1000 * 60 * 60 * 24 * 30,
         numberInput: "",
         location: "",
-        fileList: []
+        mediaList: []
     },
 
     /**
@@ -145,7 +145,7 @@ Page({
                     textInput: textContent,
                     shareToWeRun: false,
                     location,
-                    fileList: images.map((v) => {
+                    mediaList: images.map((v) => {
                         return {
                             type: 'image',
                             url: v
@@ -266,16 +266,21 @@ Page({
         const db = wx.cloud.database()
         const col = db.collection('WeRunDetails')
 
-        if (!this.data.date || !this.data.location || !this.data.fileList.length || !(this.data.shareToWeRun ? this.data.weRunActivity && this.data.numberInput : this.data.activity)) {
-            wx.showToast({
-                title: '信息不完整',
-                icon: 'error'
+        if (!this.data.mediaList.length) {
+            wx.showModal({
+                title: '缺少细节',
+                content: '需要至少一张图片或视频'
             })
             return
         }
 
-        let images = this.data.fileList.filter(e => e.type == "image"),
-            videos = this.data.fileList.filter(e => e.type == "video")
+        if (!this.data.date || !this.data.location || !(this.data.shareToWeRun ? this.data.weRunActivity && this.data.numberInput : this.data.activity)) {
+            wx.showModal({
+                title: '缺少细节',
+                content: '信息不完整'
+            })
+            return
+        }
 
         if (this.edit) {
             console.log(this.edit)
@@ -296,21 +301,12 @@ Page({
                 throw e
             })
 
-            if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${this.edit}/img`)
+            if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `WeRunDetails/${this.edit}`)
                 .then(uploadResult => {
                     console.log(uploadResult)
                     col.doc(this.edit).update({
                         data: {
-                            images: uploadResult.map((file, index) => file.fileID)
-                        }
-                    })
-                })
-            if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${this.edit}/video`)
-                .then(uploadResult => {
-                    console.log(uploadResult)
-                    col.doc(this.edit).update({
-                        data: {
-                            videos: uploadResult.map((file, index) => file.fileID)
+                            media: uploadResult
                         }
                     })
                 })
@@ -323,27 +319,17 @@ Page({
                     numericData: this.data.shareToWeRun ? this.data.numberInput : undefined,
                     textContent: this.data.textInput,
                     location: this.data.location,
-                    images: [],
-                    videos: [],
+                    media: [],
                     likedBy: [],
                     comments: []
                 }
             }).then(async r => {
-                if (images.length) await this.uploadFilesToCloud(images, `WeRunDetails/${r._id}/img`)
+                if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `WeRunDetails/${r._id}`)
                     .then(uploadResult => {
                         console.log(uploadResult)
                         col.doc(r._id).update({
                             data: {
-                                images: uploadResult.map((file, index) => file.fileID)
-                            }
-                        })
-                    })
-                if (videos.length) await this.uploadFilesToCloud(videos, `WeRunDetails/${r._id}/video`)
-                    .then(uploadResult => {
-                        console.log(uploadResult)
-                        col.doc(r._id).update({
-                            data: {
-                                videos: uploadResult.map((file, index) => file.fileID)
+                                media: uploadResult
                             }
                         })
                     })
@@ -414,32 +400,38 @@ Page({
 
     afterFileRead(e) {
         console.log(e)
-        this.data.fileList.push(...e.detail.file);
+        this.data.mediaList.push(...e.detail.file);
         this.setData({
-            fileList: this.data.fileList
+            mediaList: this.data.mediaList
         });
     },
 
     fileDelete(e) {
         console.log(e)
-        this.data.fileList.splice(e.detail.index);
+        this.data.mediaList.splice(e.detail.index);
         this.setData({
-            fileList: this.data.fileList
+            mediaList: this.data.mediaList
         });
     },
 
-    async uploadFilesToCloud(fileList, filePrefix) {
+    async uploadMediaToCloud(fileList, cloudFolderPath) {
         wx.showLoading({
             title: '正在上传',
         })
         const uploadTasks = fileList.map((file, index) => {
             if (!file.url.startsWith('cloud')) {
                 return wx.cloud.uploadFile({
-                    cloudPath: `${filePrefix}${index}`,
+                    cloudPath: `${cloudFolderPath}/${file.type}${index}`,
                     filePath: file.url
+                }).then(r => {
+                    return {
+                        fileID: r.fileID,
+                        type: file.type
+                    }
                 })
             } else return {
-                fileID: file.url
+                fileID: file.url,
+                type: file.type
             }
         });
         return Promise.all(uploadTasks)
