@@ -256,7 +256,7 @@ Page({
             }
         } else {
             return {
-                title: '小西按运动',
+                title: '小西爱运动',
                 page: 'pages/feed/moment'
             }
         }
