@@ -24,7 +24,7 @@
     </view>
 </van-cell-group>
 <button style="margin-top: 24px;" type="primary" bindtap="onSubmit">发送</button>
-<button style="margin-top: 16px;">存草稿</button>
+<button style="margin-top: 16px;" bindtap="onSaveDraft">存草稿</button>
 <!-- <view>
     <form bindsubmit="bindSubmit">
         <picker mode="time" bindchange="bindDateChange" value="{{date}}">
