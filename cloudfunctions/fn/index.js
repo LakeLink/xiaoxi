@@ -54,6 +54,10 @@ exports.main = async function (event, context) {
         case 'rankWeRunTotalSteps':
             return await weRun.rankTotalSteps(event, context)
         
+        case 'comment':
+            return await quickAction.comment(event, context, event.col)
+        case 'delComment':
+            return await quickAction.delComment(event, context)
         case 'getAds':
             return ["cloud://xiaoxiaiyundong-8g95vuw53cf7c6b4.7869-xiaoxiaiyundong-8g95vuw53cf7c6b4-1317841170/20230413_223142_0000.png"]
     }

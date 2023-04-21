@@ -206,38 +206,6 @@ Page({
         }
     },
 
-    onSubmitComment(e) {
-        this.setData({
-            sendingComment: true
-        })
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'commentTogether',
-                id: this.data.togetherDetails[e.target.dataset.idx]._id,
-                content: e.detail.newComment
-            }
-        }).then((r) => {
-            if (r.result.updated == 1) {
-                this.setData({
-                    sendingComment: false,
-                    onlyForResetNewComment: ''
-                })
-                this.refresh()
-            } else {
-                throw new Error()
-            }
-        }).catch(e => {
-            this.setData({
-                sendingComment: false
-            })
-            wx.showToast({
-                title: '数据错误',
-                icon: 'error'
-            })
-        })
-    },
-
     onComment(e) {
         console.log(e)
         this.setData({

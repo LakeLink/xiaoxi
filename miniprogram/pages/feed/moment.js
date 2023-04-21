@@ -93,38 +93,6 @@ Page({
         // })
     },
 
-    onSubmitComment(e) {
-        this.setData({
-            sendingComment: true
-        })
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'commentWeRun',
-                id: this.data.weRunDetails[e.target.dataset.idx]._id,
-                content: e.detail.newComment
-            }
-        }).then((r) => {
-            if (r.result.updated == 1) {
-                this.setData({
-                    sendingComment: false,
-                    onlyForResetNewComment: ''
-                })
-                this.refresh()
-            } else {
-                throw new Error()
-            }
-        }).catch(e => {
-            this.setData({
-                sendingComment: false
-            })
-            wx.showToast({
-                title: '数据错误',
-                icon: 'error'
-            })
-        })
-    },
-
     onEdit(e) {
         const item = this.data.weRunDetails[e.currentTarget.dataset.idx]
         wx.showActionSheet({

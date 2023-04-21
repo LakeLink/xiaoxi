@@ -127,3 +127,27 @@ exports.comment = async (event, context, collection) => {
         })
     }).then(r => r.stats)
 }
+
+exports.delComment = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection(event.col)
+    const _ = db.command
+    const $ = _.aggregate
+
+    return await col.doc(event.id).update({
+        data: {
+            comments: _.pull({
+                author: OPENID,
+                content: event.content,
+                when: event.when
+            })
+        }
+    }).then(r => r.stats)
+}

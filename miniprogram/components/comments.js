@@ -12,15 +12,17 @@ Component({
         userInfo: Object,
         showPopup: Boolean,
         showInput: Boolean,
-        sending: Boolean,
-        newComment: String
+        rid: String,
+        collection: String
     },
 
     /**
      * 组件的初始数据
      */
     data: {
-        showAllComments: false
+        showAllComments: false,
+        sending: false,
+        newComment: ''
     },
 
     /**
@@ -55,8 +57,37 @@ Component({
                 })
                 return
             }
-            this.triggerEvent('submit', {
-                newComment: this.data.newComment
+            
+            this.setData({
+                sendingComment: true
+            })
+
+            wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    type: 'comment',
+                    col: this.properties.collection,
+                    id: this.properties.rid,
+                    content: this.data.newComment
+                }
+            }).then((r) => {
+                if (r.result.updated == 1) {
+                    this.setData({
+                        sending: false,
+                        newComment: ''
+                    })
+                    this.triggerEvent('submit')
+                } else {
+                    throw new Error()
+                }
+            }).catch(e => {
+                this.setData({
+                    sending: false
+                })
+                wx.showToast({
+                    title: '数据错误',
+                    icon: 'error'
+                })
             })
         },
 

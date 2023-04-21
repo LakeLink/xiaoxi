@@ -17,7 +17,7 @@
             <text style="margin-left: 12px; color: grey; font-size: small;">{{item.when}} - {{item.location}}</text>
             <text class="content">{{item.textContent}}</text>
 
-            <comments bind:submit="onSubmitComment" data-idx="{{weRunIdx}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showPopup}}" show-input="{{showCommentInput == weRunIdx}}" sending="{{sendingComment}}" new-comment="{{onlyForResetNewComment}}"></comments>
+            <comments bind:submit="refresh" rid="{{item._id}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showPopup}}" show-input="{{showCommentInput == weRunIdx}}" collection="WeRunDetails"></comments>
 
             <view class="action">
                 <view style="flex-grow: 1; display:flex; justify-content:space-around; ">
