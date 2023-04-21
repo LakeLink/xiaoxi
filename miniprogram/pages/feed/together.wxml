@@ -32,7 +32,7 @@
             </view>
         </view>
 
-        <comments bind:submit="refresh" rid="{{item._id}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showUserPopup}}" show-input="{{showCommentInput == index}}" collection="TogetherDetails"></comments>
+        <comments bind:refresh="refresh" rid="{{item._id}}" comments="{{item.comments}}" user-info="{{item.commentUserInfo}}" show-popup="{{showUserPopup}}" show-input="{{showCommentInput == index}}" collection="TogetherDetails"></comments>
 
         <view class="action">
             <view style="flex-grow: 1; display:flex; justify-content:space-around; ">

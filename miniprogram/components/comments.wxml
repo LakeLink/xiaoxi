@@ -6,7 +6,7 @@
             <popup-user-name-avatar style="display: inline-block" user="{{userInfo[c.userIndex]}}" showPopup="{{showPopup}}">
                 <text class="{{'~college-' + userInfo[c.userIndex].collegeIndex}}">{{userInfo[c.userIndex].nickname}}：</text>
             </popup-user-name-avatar>
-            <text bindtap="onReply" data-idx="{{index}}">{{c.content}}</text>
+            <text bindtap="onReply" bindlongpress="onDelete" data-idx="{{index}}">{{c.content}}</text>
         </view>
     </view>
 </view>

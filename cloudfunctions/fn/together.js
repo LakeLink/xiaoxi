@@ -157,12 +157,16 @@ exports.get = async (event, context) => {
         e.mine = e._openid == OPENID
     })
     r.list.forEach(e => {
-        e.comments.forEach(c =>
+        e.comments.forEach(c => {
             c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
-        )
+            c.canDelete = c.author == OPENID
+        })
         // e.comments.sort((a, b) => a.when > b.when)
     })
-    return { list: r.list, filtered }
+    return {
+        list: r.list,
+        filtered
+    }
 }
 
 exports.quit = async (event, context) => {

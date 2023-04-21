@@ -51,12 +51,16 @@ exports.getFeed = async (event, context) => {
         e.mine = e._openid == OPENID
     })
     r.list.forEach(e => {
-        e.comments.forEach(c =>
+        e.comments.forEach(c => {
             c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
-        )
+            c.canDelete = c.author == OPENID
+        })
         // e.comments.sort((a, b) => a.when > b.when)
     })
-    return { list: r.list, filtered }
+    return {
+        list: r.list,
+        filtered
+    }
 }
 
 exports.updateStepInfo = async (event, context) => {
@@ -146,7 +150,9 @@ exports.rankTotalStepsV2 = async (event, context) => {
                     timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 30)
                 }
             ])
-        ).project({ step: true }).done(),
+        ).project({
+            step: true
+        }).done(),
         as: 'totalSteps'
     })
     if (await quickAction.invitedUser(OPENID)) {

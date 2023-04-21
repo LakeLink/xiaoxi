@@ -145,8 +145,7 @@ exports.delComment = async (event, context) => {
         data: {
             comments: _.pull({
                 author: OPENID,
-                content: event.content,
-                when: event.when
+                content: event.content
             })
         }
     }).then(r => r.stats)

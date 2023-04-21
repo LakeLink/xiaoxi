@@ -57,7 +57,7 @@ Component({
                 })
                 return
             }
-            
+
             this.setData({
                 sendingComment: true
             })
@@ -76,7 +76,7 @@ Component({
                         sending: false,
                         newComment: ''
                     })
-                    this.triggerEvent('submit')
+                    this.triggerEvent('refresh')
                 } else {
                     throw new Error()
                 }
@@ -88,6 +88,43 @@ Component({
                     title: '数据错误',
                     icon: 'error'
                 })
+            })
+        },
+
+        onDelete(e) {
+            const c = this.properties.comments[e.target.dataset.idx]
+            if (!c.canDelete) return
+            wx.showModal({
+                title: '删除评论',
+                content: '是否要删除该评论',
+                complete: (res) => {
+                    if (res.confirm) {
+                        wx.cloud.callFunction({
+                            name: 'fn',
+                            data: {
+                                type: 'delComment',
+                                id: this.properties.rid,
+                                col: this.properties.collection,
+                                content: c.content
+                            }
+                        }).then((r) => {
+                            if (r.result.updated == 1) {
+                                wx.showToast({
+                                    title: '删除成功',
+                                    icon: 'success'
+                                })
+                            } else {
+                                throw new Error()
+                            }
+                            this.triggerEvent('refresh')
+                        }).catch(e => {
+                            wx.showToast({
+                                title: '数据错误',
+                                icon: 'error'
+                            })
+                        })
+                    }
+                }
             })
         },
 
