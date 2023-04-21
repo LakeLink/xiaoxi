@@ -22,6 +22,6 @@
             </view>
         </view>
 
-        <text style='{{(index <=2 ? "color: orange;" : "color: darkcyan;") + "margin: 10px 0 10px 10px; font-weight: bold; font-size: large;"}}'>{{item.totalSteps ? item.totalSteps: '未同步' }}</text>
+        <text style='{{(index <=2 ? "color: orange;" : (item.totalSteps ? "color: darkcyan;" : "color: grey;")) + "margin: 10px 0 10px 10px; font-weight: bold; font-size: large;"}}'>{{item.totalSteps ? item.totalSteps: '未同步' }}</text>
     </view>
 </view>

@@ -153,6 +153,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         avatarUrl: true,
         nickname: true,
         realname: true,
+        collegeIndex: true,
         bio: true
     }).sort({
         totalSteps: -1

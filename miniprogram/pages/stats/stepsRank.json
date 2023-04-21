@@ -1,5 +1,6 @@
 {
     "usingComponents": {
         "ec-canvas": "/3rdparty/ec-canvas/ec-canvas"
-    }
+    },
+    "enablePullDownRefresh": true
 }

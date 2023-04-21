@@ -14,7 +14,7 @@ Page({
         collegeList: ["α", "β", "γ", "δ", "教", "博"]
     },
 
-    async loadRank(chart) {
+    async loadRank() {
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -67,7 +67,7 @@ Page({
                     }
                 }]
             };
-            chart.setOption(option);
+            this.chart.setOption(option);
         })
     },
 
@@ -79,7 +79,8 @@ Page({
         });
         canvas.setChart(chart);
 
-        this.loadRank(chart)
+        this.chart = chart
+        this.loadRank()
         console.log('initChartDone')
         return chart;
     },
@@ -120,7 +121,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-
+        this.loadRank().then(wx.stopPullDownRefresh)
     },
 
     /**
