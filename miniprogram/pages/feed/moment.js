@@ -81,7 +81,7 @@ Page({
     onComment(e) {
         console.log(e)
         this.setData({
-            showCommentInput: this.data.showCommentInput == -1 ? e.currentTarget.dataset.idx : -1
+            showCommentInput: this.data.showCommentInput == e.currentTarget.dataset.idx ? -1 : e.currentTarget.dataset.idx
         })
         // wx.cloud.callFunction({
         //     name: 'fn',
