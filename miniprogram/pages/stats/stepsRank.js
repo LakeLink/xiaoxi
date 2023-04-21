@@ -18,7 +18,7 @@ Page({
         wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'rankWeRunTotalSteps'
+                type: 'rankWeRunTotalStepsV2'
             }
         }).then(r => {
             const [rankForList, rankForChart] = [r.result, r.result.slice(0, 3)]
@@ -37,7 +37,7 @@ Page({
                     color: 'black'
                 },
                 xAxis: {
-                    data: rankForChart.map(e => e.info.nickname),
+                    data: rankForChart.map(e => e.nickname),
                     axisTick: {
                         show: false
                     }

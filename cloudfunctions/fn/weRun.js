@@ -120,6 +120,46 @@ exports.getTotalSteps = async (event, context) => {
     return r.list[0]
 }
 
+
+exports.rankTotalStepsV2 = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('Users')
+    const _ = db.command
+    const $ = _.aggregate
+
+    const r = await col.aggregate().lookup({
+        from: 'WeRunStepInfo',
+        let: {
+            openid: '$_id'
+        },
+        pipeline: $.pipeline().match(
+            _.and([
+                _.expr(_.eq(['$user', '$$openid'])),
+                {
+                    timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 30)
+                }
+            ])
+        ).project({ step: true }).done(),
+        as: 'totalSteps'
+    }).project({
+        totalSteps: $.sum('$totalSteps.step'),
+        avatarUrl: true,
+        nickname: true,
+        realname: true,
+        bio: true
+    }).sort({
+        totalSteps: -1
+    }).end()
+    return r.list
+}
+
 exports.rankTotalSteps = async (event, context) => {
     // 获取基础信息
     const {

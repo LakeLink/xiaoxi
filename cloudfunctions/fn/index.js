@@ -48,6 +48,9 @@ exports.main = async function (event, context) {
             return await weRun.updateStepInfo(event, context)
         case 'getWeRunTotalSteps':
             return await weRun.getTotalSteps(event, context)
+            
+        case 'rankWeRunTotalStepsV2':
+            return await weRun.rankTotalStepsV2(event, context)
         case 'rankWeRunTotalSteps':
             return await weRun.rankTotalSteps(event, context)
         
