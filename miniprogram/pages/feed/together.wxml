@@ -74,6 +74,7 @@
                     </view>
                     <view slot="title" style="margin-left: 20px; margin-top: 2px;">
                         <text class="user-nickname">{{ item.nickname }}</text>
+                        <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
                         <text class="user-realname">{{ item.realname }}</text>
                     </view>
                 </van-cell>
@@ -87,6 +88,7 @@
                     </view>
                     <view slot="title" style="margin-left: 20px; margin-top: 2px;">
                         <text class="user-nickname">{{ item.nickname }}</text>
+                        <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
                         <text class="user-realname">{{ item.realname }}</text>
                     </view>
                 </van-cell>

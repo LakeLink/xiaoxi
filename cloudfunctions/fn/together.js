@@ -108,7 +108,8 @@ exports.get = async (event, context) => {
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
                 nickname: true,
                 realname: true,
-                avatarUrl: true
+                avatarUrl: true,
+                collegeIndex: true
             })
             .done(),
         as: 'partnerInfo'
@@ -120,7 +121,8 @@ exports.get = async (event, context) => {
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$p']))).project({
                 nickname: true,
                 realname: true,
-                avatarUrl: true
+                avatarUrl: true,
+                collegeIndex: true
             })
             .done(),
         as: 'waitUserInfo'

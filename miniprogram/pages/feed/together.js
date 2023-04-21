@@ -19,7 +19,9 @@ Page({
         popupIndex: null,
         showCommentInput: -1,
         showHostDetail: false,
-        filtered: false
+        filtered: false,
+        
+        collegeList: ["α", "β", "γ", "δ", "教职工", "博士生"],
     },
 
     async refresh() {
