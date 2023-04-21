@@ -41,7 +41,7 @@ App({
             this.globalData.userExist = true
         }).catch(e => {
             wx.showToast({
-                title: '请前往`About`完善个人信息',
+                title: '请前往`我`页面完善个人信息',
                 icon: 'error'
             })
         })
