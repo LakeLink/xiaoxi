@@ -3,10 +3,10 @@
     <van-skeleton avatar-shape="square" avatar-size="50px" title avatar row="7" row-width="{{ skeletonRowWidth }}" loading="{{ loading }}">
         <van-cell>
             <view slot="icon">
-                <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+                <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" bindtap="onTapChooseAvatar">
                     <image mode="aspectFit" class="avatar" src="{{avatarUrl ? avatarUrl : defaultAvatarUrl}}"></image>
                 </button>
-                <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: grey;">点按修改头像</text>
+                <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按修改头像</text>
             </view>
             <view slot="title" style="margin-left: 20px; margin-top: 2px;">
                 <text class="{{'main-title  ~college-' + collegeIndex}}">{{ nickname }}</text>
@@ -15,7 +15,7 @@
             <text wx:if="{{totalSteps}}">近30天总步数：{{totalSteps}}</text>
         </van-cell>
 
-        <van-field model:value="{{bio}}" placeholder="说点什么" label="Bio">
+        <van-field model:value="{{bio}}" placeholder="说点什么" label="个性签名">
         </van-field>
 
         <van-field model:value="{{nickname}}" required clearable label="昵称">

@@ -63,6 +63,19 @@ Page({
             college: this.data.collegeList[e.detail.value]
         })
     },
+
+    onTapChooseAvatar(e) {
+        this.avatarTapped++
+        console.log(this.avatarTapped)
+        if (this.avatarTapped >= 3) {
+            wx.showModal({
+              title: '温馨提示',
+              content: '头像选择弹窗可能存在延迟，点击后请耐心等待'
+            })
+            this.avatarTapped = 0
+        }
+    },
+
     onSubmit(e) {
         // console.log("submit event:", e.detail)
         // console.log("data:", this.data)
@@ -76,6 +89,13 @@ Page({
             year,
             age
         } = this.data
+        if (!avatarUrl) {
+            wx.showToast({
+                title: '请设置头像',
+                icon: 'error'
+            })
+            return
+        }
         if (!avatarUrl || !nickname || !realname || !hobby || !collegeIndex) {
             wx.showToast({
                 title: '个人信息不完整',
@@ -252,6 +272,7 @@ Page({
 
 
     onLoad(options) {
+        this.avatarTapped = 0
         this.query = options
 
         let skeletonRowWidth = []
