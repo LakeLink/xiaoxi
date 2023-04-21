@@ -24,7 +24,7 @@ ec-canvas {
 .user-nickname {
     /* display: block; */
     font-weight: bold;
-    font-size: large;
+    font-size: medium;
 }
 
 .user-realname {

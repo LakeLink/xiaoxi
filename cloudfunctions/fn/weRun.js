@@ -134,7 +134,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const r = await col.aggregate().lookup({
+    let agg = col.aggregate().lookup({
         from: 'WeRunStepInfo',
         let: {
             openid: '$_id'
@@ -148,14 +148,27 @@ exports.rankTotalStepsV2 = async (event, context) => {
             ])
         ).project({ step: true }).done(),
         as: 'totalSteps'
-    }).project({
-        totalSteps: $.sum('$totalSteps.step'),
-        avatarUrl: true,
-        nickname: true,
-        realname: true,
-        collegeIndex: true,
-        bio: true
-    }).sort({
+    })
+    if (await quickAction.invitedUser(OPENID)) {
+        agg = agg.project({
+            totalSteps: $.sum('$totalSteps.step'),
+            avatarUrl: true,
+            nickname: true,
+            realname: true,
+            collegeIndex: true,
+            bio: true
+        })
+    } else {
+        agg = agg.project({
+            totalSteps: $.sum('$totalSteps.step'),
+            avatarUrl: true,
+            nickname: true,
+            realname: true,
+            collegeIndex: true
+        })
+    }
+
+    const r = await agg.sort({
         totalSteps: -1
     }).end()
     return r.list
