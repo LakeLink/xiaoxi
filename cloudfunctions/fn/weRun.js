@@ -139,6 +139,13 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const $ = _.aggregate
 
     let agg = col.aggregate().lookup({
+        from: 'InvitedUsers',
+        let: {
+            openid: '$_id'
+        },
+        pipeline: $.pipeline().match(_.expr(_.eq(['$_id', '$$openid']))).project({ invited: true }).done(),
+        as: 'invited'
+    }).match({ 'invited.0.invited': true }).limit(100).lookup({
         from: 'WeRunStepInfo',
         let: {
             openid: '$_id'
@@ -155,6 +162,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         }).done(),
         as: 'totalSteps'
     })
+
     if (await quickAction.invitedUser(OPENID)) {
         agg = agg.project({
             totalSteps: $.sum('$totalSteps.step'),
