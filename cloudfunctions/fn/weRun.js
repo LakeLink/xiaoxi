@@ -134,7 +134,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    const r = await col.aggregate().lookup({
+    const r = await col.aggregate().limit(100).lookup({
         from: 'WeRunStepInfo',
         let: {
             openid: '$_id'
