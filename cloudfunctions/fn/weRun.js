@@ -89,14 +89,15 @@ exports.updateStepInfo = async (event, context) => {
     else last = 0
 
     for (e of event.weRunData.data.stepInfoList) {
-        if (e.timestamp > last) {
-            col.add({
+        // 等号很重要：最后一天步数可能不全
+        // if (e.timestamp >= last) {
+            col.doc(OPENID + '^' + e.timestamp).set({
                 data: {
                     user: OPENID,
                     ...e
                 }
             })
-        }
+        // }
     }
 }
 
@@ -143,9 +144,13 @@ exports.rankTotalStepsV2 = async (event, context) => {
         let: {
             openid: '$_id'
         },
-        pipeline: $.pipeline().match(_.expr(_.eq(['$_id', '$$openid']))).project({ invited: true }).done(),
+        pipeline: $.pipeline().match(_.expr(_.eq(['$_id', '$$openid']))).project({
+            invited: true
+        }).done(),
         as: 'invited'
-    }).match({ 'invited.0.invited': true }).limit(100).lookup({
+    }).match({
+        'invited.0.invited': true
+    }).limit(100).lookup({
         from: 'WeRunStepInfo',
         let: {
             openid: '$_id'
