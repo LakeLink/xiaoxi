@@ -114,7 +114,7 @@ exports.getTotalSteps = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let t = Date.now()
+    let t = new Date()
     t.setHours(0,0,0,0)
     t.setDate(1)
     const r = await col.aggregate().match({
@@ -142,6 +142,10 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
+    let t = new Date()
+    t.setHours(0,0,0,0)
+    t.setDate(1)
+
     let agg = col.aggregate().lookup({
         from: 'InvitedUsers',
         let: {
@@ -162,7 +166,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
             _.and([
                 _.expr(_.eq(['$user', '$$openid'])),
                 {
-                    timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 30)
+                    timestamp: _.gte(Math.floor(t.getTime() / 1000))
                 }
             ])
         ).project({
@@ -191,38 +195,6 @@ exports.rankTotalStepsV2 = async (event, context) => {
     }
 
     const r = await agg.sort({
-        totalSteps: -1
-    }).end()
-    return r.list
-}
-
-exports.rankTotalSteps = async (event, context) => {
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('WeRunStepInfo')
-    const _ = db.command
-    const $ = _.aggregate
-
-    const r = await col.aggregate().match({
-        timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 31)
-    }).group({
-        _id: '$user',
-        totalSteps: $.sum('$step')
-    }).lookup({
-        from: 'Users',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'info'
-    }).project({
-        info: $.arrayElemAt(['$info', 0]),
-        totalSteps: true
-    }).sort({
         totalSteps: -1
     }).end()
     return r.list

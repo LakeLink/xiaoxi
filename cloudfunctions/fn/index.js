@@ -51,8 +51,6 @@ exports.main = async function (event, context) {
             
         case 'rankWeRunTotalStepsV2':
             return await weRun.rankTotalStepsV2(event, context)
-        case 'rankWeRunTotalSteps':
-            return await weRun.rankTotalSteps(event, context)
         
         case 'comment':
             return await quickAction.comment(event, context, event.col)

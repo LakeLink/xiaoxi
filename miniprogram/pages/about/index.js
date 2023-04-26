@@ -69,10 +69,53 @@ Page({
         console.log(this.avatarTapped)
         if (this.avatarTapped >= 3) {
             wx.showModal({
-              title: '温馨提示',
-              content: '头像选择弹窗可能存在延迟，点击后请耐心等待'
+                title: '温馨提示',
+                content: '头像选择弹窗可能存在延迟，点击后请耐心等待'
             })
             this.avatarTapped = 0
+        }
+    },
+
+    async onTapSteps(e) {
+        await this.refreshWeRunPermission()
+        if (this.data.syncWeRunStepInfo) {
+            wx.showLoading({
+              title: '正在刷新'
+            })
+            await wx.getWeRunData().then(async r => {
+                console.log(r)
+                await wx.cloud.callFunction({
+                    name: 'fn',
+                    data: {
+                        type: 'updateWeRunStepInfo',
+                        weRunData: wx.cloud.CloudID(r.cloudID)
+                    }
+                })
+                await wx.cloud.callFunction({
+                    name: 'fn',
+                    data: {
+                        type: 'getWeRunTotalSteps'
+                    }
+                }).then(r => {
+                    this.setData({
+                        totalSteps: r.result.totalSteps
+                    })
+                })
+            }).catch(e => {
+                wx.showToast({
+                  title: '微信运动数据错误',
+                  icon: 'error'
+                })
+            })
+            wx.hideLoading()
+        } else {
+            this.setData({
+                showOpenSettingButton: true
+            })
+            wx.showToast({
+                title: '未授权读取步数信息',
+                icon: 'error'
+            })
         }
     },
 
@@ -206,9 +249,7 @@ Page({
                     title: '请打开设置页授权运动数据',
                     icon: 'error'
                 })
-            })
-            .then(this.refreshWeRunPermission)
-            .then(() => {
+            }).then(this.refreshWeRunPermission).then(() => {
                 if (r.authSetting['scope.werun']) {
                     wx.getWeRunData().then(r => {
                         console.log(r)

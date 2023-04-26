@@ -12,7 +12,7 @@
                 <text class="{{'main-title  ~college-' + collegeIndex}}">{{ nickname }}</text>
                 <text class="second-title">{{ realname }}</text>
             </view>
-            <text wx:if="{{totalSteps}}">近30天总步数：{{totalSteps}}</text>
+            <text bindtap="onTapSteps" wx:if="{{totalSteps}}">本月总步数：{{totalSteps}}</text>
         </van-cell>
 
         <van-field model:value="{{bio}}" placeholder="说点什么" label="个性签名">
