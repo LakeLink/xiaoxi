@@ -114,8 +114,11 @@ exports.getTotalSteps = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
+    let t = Date.now()
+    t.setHours(0,0,0,0)
+    t.setDate(1)
     const r = await col.aggregate().match({
-        timestamp: _.gte(Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 30)
+        timestamp: _.gte(Math.floor(t.getTime() / 1000))
     }).match({
         user: OPENID
     }).group({

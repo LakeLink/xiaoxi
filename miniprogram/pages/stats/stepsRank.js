@@ -31,7 +31,7 @@ Page({
             console.log(y)
             var option = {
                 title: {
-                    text: '30天步数排行榜'
+                    text: (new Date().getMonth()+1)+'月步数排行榜'
                 },
                 textStyle: {
                     color: 'black'
