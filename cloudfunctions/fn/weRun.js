@@ -1,6 +1,13 @@
 const cloud = require('wx-server-sdk');
 const quickAction = require('./quickAction')
 
+const dayjs = require('dayjs')
+
+require('dayjs/locale/zh-cn')
+dayjs.extend(require('dayjs/plugin/utc'))
+dayjs.extend(require('dayjs/plugin/timezone'))
+dayjs.locale('zh-cn')
+
 cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
@@ -114,11 +121,9 @@ exports.getTotalSteps = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let t = new Date()
-    t.setHours(0,0,0,0)
-    t.setDate(1)
+    let t = dayjs().tz('Asia/Shanghai').startOf('month')
     const r = await col.aggregate().match({
-        timestamp: _.gte(Math.floor(t.getTime() / 1000))
+        timestamp: _.gte(t.unix())
     }).match({
         user: OPENID
     }).group({
@@ -142,9 +147,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let t = new Date()
-    t.setHours(0,0,0,0)
-    t.setDate(1)
+    let t = dayjs().tz('Asia/Shanghai').startOf('month')
 
     let agg = col.aggregate().lookup({
         from: 'InvitedUsers',
@@ -166,7 +169,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
             _.and([
                 _.expr(_.eq(['$user', '$$openid'])),
                 {
-                    timestamp: _.gte(Math.floor(t.getTime() / 1000))
+                    timestamp: _.gte(t.unix())
                 }
             ])
         ).project({

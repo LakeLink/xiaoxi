@@ -1,7 +1,3 @@
-const dayjs = require('dayjs')
-require('dayjs/locale/zh-cn')
-dayjs.locale('zh-cn')
-
 const together = require('./together')
 const user = require('./user')
 const weRun = require('./weRun')
