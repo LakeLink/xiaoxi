@@ -144,7 +144,7 @@ exports.get = async (event, context) => {
         // 未过期，未满员，近期（时间值小）在前
         scheduledAt: 1,
         // Not likely to happen: Because `scheduledAt` actually has seconds part
-        publishedAt: 1,
+        publishedAt: -1,
     }).project({
         partners: 0 // 不需要重复数据
     })
