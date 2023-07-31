@@ -160,7 +160,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         as: 'invited'
     }).match({
         'invited.0.invited': true
-    }).limit(100).lookup({
+    }).lookup({
         from: 'WeRunStepInfo',
         let: {
             openid: '$_id'
@@ -199,6 +199,6 @@ exports.rankTotalStepsV2 = async (event, context) => {
 
     const r = await agg.sort({
         totalSteps: -1
-    }).end()
+    }).limit(100).end()
     return r.list
 }
