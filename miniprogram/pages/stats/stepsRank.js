@@ -11,7 +11,7 @@ Page({
         ec: {
             lazyLoad: true
         },
-        collegeList: ["α", "β", "γ", "δ", "教", "博"]
+        collegeList: ["", "α", "β", "γ", "δ", "教", "博"]
     },
 
     async loadRank() {
