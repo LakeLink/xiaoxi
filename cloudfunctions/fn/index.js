@@ -30,6 +30,8 @@ exports.main = async function (event, context) {
             return await user.save(event, context)
         case 'getUserAvatarPath':
             return await user.getAvatarPath(event, context)
+        case 'verifyUser':
+            return await user.verify(event, context)
 
         case 'getWeRunFeed':
             return await weRun.getFeed(event, context)

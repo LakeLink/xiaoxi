@@ -13,63 +13,6 @@ cloud.init({
 });
 
 
-exports.getFeed = async (event, context) => {
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('WeRunDetails')
-    const _ = db.command
-    const $ = _.aggregate
-
-    let filtered = true
-    let agg = col.aggregate()
-    if (event.id) {
-        filtered = false
-        agg = agg.match({
-            _id: event.id
-        })
-    } else {
-        filtered = !await quickAction.invitedUser(OPENID)
-        if (filtered) {
-            agg = agg.match({
-                _openid: OPENID
-            })
-        }
-    }
-
-    agg = agg.lookup({
-        from: 'Users',
-        localField: '_openid',
-        foreignField: '_id',
-        as: 'authorInfo'
-    }).sort({
-        when: -1
-    })
-
-    let r = await quickAction.lookupLikedAndComments(agg, _, $, OPENID).end()
-
-    r.list.forEach(e => {
-        e.authorInfo = e.authorInfo[0]
-        e.mine = e._openid == OPENID
-    })
-    r.list.forEach(e => {
-        e.comments.forEach(c => {
-            c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
-            c.canDelete = c.author == OPENID
-        })
-        // e.comments.sort((a, b) => a.when > b.when)
-    })
-    return {
-        list: r.list,
-        filtered
-    }
-}
-
 exports.updateStepInfo = async (event, context) => {
     if (!event.weRunData.data) {
         throw new Error('No WeRunData found')
@@ -83,7 +26,7 @@ exports.updateStepInfo = async (event, context) => {
     } = cloud.getWXContext()
     console.log(OPENID)
     const db = cloud.database()
-    const col = db.collection('WeRunStepInfo')
+    const col = db.collection('werun_steps')
     const _ = db.command
     const $ = _.aggregate
 
@@ -117,7 +60,7 @@ exports.getTotalSteps = async (event, context) => {
     } = cloud.getWXContext()
     console.log(OPENID)
     const db = cloud.database()
-    const col = db.collection('WeRunStepInfo')
+    const col = db.collection('werun_steps')
     const _ = db.command
     const $ = _.aggregate
 
@@ -143,25 +86,14 @@ exports.rankTotalStepsV2 = async (event, context) => {
     } = cloud.getWXContext()
     console.log(OPENID)
     const db = cloud.database()
-    const col = db.collection('Users')
+    const col = db.collection('users')
     const _ = db.command
     const $ = _.aggregate
 
     let t = dayjs().tz('Asia/Shanghai').startOf('month')
 
     let agg = col.aggregate().lookup({
-        from: 'InvitedUsers',
-        let: {
-            openid: '$_id'
-        },
-        pipeline: $.pipeline().match(_.expr(_.eq(['$_id', '$$openid']))).project({
-            invited: true
-        }).done(),
-        as: 'invited'
-    }).match({
-        'invited.0.invited': true
-    }).lookup({
-        from: 'WeRunStepInfo',
+        from: 'werun_steps',
         let: {
             openid: '$_id'
         },
@@ -178,7 +110,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         as: 'totalSteps'
     })
 
-    if (await quickAction.invitedUser(OPENID)) {
+    // if (await quickAction.invitedUser(OPENID)) {
         agg = agg.project({
             totalSteps: $.sum('$totalSteps.step'),
             avatarUrl: true,
@@ -187,15 +119,15 @@ exports.rankTotalStepsV2 = async (event, context) => {
             collegeIndex: true,
             bio: true
         })
-    } else {
-        agg = agg.project({
-            totalSteps: $.sum('$totalSteps.step'),
-            avatarUrl: true,
-            nickname: true,
-            realname: true,
-            collegeIndex: true
-        })
-    }
+    // } else {
+    //     agg = agg.project({
+    //         totalSteps: $.sum('$totalSteps.step'),
+    //         avatarUrl: true,
+    //         nickname: true,
+    //         realname: true,
+    //         collegeIndex: true
+    //     })
+    // }
 
     const r = await agg.sort({
         totalSteps: -1
