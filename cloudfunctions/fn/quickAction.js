@@ -4,17 +4,17 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-exports.invitedUser = async (id) => {
-    const db = cloud.database()
-    const col = db.collection('InvitedUsers')
-    let u = await col.doc(id).get().then(r => r.data).catch(e => console.error(e))
-    if (u) return u.invited
-    else return false
-}
+// exports.invitedUser = async (id) => {
+//     const db = cloud.database()
+//     const col = db.collection('InvitedUsers')
+//     let u = await col.doc(id).get().then(r => r.data).catch(e => console.error(e))
+//     if (u) return u.invited
+//     else return false
+// }
 
-exports.lookupLikedAndComments = (agg, _, $, OPENID) =>
+exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
     agg.lookup({
-        from: 'Users',
+        from: 'users',
         let: {
             l: '$likedBy'
         },
@@ -27,8 +27,27 @@ exports.lookupLikedAndComments = (agg, _, $, OPENID) =>
             bio: true
         }).done(),
         as: 'likedUserInfo'
-    }).lookup({
-        from: 'Users',
+    })
+    .lookup({
+        from: 'posts',
+        let: {
+            id: '_id'
+        },
+        pipeline: $.pipeline()
+            .match({
+                parentId: _.expr('$$id')
+            })
+            .lookup({
+                from: 'users',
+                localField: 'author',
+                foreignField: '_id',
+                as: 'userInfo'
+            }).project({
+                userInfo: $.arrayElemAt(['$userInfo', 0])
+            }).done()
+    })
+    .lookup({
+        from: 'users',
         let: {
             c: $.map({
                 input: '$comments',

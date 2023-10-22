@@ -18,6 +18,38 @@
 
 ### Collections
 
+#### users
+
+* avatarUrl (string)
+* bio (string)
+* nickname (string)
+* realname (string)
+* hobby (string)
+* collegeIndex (string)
+* verifiedIdentity (string)
+* verifiedOrganization (string)
+* year (string)
+
+#### posts
+
+* author (openid)
+* when (serverDate)
+* textContent (String)
+* images (string[])
+* likedBy (openid[])
+
+#### comments
+
+* author (openid)
+* parentId (string)
+* when (serverDate)
+* textContent (String)
+* images (string[])
+* likedBy (openid[])
+* subComments ({author: openid, textContent: string, images: string[], when: serverDate}[])
+
+post -> comment -> subComment
+
 #### WeRunDetails
 
 * when (Date)
@@ -30,7 +62,6 @@
 * location (string)
 * images (string[])
 * videos (string[])
-* likedBy (openid[])
 * comments ({author: openid, content: string, when: serverDate}[])
 
 #### WeRunStepInfo
