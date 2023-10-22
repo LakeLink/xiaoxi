@@ -30,25 +30,30 @@ page {
 } */
 
 .college-0 {
-    color: #cc8f66
+    color: black
 }
 
 .college-1 {
-    color: #66cc66
+    color: #cc8f66
 }
 
 .college-2 {
-    color: #cc6688
+    color: #66cc66
 }
 
 .college-3 {
-    color: #6697cc
+    color: #cc6688
 }
 
 .college-4 {
-    color: #00498F
+    color: #6697cc
 }
 
 .college-5 {
     color: #F18B1C
 }
+
+.college-6 {
+    color: #00498F
+}
+

@@ -12,9 +12,9 @@ Page({
         hobby: "",
         college: "请选择",
         collegeIndex: null,
-        collegeList: ["α", "β", "γ", "δ", "教职工", "博士生"],
+        collegeList: ["暂无", "α", "β", "γ", "δ", "博士生", "教职工"],
         year: "",
-        age: "",
+        // age: "",
         defaultAvatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
         avatarUrl: null,
         skeletonRowWidth: [],
@@ -80,7 +80,7 @@ Page({
         await this.refreshWeRunPermission()
         if (this.data.syncWeRunStepInfo) {
             wx.showLoading({
-              title: '正在刷新'
+                title: '正在刷新'
             })
             await wx.getWeRunData().then(async r => {
                 console.log(r)
@@ -103,8 +103,8 @@ Page({
                 })
             }).catch(e => {
                 wx.showToast({
-                  title: '微信运动数据错误',
-                  icon: 'error'
+                    title: '微信运动数据错误',
+                    icon: 'error'
                 })
             })
             wx.hideLoading()
@@ -129,8 +129,7 @@ Page({
             realname,
             hobby,
             collegeIndex,
-            year,
-            age
+            year
         } = this.data
         if (!avatarUrl) {
             wx.showToast({
@@ -139,12 +138,13 @@ Page({
             })
             return
         }
-        if (!avatarUrl || !nickname || !realname || !hobby || !collegeIndex) {
+        if (!avatarUrl || !nickname || !realname || !hobby) {
             wx.showToast({
                 title: '个人信息不完整',
                 icon: 'error'
             })
         } else {
+            // console.log(this.data)
             wx.cloud.callFunction({
                 name: 'fn',
                 data: {
@@ -155,17 +155,44 @@ Page({
                         nickname,
                         realname,
                         hobby,
-                        collegeIndex,
-                        year,
-                        age
+                        collegeIndex: collegeIndex ? Number(collegeIndex) : 0,
+                        year
                     }
                 }
-            }).then(r => {
-                if (r.result.created || r.result.updated) wx.showToast({
-                    title: '保存成功',
-                    icon: 'success'
-                })
-                getApp().globalData.userExist = true
+            })
+            .then(r => r.result)
+            .then(r => {
+                if (r.success) {
+                    if (r.needVerify) {
+                        wx.showModal({
+                            title: '验证',
+                            content: '设置神秘符号需要验证身份，是否继续',
+                            complete: (res) => {
+                                if (res.confirm) {
+                                    wx.navigateTo({
+                                        url: `/pages/about/verify?collegeIndex=${collegeIndex}`,
+                                    })
+                                }
+                                if (res.cancel) {
+                                    this.setData({
+                                        colegeIndex: 0
+                                    })
+                                }
+                            }
+                        })
+                    } else {
+                        wx.showToast({
+                            title: '保存成功',
+                            icon: 'success'
+                        })
+                    }
+                    getApp().globalData.userExist = true
+                } else {
+                    wx.showToast({
+                        title: '发生错误',
+                        icon: 'error'
+                    })
+                }
             }).catch(e => {
                 wx.showToast({
                     title: '发生错误',

@@ -1,37 +1,29 @@
 {
     "pages": [
-        "pages/feed/moment",
-        "pages/index/index",
+        "pages/stats/stepsRank",
+        "pages/feed/posts",
+        "pages/feed/placeholder",
         "pages/moment/create",
-        "pages/feed/together",
         "pages/about/me",
         "pages/about/index",
         "pages/together/create",
-        "pages/stats/stepsRank"
+        "pages/about/verify"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
         "navigationBarBackgroundColor": "#F0F0F0",
-        "navigationBarTitleText": "小西爱运动",
+        "navigationBarTitleText": "西嘻",
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
         "list": [
             {
-                "pagePath": "pages/index/index",
-                "text": "首页"
-            },
-            {
-                "pagePath": "pages/feed/moment",
-                "text": "运动瞬间"
-            },
-            {
-                "pagePath": "pages/feed/together",
-                "text": "运动搭子"
-            },
-            {
                 "pagePath": "pages/stats/stepsRank",
-                "text": "排行榜"
+                "text": "爱步行"
+            },
+            {
+                "pagePath": "pages/feed/placeholder",
+                "text": "爱水贴"
             },
             {
                 "pagePath": "pages/about/index",
