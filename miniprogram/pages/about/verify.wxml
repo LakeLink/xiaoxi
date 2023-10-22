@@ -1,0 +1,10 @@
+<!--pages/about/verify.wxml-->
+<div style="display: flex; justify-content: center; margin-top: 64px; margin-bottom: 24px;">
+    <text style="font-size:xx-large;">某某大学身份认证</text>
+</div>
+<van-cell-group inset>
+    <van-field model:value="{{username}}" placeholder="请输入学工号" label="学工号"></van-field>
+    <van-field model:value="{{password}}" type="password" placeholder="请输入统一身份认证密码" label="密码"></van-field>
+</van-cell-group>
+<button bindtap="onTapSubmit" type="primary" style="margin-top: 24px;">登录</button>
+<button bindtap="onTapBack" style="margin-top: 12px;">返回</button>
