@@ -44,33 +44,11 @@
         "ignoreDevUnusedFiles": false,
         "condition": false
     },
-    "appid": "wxb5e5e58949b8b027",
-    "projectname": "quickstart-wx-cloud",
-    "libVersion": "2.14.1",
+    "appid": "wx3076708712966e92",
+    "projectname": "xixi",
+    "libVersion": "3.1.3",
     "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
-    "condition": {
-        "search": {
-            "list": []
-        },
-        "conversation": {
-            "list": []
-        },
-        "plugin": {
-            "list": []
-        },
-        "game": {
-            "list": []
-        },
-        "miniprogram": {
-            "list": [
-                {
-                    "id": -1,
-                    "name": "db guide",
-                    "pathName": "pages/databaseGuide/databaseGuide"
-                }
-            ]
-        }
-    },
+    "condition": {},
     "srcMiniprogramRoot": "miniprogram/",
     "compileType": "miniprogram",
     "packOptions": {

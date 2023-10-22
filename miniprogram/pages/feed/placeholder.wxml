@@ -1,0 +1,5 @@
+<!--pages/feed/placeholder.wxml-->
+<view class="rrr">
+    <rich-text nodes="{{nodes}}">
+    </rich-text>
+</view>
