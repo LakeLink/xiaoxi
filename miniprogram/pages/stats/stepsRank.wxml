@@ -13,7 +13,7 @@
             <view style="margin-left: 10px; display: inline-block;">
                 <text class="user-nickname">{{ item.nickname }}</text>
                 <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
-                <text class="user-realname">{{ item.realname }}</text>
+                <!-- <text class="user-realname">{{ item.realname }}</text> -->
                 <view style="margin-top: 4px;">
                     <text wx:if="{{item.bio}}" class="bio">"{{item.bio}}"</text>
                 </view>

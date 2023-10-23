@@ -115,7 +115,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
             totalSteps: $.sum('$totalSteps.step'),
             avatarUrl: true,
             nickname: true,
-            realname: true,
+            // realname: true,
             collegeIndex: true,
             bio: true
         })
