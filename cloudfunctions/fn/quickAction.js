@@ -12,6 +12,21 @@ cloud.init({
 //     else return false
 // }
 
+exports.hasSubscribed = async (event, context) => {
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('subscribed_msgs')
+    const _ = db.command
+
+    let r = await col.doc(OPENID).get()
+    return r.data.templateIds.includes(event.templateId)
+}
+
 exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
     agg.lookup({
         from: 'users',

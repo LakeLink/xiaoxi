@@ -7,12 +7,43 @@ Page({
     data: {
         nodes: `
         <h3>西嘻「爱水贴」即将上线</h3>
+        <br>
         <ul>
             <li>聊天吹水</li>
             <li>二手交易</li>
+            <li>组局开黑</li>
             <li>......</li>
         </ul>
-        `
+        `,
+        subscribed: false
+    },
+
+    refresh() {
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'hasSubscribed',
+                templateId: 'NAzpKmK5_dla6rINPfQGswGc2Q6dknKW2TLFuBDR4kU'
+            }
+        }).then(r => this.setData({
+            subscribed: r.result
+        }))
+    },
+
+    onTapSubscribe(e) {
+        console.log(e)
+
+        wx.requestSubscribeMessage({
+            tmplIds: [
+                'NAzpKmK5_dla6rINPfQGswGc2Q6dknKW2TLFuBDR4kU'
+            ]
+        }).then(r => {
+            wx.showToast({
+                icon: 'success',
+                title: '订阅成功…'
+            })
+            this.refresh()
+        })
     },
 
     /**
@@ -33,7 +64,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        this.refresh()
     },
 
     /**

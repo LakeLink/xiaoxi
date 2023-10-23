@@ -2,4 +2,6 @@
 <view class="rrr">
     <rich-text nodes="{{nodes}}">
     </rich-text>
+    <button wx:if="{{!subscribed}}" style="margin-top: 24px;" type="primary" bindtap="onTapSubscribe">订阅开放通知</button>
+    <button wx:if="{{subscribed}}" style="margin-top: 24px;" disabled bindtap="onTapSubscribe">已订阅开放通知</button>
 </view>
