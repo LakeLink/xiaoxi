@@ -2,61 +2,28 @@
     "miniprogramRoot": "miniprogram/",
     "cloudfunctionRoot": "cloudfunctions/",
     "setting": {
-        "urlCheck": true,
-        "es6": true,
-        "enhance": true,
-        "postcss": true,
-        "preloadBackgroundData": false,
-        "minified": true,
-        "newFeature": true,
-        "coverView": true,
-        "nodeModules": false,
-        "autoAudits": false,
-        "showShadowRootInWxmlPanel": true,
-        "scopeDataCheck": false,
-        "uglifyFileName": false,
-        "checkInvalidKey": true,
-        "checkSiteMap": true,
-        "uploadWithSourceMap": true,
-        "compileHotReLoad": false,
-        "lazyloadPlaceholderEnable": false,
-        "useMultiFrameRuntime": true,
-        "useApiHook": true,
-        "useApiHostProcess": true,
+        "ignoreUploadUnusedFiles": true,
         "babelSetting": {
-            "ignore": [
-                "utils/3rdparty/*"
-            ],
+            "ignore": [],
             "disablePlugins": [],
             "outputPath": ""
         },
-        "enableEngineNative": false,
-        "useIsolateContext": true,
-        "userConfirmedBundleSwitch": false,
-        "packNpmManually": false,
-        "packNpmRelationList": [],
-        "minifyWXSS": true,
-        "disableUseStrict": false,
-        "showES6CompileOption": false,
-        "useCompilerPlugins": false,
-        "minifyWXML": true,
-        "ignoreUploadUnusedFiles": true,
-        "ignoreDevUnusedFiles": false,
-        "condition": false
+        "es6": true,
+        "enhance": true,
+        "minified": true
     },
     "appid": "wx3076708712966e92",
     "projectname": "xixi",
-    "libVersion": "3.1.3",
-    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
-    "condition": {},
+    "libVersion": "3.1.4",
     "srcMiniprogramRoot": "miniprogram/",
     "compileType": "miniprogram",
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
+    },
     "packOptions": {
         "ignore": [],
         "include": []
     },
-    "editorSetting": {
-        "tabIndent": "insertSpaces",
-        "tabSize": 4
-    }
+    "condition": {}
 }

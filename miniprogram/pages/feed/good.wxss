@@ -1,4 +1,0 @@
-/* pages/feed/good.wxss */
-.feed-input {
-    --field-text-area-min-height: 100px;
-}

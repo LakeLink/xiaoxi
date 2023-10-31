@@ -4,7 +4,6 @@
         "pages/feed/posts",
         "pages/feed/placeholder",
         "pages/moment/create",
-        "pages/about/me",
         "pages/about/index",
         "pages/together/create",
         "pages/about/verify"
@@ -35,6 +34,5 @@
         "~/*": "/*",
         "@3rdparty/*": "3rdparty/*"
     },
-    "sitemapLocation": "sitemap.json",
-    "style": "v2"
+    "sitemapLocation": "sitemap.json"
 }
