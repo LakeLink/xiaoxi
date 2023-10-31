@@ -25,5 +25,6 @@
         "ignore": [],
         "include": []
     },
-    "condition": {}
+    "condition": {},
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

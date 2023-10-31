@@ -64,23 +64,17 @@ post -> comment -> subComment
 * videos (string[])
 * comments ({author: openid, content: string, when: serverDate}[])
 
-#### WeRunStepInfo
+#### werun_steps
 
 * timestamp (Number, index, descending)
 * user (openid, index)
 * step (Number)
 
-#### TogetherDetails
+#### werun_notices
 
-* sportsType (string)
-* publishedAt (serverDate)
-* scheduledAt (Date)
-* location (string)
-* description (string)
-* limit (number)
-* images (string[])
-* partners (openid[])
-* comments ({author: openid, content: string, when: serverDate}[])
+* when (serverDate)
+* author (openid)
+* content (string)
 
 
 ## 3rdparty 目录
