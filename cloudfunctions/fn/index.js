@@ -45,6 +45,12 @@ exports.main = async function (event, context) {
         case 'undoLikeWeRun':
             return await quickAction.undoLike(event, context, 'WeRunDetails')
 
+        case 'postWeRunNotice':
+            return await weRun.postNotice(event, context)
+        case 'getWeRunNotices':
+            return await weRun.getNotices(event, context)
+        case 'nudgeWeRunUser':
+            return await weRun.nudge(event, context)
         case 'updateWeRunStepInfo':
             return await weRun.updateStepInfo(event, context)
         case 'getWeRunTotalSteps':

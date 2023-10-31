@@ -1,5 +1,6 @@
 // pages/stats/stepsRank.js
 import * as echarts from '@3rdparty/ec-canvas/echarts';
+import Message from 'tdesign-miniprogram/message/index';
 
 Page({
 
@@ -11,7 +12,8 @@ Page({
         ec: {
             lazyLoad: true
         },
-        collegeList: ["", "α", "β", "γ", "δ", "教", "博"]
+        collegeList: ["", "α", "β", "γ", "δ", "教", "博"],
+        notices: []
     },
 
     async loadRank() {
@@ -31,7 +33,7 @@ Page({
             console.log(y)
             var option = {
                 title: {
-                    text: (new Date().getMonth()+1)+'月步数排行榜'
+                    text: (new Date().getMonth() + 1) + '月步数排行榜'
                 },
                 textStyle: {
                     color: 'black'
@@ -69,6 +71,18 @@ Page({
             };
             this.chart.setOption(option);
         })
+    
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getWeRunNotices'
+            }
+        }).then(r => {
+            console.log(r)
+            this.setData({
+                notices: r.result
+            })
+        })
     },
 
     initChart(canvas, width, height, dpr) {
@@ -83,6 +97,69 @@ Page({
         this.loadRank()
         console.log('initChartDone')
         return chart;
+    },
+
+    onTapAvatar(e) {
+        console.log(e)
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'nudgeWeRunUser',
+                target: this.data.rankForList[e.target.dataset.idx]._id
+            }
+        }).then(r => {
+            if (r.result.success) {
+                Message.success({
+                    context: this,
+                    offset: [20, 32],
+                    duration: 5000,
+                    content: '你拍了拍',
+                  });
+            this.loadRank()
+            } else {
+                Message.warning({
+                    context: this,
+                    offset: [20, 32],
+                    duration: 5000,
+                    content: '今天你已经拍过他了',
+                  });
+
+            }
+        })
+    },
+
+    onClickNotice(e) {
+        wx.showModal({
+            title: '广告位招租!',
+            content: '',
+            editable: true,
+            complete: (res) => {
+                if (res.confirm) {
+                    console.log(res)
+                    wx.cloud.callFunction({
+                        name: 'fn',
+                        data: {
+                            type: 'postWeRunNotice',
+                            content: res.content
+                        }
+                    }).then(r => {
+                        if (r.result.sucess) {
+                        wx.showToast({
+                          title: '成功投稿！将占位三天',
+                          icon: 'success'
+                        })
+                        this.loadRank()
+
+                        } else {
+                            wx.showToast({
+                              title: '内容似乎不太对，改改再发吧',
+                              icon: 'error'
+                            })
+                        }
+                    })
+                }
+            }
+        })
     },
 
     /**

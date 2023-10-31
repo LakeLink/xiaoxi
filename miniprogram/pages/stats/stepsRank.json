@@ -1,6 +1,12 @@
 {
     "usingComponents": {
-        "ec-canvas": "/3rdparty/ec-canvas/ec-canvas"
+        "ec-canvas": "/3rdparty/ec-canvas/ec-canvas",
+        "t-row": "tdesign-miniprogram/row/row",
+        "t-col": "tdesign-miniprogram/col/col",
+        "t-message": "tdesign-miniprogram/message/message",
+        "t-notice-bar": "tdesign-miniprogram/notice-bar/notice-bar",
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "t-message": "tdesign-miniprogram/message/message"
     },
     "enablePullDownRefresh": true
 }
