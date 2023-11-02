@@ -36,8 +36,6 @@ exports.main = async function (event, context) {
         case 'hasSubscribed':
             return await quickAction.hasSubscribed(event, context)
 
-        case 'getWeRunFeed':
-            return await weRun.getFeed(event, context)
         case 'commentWeRun':
             return await quickAction.comment(event, context, 'WeRunDetails')
         case 'likeWeRun':
@@ -65,5 +63,7 @@ exports.main = async function (event, context) {
             return await quickAction.delComment(event, context)
         case 'getAds':
             return ["cloud://xiaoxiaiyundong-8g95vuw53cf7c6b4.7869-xiaoxiaiyundong-8g95vuw53cf7c6b4-1317841170/20230413_223142_0000.png"]
+        default:
+            throw new Error('Invalid event.type')
     }
 }
