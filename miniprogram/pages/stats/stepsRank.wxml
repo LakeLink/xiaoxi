@@ -1,31 +1,36 @@
 <!--pages/stats/stepsRank.wxml-->
 <!-- <text>pages/stats/stepsRank.wxml</text> -->
-<t-message id="t-message" />
-<t-notice-bar visible direction="vertical" interval="{{5000}}" prefixIcon="sound" suffixIcon="chat-add" content="{{notices}}" bind:click="onClickNotice">
-</t-notice-bar>
-<view class="chart">
-    <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
-</view>
+<view class="safe-area">
+    <t-message id="t-message" />
+    <t-notice-bar visible direction="vertical" interval="{{5000}}" prefixIcon="sound" suffixIcon="chat-add" content="{{notices}}" bind:click="onClickNotice">
+    </t-notice-bar>
+    <view class="chart">
+        <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+    </view>
 
-<view class="container">
-    <view class="row" wx:for="{{rankForList}}">
-        <text class="col-rank">{{index+1}}</text>
+    <view class="container">
+        <view class="row" wx:for="{{rankForList}}">
+        
+            <text class="col-rank">{{index+1}}</text>
+            <text wx:if="{{item.delta !== undefined}}">{{item.delta}}</text>
 
-        <image bindtap="onTapAvatar" class="col-avatar" mode="aspectFit" src="{{item.avatarUrl}}" data-idx="{{index}}"></image>
+            <image bindtap="onTapAvatar" class="col-avatar" mode="aspectFit" src="{{item.avatarUrl}}" data-idx="{{index}}"></image>
 
-        <view class="col-user">
-            <text class="user-nickname">{{ item.nickname }}</text>
-            <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
-            <!-- <text class="user-realname">{{ item.realname }}</text> -->
-            <view style="margin-top: 4px;">
-                <text wx:if="{{item.bio}}" class="bio">"{{item.bio}}"</text>
+            <view class="col-user">
+                <text class="user-nickname">{{ item.nickname }}</text>
+                <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
+                <!-- <text class="user-realname">{{ item.realname }}</text> -->
+                <view style="margin-top: 4px;">
+                    <text wx:if="{{item.bio}}" class="bio">"{{item.bio}}"</text>
+                </view>
+            </view>
+
+            <view class="col-data">
+                <text class="steps" style='{{(index <=2 ? "color: orange;" : (item.totalSteps ? "color: darkcyan;" : "color: grey;"))}}'>{{item.totalSteps ? item.totalSteps: '未同步' }}</text>
+                <text wx:if="{{item.tickledBy >= 1}}" class="tickled">被拍一拍了 {{item.tickledBy}} 次</text>
             </view>
         </view>
-
-        <view class="col-data">
-            <text class="steps" style='{{(index <=2 ? "color: orange;" : (item.totalSteps ? "color: darkcyan;" : "color: grey;"))}}'>{{item.totalSteps ? item.totalSteps: '未同步' }}</text>
-            <text wx:if="{{item.tickledBy >= 1}}" class="tickled">被拍一拍了 {{item.tickledBy}} 次</text>
-        </view>
+        <text style="text-align: center; padding: 6px; color: gray" wx:if="{{rankForList.length >= 100}}">剩下同志要继续努力哦😉</text>
     </view>
-    <text style="text-align: center; padding: 6px; color: gray" wx:if="{{rankForList.length >= 100}}">剩下同志要继续努力哦😉</text>
+
 </view>

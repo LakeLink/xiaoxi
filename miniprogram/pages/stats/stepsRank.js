@@ -71,7 +71,7 @@ Page({
             };
             this.chart.setOption(option);
         })
-    
+
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -114,15 +114,15 @@ Page({
                     offset: [20, 32],
                     duration: 5000,
                     content: '你拍了拍',
-                  });
-            this.loadRank()
+                });
+                this.loadRank()
             } else {
                 Message.warning({
                     context: this,
                     offset: [20, 32],
                     duration: 5000,
                     content: '今天你已经拍过他了',
-                  });
+                });
 
             }
         })
@@ -144,16 +144,16 @@ Page({
                         }
                     }).then(r => {
                         if (r.result.sucess) {
-                        wx.showToast({
-                          title: '成功投稿！将占位三天',
-                          icon: 'success'
-                        })
-                        this.loadRank()
+                            wx.showToast({
+                                title: '成功投稿！将占位三天',
+                                icon: 'success'
+                            })
+                            this.loadRank()
 
                         } else {
                             wx.showToast({
-                              title: '内容似乎不太对，改改再发吧',
-                              icon: 'error'
+                                title: '内容似乎不太对，改改再发吧',
+                                icon: 'error'
                             })
                         }
                     })
@@ -178,7 +178,14 @@ Page({
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow() {},
+    onShow() {
+        if (typeof this.getTabBar === 'function' &&
+            this.getTabBar()) {
+            this.getTabBar().setData({
+                value: '/pages/stats/stepsRank'
+            })
+        }
+    },
 
     /**
      * 生命周期函数--监听页面隐藏
