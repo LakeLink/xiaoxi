@@ -5,6 +5,14 @@
         "van-field": "@vant/weapp/field/index",
         "van-calendar": "@vant/weapp/calendar/index",
         "van-uploader": "@vant/weapp/uploader/index",
-        "van-switch": "@vant/weapp/switch/index"
+        "van-switch": "@vant/weapp/switch/index",
+        "t-input": "tdesign-miniprogram/input/input",
+        "t-textarea": "tdesign-miniprogram/textarea/textarea",
+        "t-button": "tdesign-miniprogram/button/button",
+        "t-upload": "tdesign-miniprogram/upload/upload",
+        "t-cell": "tdesign-miniprogram/cell/cell",
+        "t-switch": "tdesign-miniprogram/switch/switch",
+        "t-picker": "tdesign-miniprogram/picker/picker",
+        "t-picker-item": "tdesign-miniprogram/picker-item/picker-item"
     }
 }

@@ -1,0 +1,8 @@
+<!--pages/moment/feed.wxml-->
+<view class="safe-area">
+
+    <view class="example-search">
+  <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
+</view>
+<t-fab style="right: 32rpx; bottom: 140rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
+</view>

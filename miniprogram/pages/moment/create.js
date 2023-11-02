@@ -113,10 +113,49 @@ Page({
                 unit: "time"
             },
         ],
+        topicPickerVisible: false,
+        topicValue: [],
+        topics: [
+            {
+                label: "唐人街", value: "唐人街"
+            }
+        ],
+        originFiles: [],
         minDateForCalendar: Date.now() - 1000 * 60 * 60 * 24 * 30,
         numberInput: "",
         location: "",
         mediaList: []
+    },
+
+    onTapBack(e) {
+        console.log(e)
+        wx.navigateBack()
+    },
+
+    onTapSubmit(e) {
+        console.log(e)
+    },
+
+    onTopicPicker(e) {
+        this.setData({
+            topicPickerVisible: true
+        })
+    },
+
+    onPickerChange(e) {
+        const { value } = e.detail;
+        this.setData({
+            topicPickerVisible: false,
+            topicValue: value,
+            topic: value.join(' ')
+        })
+    },
+
+    handleSuccess(e) {
+        const { files } = e.detail;
+        this.setData({
+          originFiles: files,
+        });
     },
 
     /**

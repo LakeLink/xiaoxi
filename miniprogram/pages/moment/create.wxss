@@ -1,1 +1,17 @@
-/* pages/exercise-now/exercise-now.wxss */
+.title {
+    margin: 24rpx 24rpx;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.uploader {
+    padding: 24rpx;
+    background-color: white;
+}
+
+.buttons {
+    margin: 32rpx 32rpx;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32rpx;
+}

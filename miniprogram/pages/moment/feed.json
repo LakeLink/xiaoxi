@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "t-fab": "tdesign-miniprogram/fab/fab",
+        "t-search": "tdesign-miniprogram/search/search"
+    }
+}
