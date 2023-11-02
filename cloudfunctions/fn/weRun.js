@@ -255,5 +255,15 @@ exports.rankTotalStepsV2 = async (event, context) => {
     const r = await agg.sort({
         totalSteps: -1
     }).limit(100).end()
+
+    let pre = await db.collection('werun_rank_cache')
+        .doc(dayjs().tz('Asia/Shanghai').subtract(1, 'day').endOf('day').unix())
+        .get().then(r => r.data)
+
+    for (let i = 0; i < r.list.length; i++) {
+        if (r.list[i]._id in pre) {
+            r.list[i].delta = pre[r.list[i]._id]-(i+1)
+        }
+    }
     return r.list
 }

@@ -1,0 +1,12 @@
+{
+    "permissions": {
+        "openapi": [
+        ]
+    },  "triggers": [
+        {
+          "name": "saveRankCache",
+          "type": "timer",
+          "config": "0 1 0 * * * *"
+        }
+      ]
+}
