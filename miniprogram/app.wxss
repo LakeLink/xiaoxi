@@ -1,6 +1,17 @@
 /**app.wxss**/
+/* https://github.com/Tencent/tdesign-miniprogram/blob/develop/src/common/style/_variables.less */
 page {
     background: #f0f0f0;
+    --td-brand-color: #66cc66;
+    --td-brand-color-active: #43b443;
+    --td-brand-color-disabled: #8fd68f;
+    /* @brand-color-focus: var(--td-brand-color-focus, @primary-color-1);
+    @brand-color-light: var(--td-brand-color-light, @primary-color-1);
+    @brand-color-light-active: var(--td-brand-color-light-active, @primary-color-2); */
+}
+
+.safe-area {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 80rpx)
 }
 
 .college-0 {

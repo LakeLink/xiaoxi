@@ -1,12 +1,12 @@
 {
     "pages": [
         "pages/stats/stepsRank",
-        "pages/feed/posts",
         "pages/feed/placeholder",
         "pages/moment/create",
         "pages/about/index",
         "pages/together/create",
-        "pages/about/verify"
+        "pages/about/verify",
+        "pages/moment/feed"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
@@ -15,13 +15,14 @@
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
+        "custom": true,
         "list": [
             {
                 "pagePath": "pages/stats/stepsRank",
                 "text": "爱步行"
             },
             {
-                "pagePath": "pages/feed/placeholder",
+                "pagePath": "pages/moment/feed",
                 "text": "爱水贴"
             },
             {
