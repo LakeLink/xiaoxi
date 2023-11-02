@@ -95,6 +95,18 @@ exports.save = async (event, context) => {
 
     console.log(event.data)
 
+    await cloud.openapi.security.msgSecCheck({
+        content: bio+nickname+realname+hobby,
+        version: 2,
+        scene: 1,
+        openid: OPENID,
+        nickname,
+        signature: bio
+    }).then(r => {
+        console.log(r)
+        if (r.result.suggest !== 'pass') throw new Error('过不了审')
+    })
+
     let r = await col.doc(OPENID).set({
         data: {
             avatarUrl,

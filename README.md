@@ -20,6 +20,7 @@
 
 #### users
 
+* _id (openid)
 * avatarUrl (string)
 * bio (string)
 * nickname (string)
