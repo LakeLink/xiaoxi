@@ -107,49 +107,57 @@ exports.save = async (event, context) => {
         if (r.result.suggest !== 'pass') throw new Error('过不了审')
     })
 
-    let r = await col.doc(OPENID).set({
-        data: {
-            avatarUrl,
-            bio,
-            nickname,
-            realname,
-            hobby,
-            year
-        }
-    })
-
     let success = false, needVerify = false
-    // collegeIndex = Number(collegeIndex)
-    if (r.stats.updated) {
+    try {
         let data = await col.doc(OPENID).get().then(r => r.data)
+
         if (!collegeIndex) {
-            success = true
+            // success = true
             needVerify = false
         } else if (1 <= collegeIndex && collegeIndex <= 5) {
-            success = true
+            // success = true
             needVerify = data.verifiedIdentity !== "student"
         } else if (collegeIndex == 6) {
-            success = true
+            // success = true
             needVerify = data.verifiedIdentity !== "teacher"
         }
-    } else if (r.stats.created) {
+        // collegeIndex = Number(collegeIndex)
+        let r = await col.doc(OPENID).update({
+            data: {
+                avatarUrl,
+                bio,
+                nickname,
+                realname,
+                hobby,
+                year,
+                collegeIndex: !needVerify && collegeIndex ? collegeIndex : undefined
+            }
+        })
+        // If no field is changed, then udpated == 0
+        // if (r.stats.updated) {
+            success = true
+        // }
+    } catch(e) {
+        r = await col.doc(OPENID).set({
+            data: {
+                avatarUrl,
+                bio,
+                nickname,
+                realname,
+                hobby,
+                year
+            }
+        })
         // created
         if (!collegeIndex) {
-            success = true
+            success = r.stats.created == 1
             needVerify = false
         } else {
-            success = true
+            success = r.stats.created == 1
             needVerify = true
         }
     }
 
-    if (success && !needVerify && collegeIndex) {
-        await col.doc(OPENID).update({
-            data: {
-                collegeIndex
-            }
-        })
-    }
     return {
         success,
         needVerify
