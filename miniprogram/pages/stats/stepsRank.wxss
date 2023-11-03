@@ -48,8 +48,9 @@ ec-canvas {
     font-family: monospace;
     font-size: small;
     position: relative;
-    /* left: -8rpx; */
+    left: -8rpx;
     top: -12rpx;
+    margin-right: -8rpx;
 }
 
 .col-positivedelta {

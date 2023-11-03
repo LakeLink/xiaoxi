@@ -121,7 +121,7 @@ Page({
                     context: this,
                     offset: [20, 32],
                     duration: 5000,
-                    content: '今天你已经拍过他了',
+                    content: '今天已经拍过他了',
                 });
 
             }
@@ -143,7 +143,7 @@ Page({
                             content: res.content
                         }
                     }).then(r => {
-                        if (r.result.sucess) {
+                        if (r.result.success) {
                             wx.showToast({
                                 title: '成功投稿！将占位三天',
                                 icon: 'success'
