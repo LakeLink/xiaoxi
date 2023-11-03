@@ -5,8 +5,7 @@
         "t-col": "tdesign-miniprogram/col/col",
         "t-message": "tdesign-miniprogram/message/message",
         "t-notice-bar": "tdesign-miniprogram/notice-bar/notice-bar",
-        "t-icon": "tdesign-miniprogram/icon/icon",
-        "t-message": "tdesign-miniprogram/message/message"
+        "t-icon": "tdesign-miniprogram/icon/icon"
     },
     "enablePullDownRefresh": true
 }

@@ -42,8 +42,18 @@ ec-canvas {
     color: yellowgreen;
     font-weight: bolder;
     font-size: larger;
+}
 
-    flex-basis: 5%;
+.col-positivedelta {
+    color: orange;
+    font-size: small;
+    position: relative;
+    /* left: -8rpx; */
+    top: -12rpx;
+}
+
+.col-negativedelta {
+    color: grey;
 }
 
 .col-avatar {
