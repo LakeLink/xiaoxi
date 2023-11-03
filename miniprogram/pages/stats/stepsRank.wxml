@@ -14,8 +14,8 @@
             <text class="col-rank">{{index+1}}</text>
             <block wx:if="{{item.delta !== undefined}}">
                 
-                <text wx:if="{{item.delta >= 0}}" class="col-positivedelta">+{{item.delta}}</text>
-                <text wx:else class="col-negativedelta">{{item.delta}}</text>
+                <text wx:if="{{item.delta >= 0}}" class="col-delta col-positivedelta">+{{item.delta}}</text>
+                <text wx:else class="col-delta col-negativedelta">{{item.delta}}</text>
             </block>
 
             <image bindtap="onTapAvatar" class="col-avatar" mode="aspectFit" src="{{item.avatarUrl}}" data-idx="{{index}}"></image>
@@ -31,7 +31,7 @@
 
             <view class="col-data">
                 <text class="steps" style='{{(index <=2 ? "color: orange;" : (item.totalSteps ? "color: darkcyan;" : "color: grey;"))}}'>{{item.totalSteps ? item.totalSteps: '未同步' }}</text>
-                <text wx:if="{{item.tickledBy >= 1}}" class="tickled">被拍一拍了 {{item.tickledBy}} 次</text>
+                <text wx:if="{{item.tickledBy >= 1}}" class="tickled">拍一拍 × {{item.tickledBy}}</text>
             </view>
         </view>
         <text style="text-align: center; padding: 6px; color: gray" wx:if="{{rankForList.length >= 100}}">剩下同志要继续努力哦😉</text>

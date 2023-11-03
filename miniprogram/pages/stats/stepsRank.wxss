@@ -44,12 +44,16 @@ ec-canvas {
     font-size: larger;
 }
 
-.col-positivedelta {
-    color: orange;
+.col-delta {
+    font-family: monospace;
     font-size: small;
     position: relative;
     /* left: -8rpx; */
     top: -12rpx;
+}
+
+.col-positivedelta {
+    color: orange;
 }
 
 .col-negativedelta {
