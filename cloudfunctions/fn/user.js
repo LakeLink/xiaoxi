@@ -29,13 +29,18 @@ exports.verify = async (event, context) => {
         }
     }).json().then(async r => {
         let attrs = r.authentication.successes.RestAuthenticationHandler.principal.attributes
-        let success = true
+        let success = true, reason = ""
         if (1 <= collegeIndex && collegeIndex <= 5) {
             success = attrs.identity == "student"
         } else if (collegeIndex == 6) {
             success = attrs.identity == "teacher"
         } else {
             success = false
+            reason = "collegeIndex 错误"
+        }
+
+        if (!success) {
+            reason = "用户与神秘符号不匹配"
         }
 
         let stats = await col.doc(OPENID).update({
@@ -47,14 +52,27 @@ exports.verify = async (event, context) => {
                 sex: attrs.sex
             }
         }).then(r => r.stats)
-
-        return {
-            success: success && stats.updated
+        if (!success) {
+            return {
+                success,
+                reason
+            }
+        } else if (!stats.updated) {
+            return {
+                success: false,
+                reason: "数据库错误"
+            }
+        } else {
+            return {
+                success: true,
+                reason: "成功"
+            }
         }
     }).catch(e => {
         console.log(e)
         return {
-            success: false
+            success: false,
+            reason: "服务器错误"
         }
     })
 

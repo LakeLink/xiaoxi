@@ -77,14 +77,14 @@ Page({
             } else {
                 wx.showToast({
                     icon: 'error',
-                    title: '用户名或密码不正确'
+                    title: r.reason
                 })
             }
         }).catch(e => {
             console.log(e)
             wx.showToast({
                 icon: 'error',
-                title: '系统错误',
+                title: '云函数错误',
             })
         }).finally(() => {
             this.setData({
