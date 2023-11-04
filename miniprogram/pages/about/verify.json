@@ -3,6 +3,7 @@
         "van-cell": "@vant/weapp/cell/index",
         "van-icon": "@vant/weapp/icon/index",
         "van-field": "@vant/weapp/field/index",
-        "van-cell-group": "@vant/weapp/cell-group/index"
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "t-button": "tdesign-miniprogram/button/button"
     }
 }

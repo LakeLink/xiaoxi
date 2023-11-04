@@ -21,7 +21,8 @@ Page({
         loading: true,
         syncWeRunStepInfo: false,
         showOpenSettingButton: false,
-        totalSteps: null
+        totalSteps: null,
+        submitting: false
     },
 
     onChooseAvatar(e) {
@@ -122,6 +123,7 @@ Page({
     onSubmit(e) {
         // console.log("submit event:", e.detail)
         // console.log("data:", this.data)
+
         const {
             avatarUrl,
             bio,
@@ -144,61 +146,68 @@ Page({
                 icon: 'error'
             })
         } else {
+            this.setData({
+                submitting: true
+            })
             // console.log(this.data)
             wx.cloud.callFunction({
-                name: 'fn',
-                data: {
-                    type: 'saveUser',
+                    name: 'fn',
                     data: {
-                        avatarUrl,
-                        bio,
-                        nickname,
-                        realname,
-                        hobby,
-                        collegeIndex: collegeIndex ? Number(collegeIndex) : 0,
-                        year
+                        type: 'saveUser',
+                        data: {
+                            avatarUrl,
+                            bio,
+                            nickname,
+                            realname,
+                            hobby,
+                            collegeIndex: collegeIndex ? Number(collegeIndex) : 0,
+                            year
+                        }
                     }
-                }
-            })
-            .then(r => r.result)
-            .then(r => {
-                if (r.success) {
-                    if (r.needVerify) {
-                        wx.showModal({
-                            title: '验证',
-                            content: '设置神秘符号需要验证身份，是否继续',
-                            complete: (res) => {
-                                if (res.confirm) {
-                                    wx.navigateTo({
-                                        url: `/pages/about/verify?collegeIndex=${collegeIndex}`,
-                                    })
+                })
+                .then(r => r.result)
+                .then(r => {
+                    if (r.success) {
+                        if (r.needVerify) {
+                            wx.showModal({
+                                title: '验证',
+                                content: '设置神秘符号需要验证身份，是否继续',
+                                complete: (res) => {
+                                    if (res.confirm) {
+                                        wx.navigateTo({
+                                            url: `/pages/about/verify?collegeIndex=${collegeIndex}`,
+                                        })
+                                    }
+                                    if (res.cancel) {
+                                        this.setData({
+                                            colegeIndex: 0
+                                        })
+                                    }
                                 }
-                                if (res.cancel) {
-                                    this.setData({
-                                        colegeIndex: 0
-                                    })
-                                }
-                            }
-                        })
+                            })
+                        } else {
+                            wx.showToast({
+                                title: '保存成功',
+                                icon: 'success'
+                            })
+                        }
+                        getApp().globalData.userExist = true
                     } else {
                         wx.showToast({
-                            title: '保存成功',
-                            icon: 'success'
+                            title: '发生错误',
+                            icon: 'error'
                         })
                     }
-                    getApp().globalData.userExist = true
-                } else {
+                }).catch(e => {
                     wx.showToast({
                         title: '发生错误',
                         icon: 'error'
                     })
-                }
-            }).catch(e => {
-                wx.showToast({
-                    title: '发生错误',
-                    icon: 'error'
+                }).finally(() => {
+                    this.setData({
+                        submitting: false
+                    })
                 })
-            })
         }
         return
         // const db = wx.cloud.database()
@@ -309,7 +318,9 @@ Page({
                 q: this.query
             }
         }).then(r => {
-            r.result.college = this.data.collegeList[r.result.collegeIndex]
+            if (r.result.collegeIndex) {
+                r.result.college = this.data.collegeList[r.result.collegeIndex]
+            }
             this.setData({
                 loading: false,
                 ...r.result

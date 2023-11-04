@@ -1,1 +1,6 @@
 /* pages/about/verify.wxss */
+.buttons {
+    margin-top: 24rpx;
+    display: flex;
+    /* gap: 12rpx; */
+}

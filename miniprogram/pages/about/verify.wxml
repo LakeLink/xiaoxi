@@ -6,5 +6,7 @@
     <van-field model:value="{{username}}" placeholder="请输入学工号" label="学工号"></van-field>
     <van-field model:value="{{password}}" type="password" placeholder="请输入统一身份认证密码" label="密码"></van-field>
 </van-cell-group>
-<button bindtap="onTapSubmit" type="primary" style="margin-top: 24px;">登录</button>
-<button bindtap="onTapBack" style="margin-top: 12px;">返回</button>
+<view class="buttons">
+    <t-button bind:tap="onTapSubmit" theme="primary" size="large" loading="{{loading}}">登录</t-button>
+    <t-button bind:tap="onTapBack" size="large">返回</t-button>
+</view>

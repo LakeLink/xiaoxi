@@ -48,6 +48,8 @@
         </view>
     </van-skeleton>
 </van-cell-group>
-<button style="margin-top: 24px; margin-bottom: 12px" type="primary" bindtap="onSubmit">保存</button>
-<button wx:if="{{showOpenSettingButton}}" open-type="openSetting">打开设置页</button>
+<view class="buttons">
+    <t-button theme="primary" size="large" loading="{{submitting}}" bind:tap="onSubmit">保存我的信息</t-button>
+    <t-button wx:if="{{showOpenSettingButton}}" size="large" open-type="openSetting">步数同步设置</t-button>
+</view>
 <!-- <navigator url="/pages/about/verify?collegeIndex=2" open-type="navigate">foo</navigator> -->

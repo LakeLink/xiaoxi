@@ -24,25 +24,21 @@ exports.nudge = async (event, context) => {
     const _ = db.command
 
 
-    let t = dayjs().tz('Asia/Shanghai').startOf('day')
-    let r = await col.doc(event.target + '^' + t.unix()).update({
+    let t = dayjs().tz('Asia/Shanghai').startOf('minute')
+    let r = await col.doc(`${OPENID}^${event.target}^${t.unix()}`).set({
         data: {
-            tickledBy: _.addToSet(OPENID)
+            by: OPENID,
+            target: event.target,
+            startOf: t.unix()
         }
     })
-    if (!r.stats.updated) {
+    if (r.stats.created) {
         return {
-            success: (await col.doc(event.target + '^' + t.unix()).set({
-                data: {
-                    target: event.target,
-                    tickledBy: [OPENID],
-                    startOf: t.unix()
-                }
-            }).then(r => r.stats.created)) == 1
+            success: true
         }
     } else {
         return {
-            success: true
+            success: false
         }
     }
 }
@@ -224,10 +220,10 @@ exports.rankTotalStepsV2 = async (event, context) => {
         pipeline: $.pipeline().match(_.and([
             _.expr($.eq(['$target', '$$openid'])),
             {
-                startOf: dayjs().tz('Asia/Shanghai').startOf('day').unix()
+                startOf: _.gte(dayjs().tz('Asia/Shanghai').startOf('day').unix())
             }
         ])).project({
-            cnt: $.size('$tickledBy')
+            by: true
         }).done(),
         as: 'tickledBy'
     })
@@ -240,7 +236,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         // realname: true,
         collegeIndex: true,
         bio: true,
-        tickledBy: $.arrayElemAt(['$tickledBy.cnt', 0])
+        tickledBy: $.size('$tickledBy')
     })
     // } else {
     //     agg = agg.project({

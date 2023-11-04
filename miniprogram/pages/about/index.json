@@ -5,6 +5,7 @@
         "van-field": "@vant/weapp/field/index",
         "van-cell-group": "@vant/weapp/cell-group/index",
         "van-skeleton": "@vant/weapp/skeleton/index",
-        "van-switch": "@vant/weapp/switch/index"
+        "van-switch": "@vant/weapp/switch/index",
+        "t-button": "tdesign-miniprogram/button/button"
     }
 }

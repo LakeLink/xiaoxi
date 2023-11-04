@@ -6,7 +6,8 @@ Page({
      */
     data: {
         username: null,
-        password: null
+        password: null,
+        loading: false
     },
 
     /**
@@ -51,6 +52,9 @@ Page({
             })
             return
         }
+        this.setData({
+            loading: true
+        })
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -69,7 +73,7 @@ Page({
                     icon: 'success',
                     title: '认证成功'
                 })
-                wx.navigateBack()
+                setTimeout(wx.navigateBack, 1000)
             } else {
                 wx.showToast({
                     icon: 'error',
@@ -81,6 +85,10 @@ Page({
             wx.showToast({
                 icon: 'error',
                 title: '系统错误',
+            })
+        }).finally(() => {
+            this.setData({
+                loading: false
             })
         })
     },

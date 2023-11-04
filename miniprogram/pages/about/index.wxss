@@ -17,3 +17,10 @@
     --skeleton-padding: 16px;
     --skeleton-row-height: 32px;
 }
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+    margin-top: 48rpx;
+}
