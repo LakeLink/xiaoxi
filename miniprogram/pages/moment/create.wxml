@@ -2,10 +2,10 @@
 
 <t-cell left-icon="chat-double" title="话题" arrow hover note="{{topic}}" bind:click="onTopicPicker" />
 
-<t-textarea placeholder="讲点什么…" />
+<t-textarea placeholder="讲点什么…" model:value="{{textValue}}" />
 
 <view class="uploader">
-    <t-upload media-type="{{['video','image']}}" files="{{originFiles}}" bind:success="handleSuccess" bind:remove="handleRemove" />
+    <t-upload media-type="{{['video','image']}}" files="{{mediaList}}" bind:success="handleMediaAdd" bind:remove="handleMediaRemove" />
 </view>
 
 <t-cell left-icon="user-invisible" title="使用面具">
@@ -13,7 +13,7 @@
 </t-cell>
 
 <view class="buttons">
-    <t-button theme="primary" size="large" bind:tap="onTapSubmit">帖子，发送!</t-button>
+    <t-button loading="{{loading}}" theme="primary" size="large" bind:tap="onTapSubmit">帖子，发送!</t-button>
     <t-button theme="light" size="large" bind:tap="onTapBack">返回</t-button>
 </view>
 
@@ -27,61 +27,3 @@
 >
   <t-picker-item options="{{topics}}" />
 </t-picker>
-
-<van-cell-group title="发帖" inset="true">
-    <picker mode="selector" bindchange="bindWeRunActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
-        <van-cell required title="运动项目" value="{{ weRunActivity.name }}" is-link></van-cell>
-    </picker>
-    <van-cell required title="运动日期" is-link value="{{ date }}" bind:click="openCalendar" />
-    <van-calendar min-date="{{minDateForCalendar}}" show="{{ isCalendarOpen }}" bind:confirm="confirmDate" bind:close="closeCalendar" />
-
-    <van-field required model:value="{{ location }}" label="地点" input-align="right">
-    </van-field>
-
-    <view style="background-color: white; padding: 16px;">
-        <textarea placeholder="讲几句？" placeholder-style="font-size: small;" auto-height="true" model:value="{{ textInput }}"></textarea>
-    </view>
-    <view style="background-color: white; padding: 16px; position: relative">
-        <text style="vertical-align: top; color: red; position: absolute; left: 8px;">*</text>
-        <van-uploader accept="media" multiple="true" max-duration="15" compressed="false" image-fit="aspectFit" bind:after-read="afterFileRead" bind:delete="fileDelete" file-list="{{ mediaList }}" max-count="9" />
-    </view>
-
-    <van-cell>
-        <text style="height: 100%; vertical-align: middle;" slot="title">同步到微信运动</text>
-        <van-switch size="24px" checked="{{ shareToWeRun }}" bind:change="onChange" />
-    </van-cell>
-
-    <block wx:if="{{shareToWeRun}}">
-        <picker mode="selector" bindchange="bindWeRunActivityChange" range="{{activities}}" range-key="name" value="{{activity}}">
-            <van-cell required title="运动项目" value="{{ weRunActivity.name }}" is-link></van-cell>
-        </picker>
-
-        <view wx:if='{{weRunActivity.unit == "distance"}}'>
-            <van-field model:value="{{ numberInput }}" label="运动距离" type="digit" input-align="right">
-                <label slot="right-icon">千米</label>
-            </van-field>
-        </view>
-        <view wx:elif='{{weRunActivity.unit == "time"}}'>
-            <van-field model:value="{{ numberInput }}" label="运动时长" type="number" input-align="right">
-                <label slot="right-icon">分钟</label>
-            </van-field>
-        </view>
-        <view wx:elif='{{weRunActivity.unit == "number"}}'>
-            <van-field model:value="{{ numberInput }}" label="数量" type="number" input-align="right">
-                <label slot="right-icon">个</label>
-            </van-field>
-        </view>
-    </block>
-
-</van-cell-group>
-<button style="margin-top: 24px;" type="primary" bindtap="bindSubmit">分享运动瞬间</button>
-<button style="margin-top: 16px;" bindtap="onBack">Back</button>
-<!-- <view>
-    <form bindsubmit="bindSubmit">
-        <picker mode="time" bindchange="bindDateChange" value="{{date}}">
-            <view>
-                时间：{{date}}
-            </view>
-        </picker>
-    </form>
-</view> -->

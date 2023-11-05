@@ -2,7 +2,17 @@
 <view class="safe-area">
 
     <view class="example-search">
-  <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
-</view>
-<t-fab style="right: 32rpx; bottom: 140rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
+        <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
+    </view>
+    <view wx:for="{{posts}}" class="post">
+        <view class="meta">
+            <t-avatar image="{{item.authorInfo.avatarUrl}}" />
+            <text class="{{'author college-' + item.authorInfo.collegeIndex}}">{{item.authorInfo.nickname}}</text>
+            <text class="when">• 1 hr ago</text>
+            <view class="topic">#{{item.topic}}</view>
+        </view>
+        <text class="content">{{item.textContent}}</text>
+        <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper>
+    </view>
+    <t-fab style="right: 32rpx; bottom: 140rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
 </view>

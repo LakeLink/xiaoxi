@@ -34,7 +34,8 @@
 #### posts
 
 * author (openid)
-* when (serverDate)
+* when (timestamp)
+* topic (string)
 * textContent (String)
 * images (string[])
 * likedBy (openid[])
@@ -43,7 +44,7 @@
 
 * author (openid)
 * parentId (string)
-* when (serverDate)
+* when (timestamp)
 * textContent (String)
 * images (string[])
 * likedBy (openid[])

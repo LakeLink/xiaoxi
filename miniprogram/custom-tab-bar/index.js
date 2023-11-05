@@ -23,6 +23,11 @@ Component({
                 icon: 'crooked-smile'
             },
             {
+                value: '/pages/stats/foods',
+                label: '爱干饭',
+                icon: 'rice'
+            },
+            {
                 value: '/pages/about/index',
                 label: '我的',
                 icon: 'user'

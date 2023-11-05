@@ -6,11 +6,17 @@ Page({
      */
     data: {
         searchValue: '',
+        imageProps: {
+            shape: 'round',
+            mode: 'aspectFit',
+            'show-menu-by-longpress': true,
+        },
+        posts: []
     },
 
     onTapCreate(e) {
         wx.navigateTo({
-          url: '/pages/moment/create',
+            url: '/pages/moment/create',
         })
     },
 
@@ -38,6 +44,26 @@ Page({
                 value: '/pages/moment/feed'
             })
         }
+
+        wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getPosts'
+            }
+        }).then(r => {
+            for (let i = 0; i < r.result.list.length; i++) {
+                const e = r.result.list[i];
+                e.swiper = e.images.map(x => {
+                    return {
+                        value: x
+                    }
+                })
+            }
+            this.setData({
+                posts: r.result.list
+            })
+            console.log(r.result.list)
+        })
     },
 
     /**
