@@ -2,11 +2,19 @@ const together = require('./together')
 const user = require('./user')
 const weRun = require('./weRun')
 const quickAction = require('./quickAction')
+const posts = require('./posts')
 
 // 云函数入口函数
 exports.main = async function (event, context) {
     console.log(event)
     switch (event.type) {
+        case 'getPosts':
+            return await posts.getPosts(event, context)
+        case 'addPost':
+            return await posts.add(event, context)
+        case 'setPostMedia':
+            return await posts.setMedia(event, context)
+
         case 'commentTogether':
             return await quickAction.comment(event, context, 'TogetherDetails')
         case 'likeTogether':

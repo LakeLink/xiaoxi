@@ -44,13 +44,13 @@ exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
         as: 'likedUserInfo'
     })
     .lookup({
-        from: 'posts',
+        from: 'comments',
         let: {
-            id: '_id'
+            id: '$_id'
         },
         pipeline: $.pipeline()
             .match({
-                parentId: _.expr('$$id')
+                parentId: _.eq(_.expr('$$id'))
             })
             .lookup({
                 from: 'users',
@@ -59,7 +59,8 @@ exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
                 as: 'userInfo'
             }).project({
                 userInfo: $.arrayElemAt(['$userInfo', 0])
-            }).done()
+            }).done(),
+        as: 'comments'
     })
     .lookup({
         from: 'users',
@@ -72,11 +73,8 @@ exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
         },
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$c']))).project({
             nickname: true,
-            realname: true,
             avatarUrl: true,
-            collegeIndex: true,
-            hobby: true,
-            bio: true
+            collegeIndex: true
         }).done(),
         as: 'commentUserInfo'
     }).addFields({
