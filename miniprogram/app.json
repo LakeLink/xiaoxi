@@ -6,7 +6,8 @@
         "pages/about/index",
         "pages/together/create",
         "pages/about/verify",
-        "pages/moment/feed"
+        "pages/moment/feed",
+        "pages/stats/foods"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
@@ -16,14 +17,17 @@
     },
     "tabBar": {
         "custom": true,
-        "list": [
-            {
+        "list": [{
                 "pagePath": "pages/stats/stepsRank",
                 "text": "爱步行"
             },
             {
                 "pagePath": "pages/moment/feed",
                 "text": "爱水贴"
+            },
+            {
+                "pagePath": "pages/stats/foods",
+                "text": "爱干饭"
             },
             {
                 "pagePath": "pages/about/index",
