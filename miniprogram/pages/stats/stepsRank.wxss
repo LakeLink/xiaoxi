@@ -49,7 +49,7 @@ ec-canvas {
     font-size: small;
     position: relative;
     left: -8rpx;
-    top: -12rpx;
+    /* top: -12rpx; */
     margin-right: -8rpx;
 }
 

@@ -101,11 +101,12 @@ Page({
 
     onTapAvatar(e) {
         console.log(e)
+        let u = this.data.rankForList[e.target.dataset.idx]
         wx.cloud.callFunction({
             name: 'fn',
             data: {
                 type: 'nudgeWeRunUser',
-                target: this.data.rankForList[e.target.dataset.idx]._id
+                target: u._id
             }
         }).then(r => {
             if (r.result.success) {
@@ -113,7 +114,7 @@ Page({
                     context: this,
                     offset: [20, 32],
                     duration: 5000,
-                    content: '你拍了拍',
+                    content: `你拍了拍 ${u.nickname}`,
                 });
                 this.loadRank()
             } else {
@@ -121,7 +122,7 @@ Page({
                     context: this,
                     offset: [20, 32],
                     duration: 5000,
-                    content: '今天已经拍过他了',
+                    content: '一分钟只能拍TA一次哦',
                 });
 
             }
