@@ -30,12 +30,16 @@ ec-canvas {
 
     display: flex;
     flex-direction: column;
+    /* gap: 8rpx; */
 }
 
 .row {
     display: flex;
+    padding-bottom: 6px;
     margin-bottom: 6px;
     column-gap: 6px;
+
+    border-bottom: dashed lightgray 1px;
 }
 
 .col-rank {

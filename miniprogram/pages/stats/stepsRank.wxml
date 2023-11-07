@@ -10,10 +10,10 @@
 
     <view class="container">
         <view class="row" wx:for="{{rankForList}}">
-        
+
             <text class="col-rank">{{index+1}}</text>
             <block wx:if="{{item.delta !== undefined}}">
-                
+
                 <text wx:if="{{item.delta >= 0}}" class="col-delta col-positivedelta">+{{item.delta}}</text>
                 <text wx:else class="col-delta col-negativedelta">{{item.delta}}</text>
             </block>
@@ -21,8 +21,13 @@
             <image bindtap="onTapAvatar" class="col-avatar" mode="aspectFit" src="{{item.avatarUrl}}" data-idx="{{index}}"></image>
 
             <view class="col-user">
-                <text class="user-nickname">{{ item.nickname }}</text>
-                <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
+                <block wx:if="{{item.collegeIndex}}">
+                    <text class="{{'user-nickname' + ' college-' + item.collegeIndex}}">{{ item.nickname }}</text>
+                    <text class="{{'college ' + 'college-' + item.collegeIndex}}">{{ collegeList[item.collegeIndex] }}</text>
+                </block>
+                <block wx:else>
+                    <text class="user-nickname">{{ item.nickname }}</text>
+                </block>
                 <!-- <text class="user-realname">{{ item.realname }}</text> -->
                 <view style="margin-top: 4px;">
                     <text wx:if="{{item.bio}}" class="bio">"{{item.bio}}"</text>
