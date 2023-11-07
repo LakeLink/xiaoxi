@@ -110,7 +110,7 @@ exports.getNotices = async (event, context) => {
         })
         .end().then(r => {
             // console.log(r)
-            let a = ["前排兜售瓜子，广告位招租！", "戳戳头像拍一拍！"]
+            let a = ["前排兜售瓜子，广告位招租！", "戳戳头像拍一拍！", "排名角标：相比昨天的排名变化"]
             return a.concat(r.list.map(x => `${x.authorInfo.nickname}: "${x.content}"`))
         })
 }

@@ -29,50 +29,51 @@ exports.verify = async (event, context) => {
         }
     }).json().then(async r => {
         let attrs = r.authentication.successes.RestAuthenticationHandler.principal.attributes
-        let success = true, reason = ""
+        let success = true,
+            reason = ""
         if (1 <= collegeIndex && collegeIndex <= 5) {
             success = attrs.identity == "student"
         } else if (collegeIndex == 6) {
             success = attrs.identity == "teacher"
-        } else {
-            success = false
-            reason = "collegeIndex 错误"
-        }
-
-        if (!success) {
-            reason = "用户与神秘符号不匹配"
+        } else return {
+            success: false,
+            reason: "collegeIndex 错误"
         }
 
         let stats = await col.doc(OPENID).update({
             data: {
+                verifiedCasId: username,
                 verifiedIdentity: attrs.identity,
                 verifiedOrganization: attrs.organization,
-                collegeIndex: success ? collegeIndex : undefined,
+                collegeIndex: success ? collegeIndex : 0,
                 realname: attrs.name,
                 sex: attrs.sex
             }
         }).then(r => r.stats)
+
         if (!success) {
             return {
-                success,
-                reason
-            }
-        } else if (!stats.updated) {
-            return {
                 success: false,
-                reason: "数据库错误"
+                reason: "用户与神秘符号不匹配"
             }
         } else {
-            return {
-                success: true,
-                reason: "成功"
+            if (!stats.updated) {
+                return {
+                    success: false,
+                    reason: "数据库错误"
+                }
+            } else {
+                return {
+                    success: true,
+                    reason: "成功"
+                }
             }
         }
     }).catch(e => {
         console.log(e)
         return {
             success: false,
-            reason: "服务器错误"
+            reason: "用户名或密码错误"
         }
     })
 
@@ -114,7 +115,7 @@ exports.save = async (event, context) => {
     console.log(event.data)
 
     await cloud.openapi.security.msgSecCheck({
-        content: bio+nickname+realname+hobby,
+        content: bio + nickname + realname + hobby,
         version: 2,
         scene: 1,
         openid: OPENID,
@@ -125,7 +126,8 @@ exports.save = async (event, context) => {
         if (r.result.suggest !== 'pass') throw new Error('过不了审')
     })
 
-    let success = false, needVerify = false
+    let success = false,
+        needVerify = false
     try {
         let data = await col.doc(OPENID).get().then(r => r.data)
 
@@ -153,9 +155,9 @@ exports.save = async (event, context) => {
         })
         // If no field is changed, then udpated == 0
         // if (r.stats.updated) {
-            success = true
+        success = true
         // }
-    } catch(e) {
+    } catch (e) {
         r = await col.doc(OPENID).set({
             data: {
                 avatarUrl,
