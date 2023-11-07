@@ -110,7 +110,7 @@ exports.getNotices = async (event, context) => {
         })
         .end().then(r => {
             // console.log(r)
-            let a = ["每月排名前三的同学或许有神秘奖励", "每月被拍一拍次数最多的同学或许有神秘奖励"]
+            let a = ["前排兜售瓜子，广告位招租！", "戳戳头像拍一拍！"]
             return a.concat(r.list.map(x => `${x.authorInfo.nickname}: "${x.content}"`))
         })
 }
@@ -220,7 +220,7 @@ exports.rankTotalStepsV2 = async (event, context) => {
         pipeline: $.pipeline().match(_.and([
             _.expr($.eq(['$target', '$$openid'])),
             {
-                startOf: _.gte(dayjs().tz('Asia/Shanghai').startOf('day').unix())
+                startOf: _.gte(dayjs().tz('Asia/Shanghai').startOf('month').unix())
             }
         ])).project({
             by: true
