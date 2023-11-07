@@ -18,7 +18,7 @@ Component({
                 icon: 'thumb-up'
             },
             {
-                value: '/pages/moment/feed',
+                value: '/pages/feed/placeholder',
                 label: '爱水贴',
                 icon: 'crooked-smile'
             },

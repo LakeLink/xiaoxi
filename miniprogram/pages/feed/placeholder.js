@@ -38,11 +38,14 @@ Page({
                 'NAzpKmK5_dla6rINPfQGswGc2Q6dknKW2TLFuBDR4kU'
             ]
         }).then(r => {
-            wx.showToast({
-                icon: 'success',
-                title: '订阅成功…'
-            })
-            this.refresh()
+            if (r['NAzpKmK5_dla6rINPfQGswGc2Q6dknKW2TLFuBDR4kU'] == "accept") {
+                console.log(r)
+                wx.showToast({
+                    icon: 'success',
+                    title: '订阅成功…'
+                })
+                this.refresh()
+            }
         })
     },
 
@@ -64,7 +67,13 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-        this.refresh()
+        // this.refresh()
+        if (typeof this.getTabBar === 'function' &&
+            this.getTabBar()) {
+            this.getTabBar().setData({
+                value: '/pages/feed/placeholder'
+            })
+        }
     },
 
     /**

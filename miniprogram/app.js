@@ -27,6 +27,8 @@ App({
                         }
                     })
                 })
+            } else {
+                this.globalData.werunEnabled = true
             }
         });
 

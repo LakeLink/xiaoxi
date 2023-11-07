@@ -3,6 +3,7 @@
         "t-fab": "tdesign-miniprogram/fab/fab",
         "t-search": "tdesign-miniprogram/search/search",
         "t-side-bar": "tdesign-miniprogram/side-bar/side-bar",
-        "t-side-bar-item": "tdesign-miniprogram/side-bar-item/side-bar-item"
+        "t-side-bar-item": "tdesign-miniprogram/side-bar-item/side-bar-item",
+        "t-button": "tdesign-miniprogram/button/button"
     }
 }

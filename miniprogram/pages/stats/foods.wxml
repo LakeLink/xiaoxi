@@ -1,7 +1,13 @@
 <!--pages/stats/foods.wxml-->
 <view class="safe-area">
 
-    <view class="example-search">
+    <view style=" margin: 32rpx; padding: 32rpx; border-radius: 8rpx; background-color: white;">
+        <text style="display: block; font-size:large; font-weight: bold;">什么是“爱干饭”？</text>
+        <text style="display: block; margin-top: 16rpx;">“爱干饭”将汇集各大食堂的优质菜品，为你提供打分评价、“今天吃什么”等欢乐的饮食服务。</text>
+        <t-button wx:if="{{!subscribed}}" style="margin-top: 24px;" theme="primary" bind:tap="onTapSubscribe">订阅开放通知</t-button>
+        <t-button wx:if="{{subscribed}}" style="margin-top: 24px;" disabled bind:tap="onTapSubscribe">已订阅开放通知</t-button>
+    </view>
+    <!-- <view class="example-search">
         <t-search model:value="{{searchValue}}" placeholder="搜吃的" />
     </view>
     <view class="side-bar-wrapper">
@@ -20,5 +26,5 @@
             </view>
         </scroll-view>
     </view>
-    <t-fab style="right: 32rpx; bottom: 140rpx;" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab>
+    <t-fab style="right: 32rpx; bottom: 140rpx;" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab> -->
 </view>
