@@ -171,10 +171,7 @@ Page({
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady() {
-        this.ecCanvas = this.selectComponent('#mychart-dom-bar')
-        this.ecCanvas.init(this.initChart)
-    },
+    onReady() {},
 
     /**
      * 生命周期函数--监听页面显示
@@ -185,6 +182,13 @@ Page({
             this.getTabBar().setData({
                 value: '/pages/stats/stepsRank'
             })
+        }
+        if (!this.ecCanvas) {
+
+            this.ecCanvas = this.selectComponent('#mychart-dom-bar')
+            this.ecCanvas.init(this.initChart)
+        } else {
+            this.loadRank()
         }
     },
 
