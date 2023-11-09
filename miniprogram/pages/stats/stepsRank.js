@@ -188,7 +188,7 @@ Page({
             this.ecCanvas = this.selectComponent('#mychart-dom-bar')
             this.ecCanvas.init(this.initChart)
         } else {
-            this.loadRank()
+            wx.startPullDownRefresh()
         }
     },
 
@@ -210,7 +210,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-        this.loadRank().then(wx.stopPullDownRefresh)
+        this.loadRank().then(setTimeout(wx.stopPullDownRefresh, 500))
     },
 
     /**
