@@ -11,6 +11,27 @@ Page({
             label: "唐人街",
             value: "唐人街"
         }],
+        visibilityValue: ['all'],
+        visibilityLabel: '所有人',
+        visibilityOptions: [
+            {
+                label: "所有人",
+                value: 'all',
+            },
+            {
+                label: "认证用户",
+                value: 'verified'
+            },
+            {
+                label: "同学",
+                value: 'student'
+            },
+            {
+                label: "教职工",
+                value: 'faculty'
+            }
+        ],
+        visibilityPickerVisible: false,
         textValue: "",
         mediaList: [],
         loading: false,
@@ -33,7 +54,8 @@ Page({
                 data: {
                     type: 'addPost',
                     topic: this.data.topic,
-                    text: this.data.textValue
+                    text: this.data.textValue,
+                    visibility: this.data.visibilityValue[0]
                 }
             })
             .then(r => r.result)
@@ -71,7 +93,7 @@ Page({
         })
     },
 
-    onPickerChange(e) {
+    onTopicChange(e) {
         const {
             value
         } = e.detail;
@@ -79,6 +101,25 @@ Page({
             topicPickerVisible: false,
             topicValue: value,
             topic: value.join(' ')
+        })
+    },
+
+    onVisibilityPicker(e) {
+        this.setData({
+            visibilityPickerVisible: true
+        })
+    },
+
+    onVisibilityChange(e) {
+        const {
+            value,
+            label
+        } = e.detail;
+        console.log(e)
+        this.setData({
+            visibilityPickerVisible: false,
+            visibilityValue: value,
+            visibilityLabel: label
         })
     },
 

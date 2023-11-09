@@ -12,6 +12,8 @@
   <t-switch defaultValue="{{false}}" slot="note" />
 </t-cell>
 
+<t-cell left-icon="chat-double" right-icon="chevron-down" title="可见范围" hover note="{{visibilityLabel}}" bind:click="onVisibilityPicker" />
+
 <view class="buttons">
     <t-button loading="{{loading}}" theme="primary" size="large" bind:tap="onTapSubmit">帖子，发送!</t-button>
     <t-button theme="light" size="large" bind:tap="onTapBack">返回</t-button>
@@ -23,7 +25,18 @@
   title="选择话题"
   cancelBtn="取消"
   confirmBtn="确认"
-  bindchange="onPickerChange"
+  bindconfirm="onTopicChange"
 >
   <t-picker-item options="{{topics}}" />
+</t-picker>
+
+<t-picker
+  visible="{{visibilityPickerVisible}}"
+  value="{{visibilityValue}}"
+  title="选择可见范围"
+  cancelBtn="取消"
+  confirmBtn="确认"
+  bindconfirm="onVisibilityChange"
+>
+  <t-picker-item options="{{visibilityOptions}}" />
 </t-picker>

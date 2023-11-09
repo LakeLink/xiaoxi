@@ -25,8 +25,30 @@ exports.getPosts = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    let filtered = true
+    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
+
     let agg = col.aggregate()
+    // console.log(user)
+    if (user.verifiedIdentity) {
+        agg = agg.match(_.or([
+            {
+                visibility: 'all'
+            },
+            {
+                visibility: 'verified'
+            },
+            {
+                visibility: user.verifiedIdentity
+            },
+            {
+                author: OPENID
+            }
+        ]))
+    } else {
+        agg = agg.match({
+            visibility: 'all'
+        })
+    }
     /*if (event.id) {
         filtered = false
         agg = agg.match({
@@ -46,9 +68,12 @@ exports.getPosts = async (event, context) => {
         localField: 'author',
         foreignField: '_id',
         as: 'authorInfo'
-    }).sort({
+    })
+    .sort({
         when: -1
     })
+    .skip(event.offset)
+    .limit(20)
 
     let r = await quickAction.postsLookupLikedAndComments(agg, _, $, OPENID).end()
 
@@ -64,8 +89,7 @@ exports.getPosts = async (event, context) => {
         // e.comments.sort((a, b) => a.when > b.when)
     })
     return {
-        list: r.list,
-        filtered
+        list: r.list
     }
 }
 
@@ -106,8 +130,9 @@ exports.add = async (event, context) => {
             author: OPENID,
             when: dayjs().unix(),
             topic: event.topic,
+            visibility: event.visibility,
             textContent: event.text,
-            media: [],
+            images: [],
             likedBy: [],
             comments: []
         }

@@ -38,3 +38,8 @@
     display: block;
     margin: 24rpx 24rpx
 }
+.images-container {
+    display: flex;
+    gap: 24rpx;
+    flex-wrap: wrap;
+}
