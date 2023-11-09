@@ -45,5 +45,18 @@ App({
                 icon: 'error'
             })
         })
+
+        wx.getUpdateManager().onUpdateReady((e) => {
+            console.log(e);
+            wx.showModal({
+              title: '幸福倒计时！',
+              content: '船新版本的「西嘻」已经就绪！\n要现在进入新版本吗？',
+              complete: (res) => {
+                if (res.confirm) {
+                    wx.getUpdateManager().applyUpdate();
+                }
+              }
+            })
+        })
     }
 });
