@@ -5,7 +5,7 @@
 <t-textarea placeholder="讲点什么…" model:value="{{textValue}}" />
 
 <view class="uploader">
-    <t-upload media-type="{{['video','image']}}" files="{{mediaList}}" bind:success="handleMediaAdd" bind:remove="handleMediaRemove" />
+    <t-upload media-type="{{['image']}}" config="{{uploadConfig}}" files="{{mediaList}}" bind:success="handleMediaAdd" bind:remove="handleMediaRemove" />
 </view>
 
 <t-cell left-icon="user-invisible" title="使用面具">

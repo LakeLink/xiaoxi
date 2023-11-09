@@ -13,7 +13,11 @@ Page({
         }],
         textValue: "",
         mediaList: [],
-        loading: false
+        loading: false,
+        uploadConfig: {
+            count: 9,
+            sizeType: 'compressed'
+        }
     },
     onTapBack(e) {
         console.log(e)
@@ -25,39 +29,39 @@ Page({
             loading: true
         })
         wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'addPost',
-                topic: this.data.topic,
-                text: this.data.textValue
-            }
-        })
-        .then(r => r.result)
-        .then(async r => {
-            if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `posts/${r.id}`)
-                .then(uploadResult => {
-                    console.log(uploadResult)
-                    wx.cloud.callFunction({
-                        name: 'fn',
-                        data: {
-                            type: 'setPostMedia',
-                            id: r.id,
-                            images: uploadResult.map(x => x.fileID)
-                        }
+                name: 'fn',
+                data: {
+                    type: 'addPost',
+                    topic: this.data.topic,
+                    text: this.data.textValue
+                }
+            })
+            .then(r => r.result)
+            .then(async r => {
+                if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `posts/${r.id}`)
+                    .then(uploadResult => {
+                        console.log(uploadResult)
+                        wx.cloud.callFunction({
+                            name: 'fn',
+                            data: {
+                                type: 'setPostMedia',
+                                id: r.id,
+                                images: uploadResult.map(x => x.fileID)
+                            }
+                        })
                     })
+                wx.navigateBack()
+            }).catch(e => {
+                wx.showToast({
+                    title: '数据错误',
+                    icon: 'error'
                 })
-            wx.navigateBack()
-        }).catch(e => {
-            wx.showToast({
-                title: '数据错误',
-                icon: 'error'
+                // throw e
+            }).finally(() => {
+                this.setData({
+                    loading: false
+                })
             })
-            // throw e
-        }).finally(() => {
-            this.setData({
-                loading: false
-            })
-        })
 
     },
 
