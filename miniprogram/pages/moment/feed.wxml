@@ -4,8 +4,8 @@
     <view class="example-search">
         <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
     </view>
-    <block wx:for="{{posts}}" wx:for-item="listItem">
-        <view wx:for="{{listItem}}" class="post">
+    <block wx:for="{{posts}}" wx:for-item="listItem" wx:for-index="listIndex">
+        <view wx:for="{{listItem}}" wx:for-index="postIndex" class="post">
             <view class="meta">
                 <t-avatar image="{{item.authorInfo.avatarUrl}}" />
                 <text class="{{'author college-' + item.authorInfo.collegeIndex}}">{{item.authorInfo.nickname}}</text>
@@ -14,7 +14,7 @@
             </view>
             <text class="content">{{item.textContent}}</text>
             <view class="images-container">
-                <t-image wx:for="{{item.images}}" mode="aspectFill" src="{{item}}" width="140rpx" height="140rpx" lazy="{{true}}" show-menu-by-longpress="{{true}}"></t-image>
+                <t-image wx:for="{{item.images}}" mode="aspectFill" src="{{item}}" width="140rpx" height="140rpx" lazy="{{true}}" show-menu-by-longpress="{{true}}" data-idx1="{{listIndex}}" data-idx2="{{postIndex}}" data-idx3="{{index}}" bindtap="onTapImage"></t-image>
             </view>
             <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
         </view>

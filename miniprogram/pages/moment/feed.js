@@ -53,6 +53,15 @@ Page({
         })
     },
 
+    onTapImage(e) {
+        console.log(e)
+        let d = e.currentTarget.dataset
+        wx.previewImage({
+          urls: this.data.posts[d.idx1][d.idx2].images,
+          current: this.data.posts[d.idx1][d.idx2].images[d.idx3]
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
