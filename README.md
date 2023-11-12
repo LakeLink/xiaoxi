@@ -34,7 +34,8 @@
 #### posts
 
 * author (openid)
-* when (timestamp)
+* publishedAt (timestamp)
+* updatedAt (timestamp, milliseconds)
 * topic (string)
 * textContent (String)
 * images (string[])
@@ -44,7 +45,7 @@
 
 * author (openid)
 * parentId (string)
-* when (timestamp)
+* publishedAt (timestamp)
 * textContent (String)
 * images (string[])
 * likedBy (openid[])
