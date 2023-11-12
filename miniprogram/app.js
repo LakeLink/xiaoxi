@@ -13,7 +13,12 @@ App({
                 traceUser: true,
             });
         }
-        this.globalData = {};
+
+        this.globalData = {
+            userExist: false,
+            werunEnabled: false,
+            tabBarBadges: {}
+        };
 
         wx.getSetting().then(r => {
             if (r.authSetting['scope.werun']) {
@@ -58,5 +63,28 @@ App({
               }
             })
         })
+    },
+
+    onShow() {
+        let updateBadge = async () => {
+            await wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    type: 'countUserUnreadPosts'
+                }
+            }).then(r => {
+                let pages = getCurrentPages()
+                let p = pages[pages.length-1]
+                if (r.result > 99) {
+                    p.getTabBar().setBadgeOfPage("/pages/moment/feed", { count: "99+" })
+                } else if (r.result > 0) {
+                    p.getTabBar().setBadgeOfPage("/pages/moment/feed", { count: r.result })
+                } else {
+                    p.getTabBar().setBadgeOfPage("/pages/moment/feed", {})
+                }
+            })
+            setTimeout(updateBadge, 10000)
+        }
+        updateBadge()
     }
 });

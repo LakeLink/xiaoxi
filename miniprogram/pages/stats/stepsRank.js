@@ -177,12 +177,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-        if (typeof this.getTabBar === 'function' &&
-            this.getTabBar()) {
-            this.getTabBar().setData({
-                value: '/pages/stats/stepsRank'
-            })
-        }
+        this.getTabBar().onPageShow(this)
         if (!this.ecCanvas) {
 
             this.ecCanvas = this.selectComponent('#mychart-dom-bar')

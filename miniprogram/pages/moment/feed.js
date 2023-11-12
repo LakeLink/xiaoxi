@@ -6,18 +6,21 @@ Page({
      */
     data: {
         searchValue: '',
-        posts: []
+        posts: [],
+        noMorePost: false
     },
 
-    postsOffset: 0,
-    postsNoMore: false,
+    lastPostUpdatedAt: null,
 
-    async refresh(offset) {
+    async refresh(clear) {
+        if (clear) {
+            this.lastPostUpdatedAt = null
+        }
         return await wx.cloud.callFunction({
             name: 'fn',
             data: {
                 type: 'getPosts',
-                offset: this.postsOffset
+                updatedBefore: this.lastPostUpdatedAt
             }
         }).then(r => {
             // for (let i = 0; i < r.result.list.length; i++) {
@@ -29,20 +32,26 @@ Page({
             //     })
             // }
             // https://developers.weixin.qq.com/community/develop/article/doc/000404cadd0548fd6e48f439455413
-            if (offset) {
-                const {
-                    posts
-                } = this.data;
+            const {
+                posts
+            } = this.data;
+            if (!clear) {
                 this.setData({
-                    [`posts[${posts.length}]`]: r.result.list
+                    [`posts[${posts.length}]`]: r.result.list,
+                    noMorePost: r.result.list.length == 0
                 })
             } else {
                 this.setData({
-                    posts: [r.result.list]
+                    posts: [r.result.list],
+                    noMorePost: r.result.list.length == 0
                 })
-
             }
             console.log(r.result.list)
+            if (r.result.list.length) {
+                this.lastPostUpdatedAt = r.result.list[r.result.list.length-1].updatedAt
+            }
+
+            this.getTabBar().setBadge({})
             return r.result.list.length
         })
     },
@@ -79,12 +88,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-        if (typeof this.getTabBar === 'function' &&
-            this.getTabBar()) {
-            this.getTabBar().setData({
-                value: '/pages/moment/feed'
-            })
-        }
+        this.getTabBar().onPageShow(this)
 
         wx.startPullDownRefresh()
     },
@@ -107,24 +111,14 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-        this.postsOffset = 0
-        this.postsNoMore = false
-        this.refresh().then(setTimeout(wx.stopPullDownRefresh, 500))
+        this.refresh(true).then(setTimeout(wx.stopPullDownRefresh, 500))
     },
 
     /**
      * 页面上拉触底事件的处理函数
      */
     onReachBottom() {
-        if (!this.postsNoMore) {
-            this.refresh(this.postsOffset).then(c => {
-                if (c == 0) {
-                    this.postsNoMore = true
-                } else {
-                    this.postsOffset += c
-                }
-            })
-        }
+        if (!this.data.noMorePost) this.refresh()
     },
 
     /**

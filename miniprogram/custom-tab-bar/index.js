@@ -11,6 +11,7 @@ Component({
      * 组件的初始数据
      */
     data: {
+        // 必须以 / 开头，否则无法 switchTab。
         value: '/pages/stats/stepsRank',
         list: [{
                 value: '/pages/stats/stepsRank',
@@ -33,7 +34,15 @@ Component({
                 icon: 'user'
             },
         ],
+        badges: {}
     },
+
+    // this doesn't work on custom-tab-bar, known bug
+    // pageLifetimes: {
+    //     show: function() {
+    //     }
+    // },
+
 
     /**
      * 组件的方法列表
@@ -47,5 +56,25 @@ Component({
                 url: e.detail.value,
             })
         },
+
+        onPageShow(page) {
+            //但是 page.route 返回没有/
+            this.setData({
+                value: '/' + page.route,
+                badges: getApp().globalData.tabBarBadges
+            })
+        },
+
+        setBadge(b) {
+            this.setBadgeOfPage(this.data.value, b)
+        },
+
+        setBadgeOfPage(pagePath, b) {
+            this.setData({
+                [`badges.${pagePath}`]: b
+            })
+            
+            getApp().globalData.tabBarBadges[pagePath] = b
+        }
     }
 })
