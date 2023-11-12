@@ -15,6 +15,7 @@ App({
         }
 
         this.globalData = {
+            active: false,
             userExist: false,
             werunEnabled: false,
             tabBarBadges: {}
@@ -66,7 +67,10 @@ App({
     },
 
     onShow() {
+        this.globalData.active = true
         let updateBadge = async () => {
+            if(!this.globalData.active) return
+
             await wx.cloud.callFunction({
                 name: 'fn',
                 data: {
@@ -86,5 +90,9 @@ App({
             setTimeout(updateBadge, 10000)
         }
         updateBadge()
+    },
+
+    onHide() {
+        this.globalData.active = false
     }
 });
