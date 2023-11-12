@@ -87,7 +87,7 @@ exports.getPosts = async (event, context) => {
 
     r.list.forEach(e => {
         e.authorInfo = e.authorInfo[0]
-        e.mine = e._openid == OPENID
+        // e.mine = e.author == OPENID
         e.relUpdatedAt = dayjs(e.updatedAt).toNow()
     })
     r.list.forEach(e => {
@@ -104,7 +104,8 @@ exports.getPosts = async (event, context) => {
         }
     })
     return {
-        list: r.list
+        list: r.list,
+        lastReadPostAt: user.lastReadPostAt
     }
 }
 

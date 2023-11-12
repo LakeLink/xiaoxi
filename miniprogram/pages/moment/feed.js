@@ -7,6 +7,7 @@ Page({
     data: {
         searchValue: '',
         posts: [],
+        lastReadPost: null,
         noMorePost: false
     },
 
@@ -35,18 +36,28 @@ Page({
             const {
                 posts
             } = this.data;
+            let unreadPost = null
+            for (let i = 0; i < r.result.list.length; i++) {
+                const e = r.result.list[i];
+                // console.log(e.updatedAt, r.result.lastReadPostAt, e.updatedAt > r.result.lastReadPostAt)
+                if (e.updatedAt > r.result.lastReadPostAt) {
+                    unreadPost = i
+                }
+            }
             if (!clear) {
                 this.setData({
                     [`posts[${posts.length}]`]: r.result.list,
-                    noMorePost: r.result.list.length == 0
+                    noMorePost: r.result.list.length == 0,
+                    unreadPost
                 })
             } else {
                 this.setData({
                     posts: [r.result.list],
-                    noMorePost: r.result.list.length == 0
+                    noMorePost: r.result.list.length == 0,
+                    unreadPost
                 })
             }
-            console.log(r.result.list)
+            // console.log(r.result)
             if (r.result.list.length) {
                 this.lastPostUpdatedAt = r.result.list[r.result.list.length-1].updatedAt
             }

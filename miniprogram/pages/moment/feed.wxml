@@ -17,6 +17,7 @@
                 <t-image wx:for="{{item.images}}" mode="aspectFill" src="{{item}}" width="140rpx" height="140rpx" lazy="{{true}}" show-menu-by-longpress="{{true}}" data-idx1="{{listIndex}}" data-idx2="{{postIndex}}" data-idx3="{{index}}" bindtap="onTapImage"></t-image>
             </view>
             <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
+            <view wx:if="{{unreadPost == postIndex}}">上次读到这里</view>
         </view>
     </block>
     <view wx:if=""></view>
