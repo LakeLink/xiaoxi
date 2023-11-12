@@ -4,6 +4,28 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
+exports.countUnreadPosts = async (event, context) => {
+    
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    const db = cloud.database()
+    const col = db.collection('users')
+    const _ = db.command
+
+    let u = await col.doc(OPENID).get().then(r => r.data)
+
+    if (u.lastReadPostAt) {
+        return await db.collection('posts').where({
+            updatedAt: _.gte(u.lastReadPostAt)
+        }).count().then(r => r.total)
+    } else {
+        return await db.collection('posts').count().then(r => r.total)
+    }
+}
+
 exports.verify = async (event, context) => {
     // 获取基础信息
     const {

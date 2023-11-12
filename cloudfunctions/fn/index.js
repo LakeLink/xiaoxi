@@ -40,6 +40,8 @@ exports.main = async function (event, context) {
             return await user.getAvatarPath(event, context)
         case 'verifyUser':
             return await user.verify(event, context)
+        case 'countUserUnreadPosts':
+            return await user.countUnreadPosts(event, context)
         
         case 'hasSubscribed':
             return await quickAction.hasSubscribed(event, context)

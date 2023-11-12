@@ -6,6 +6,7 @@ const dayjs = require('dayjs')
 require('dayjs/locale/zh-cn')
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
+dayjs.extend(require('dayjs/plugin/relativeTime'))
 dayjs.locale('zh-cn')
 
 cloud.init({
@@ -29,9 +30,9 @@ exports.getPosts = async (event, context) => {
 
     let agg = col.aggregate()
     // console.log(user)
+    let cond = []
     if (user.verifiedIdentity) {
-        agg = agg.match(_.or([
-            {
+        cond.push(_.or([{
                 visibility: 'all'
             },
             {
@@ -45,10 +46,18 @@ exports.getPosts = async (event, context) => {
             }
         ]))
     } else {
-        agg = agg.match({
+        cond.push({
             visibility: 'all'
         })
     }
+
+    if(event.updatedBefore) {
+        cond.push({
+            updatedAt: _.lt(event.updatedBefore)
+        })
+    }
+
+    agg = agg.match(_.and(cond))
     /*if (event.id) {
         filtered = false
         agg = agg.match({
@@ -64,22 +73,22 @@ exports.getPosts = async (event, context) => {
     }*/
 
     agg = agg.lookup({
-        from: 'users',
-        localField: 'author',
-        foreignField: '_id',
-        as: 'authorInfo'
-    })
-    .sort({
-        when: -1
-    })
-    .skip(event.offset)
-    .limit(20)
+            from: 'users',
+            localField: 'author',
+            foreignField: '_id',
+            as: 'authorInfo'
+        })
+        .sort({
+            updatedAt: -1
+        })
+        .limit(20)
 
     let r = await quickAction.postsLookupLikedAndComments(agg, _, $, OPENID).end()
 
     r.list.forEach(e => {
         e.authorInfo = e.authorInfo[0]
         e.mine = e._openid == OPENID
+        e.relUpdatedAt = dayjs(e.updatedAt).toNow()
     })
     r.list.forEach(e => {
         e.comments.forEach(c => {
@@ -87,6 +96,12 @@ exports.getPosts = async (event, context) => {
             c.canDelete = c.author == OPENID
         })
         // e.comments.sort((a, b) => a.when > b.when)
+    })
+
+    await db.collection('users').doc(OPENID).update({
+        data: {
+            lastReadPostAt: dayjs().valueOf()
+        }
     })
     return {
         list: r.list
@@ -123,12 +138,15 @@ exports.add = async (event, context) => {
         }
     }
 
+    let t = dayjs()
+
     const {
         _id
     } = await col.add({
         data: {
             author: OPENID,
-            when: dayjs().unix(),
+            publishedAt: t.unix(),
+            updatedAt: t.valueOf(),
             topic: event.topic,
             visibility: event.visibility,
             textContent: event.text,
@@ -161,7 +179,7 @@ exports.setMedia = async (event, context) => {
             images: event.images
         }
     })
-    
+
     await cloud.getTempFileURL({
         fileList: event.images
     }).then(r => {
