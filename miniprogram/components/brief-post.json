@@ -1,0 +1,8 @@
+{
+    "component": true,
+    "usingComponents": {
+        "t-avatar": "tdesign-miniprogram/avatar/avatar",
+        "t-image": "tdesign-miniprogram/image/image"
+    },
+    "styleIsolation": "apply-shared"
+}

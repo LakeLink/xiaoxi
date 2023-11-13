@@ -24,14 +24,6 @@ Page({
                 updatedBefore: this.lastPostUpdatedAt
             }
         }).then(r => {
-            // for (let i = 0; i < r.result.list.length; i++) {
-            //     const e = r.result.list[i];
-            //     e.swiper = e.images.map(x => {
-            //         return {
-            //             value: x
-            //         }
-            //     })
-            // }
             // https://developers.weixin.qq.com/community/develop/article/doc/000404cadd0548fd6e48f439455413
             const {
                 posts
@@ -70,15 +62,6 @@ Page({
     onTapCreate(e) {
         wx.navigateTo({
             url: '/pages/moment/create',
-        })
-    },
-
-    onTapImage(e) {
-        console.log(e)
-        let d = e.currentTarget.dataset
-        wx.previewImage({
-          urls: this.data.posts[d.idx1][d.idx2].images,
-          current: this.data.posts[d.idx1][d.idx2].images[d.idx3]
         })
     },
 

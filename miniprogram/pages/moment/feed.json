@@ -2,11 +2,9 @@
     "usingComponents": {
         "t-fab": "tdesign-miniprogram/fab/fab",
         "t-search": "tdesign-miniprogram/search/search",
-        "t-avatar": "tdesign-miniprogram/avatar/avatar",
-        "t-avatar-group": "tdesign-miniprogram/avatar-group/avatar-group",
-        "t-image": "tdesign-miniprogram/image/image",
         "t-swiper": "tdesign-miniprogram/swiper/swiper",
-        "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav"
+        "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav",
+        "brief-post": "/components/brief-post"
     },
     "enablePullDownRefresh": true
 }
