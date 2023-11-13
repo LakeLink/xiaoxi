@@ -8,7 +8,7 @@
     </view>
     <text class="content">{{post.textContent}}</text>
     <view class="images-container">
-        <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" lazy="{{true}}" show-menu-by-longpress="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
+        <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
     </view>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>
