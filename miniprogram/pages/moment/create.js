@@ -37,7 +37,7 @@ Page({
         loading: false,
         uploadConfig: {
             count: 9,
-            sizeType: 'compressed'
+            // sizeType: 'compressed'
         }
     },
     onTapBack(e) {
