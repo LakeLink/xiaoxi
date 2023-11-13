@@ -1,32 +1,32 @@
 <!--pages/about/index.wxml-->
 <van-cell-group inset>
-    <van-skeleton avatar-shape="square" avatar-size="50px" title avatar row="7" row-width="{{ skeletonRowWidth }}" loading="{{ loading }}">
+    <van-skeleton avatar-shape="square" avatar-size="50px" title avatar row="7" row-width="{{ skeletonRowWidth }}" loading="{{false}}">
         <van-cell>
             <view slot="icon">
                 <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" bindtap="onTapChooseAvatar">
-                    <image mode="aspectFit" class="avatar" src="{{avatarUrl ? avatarUrl : defaultAvatarUrl}}"></image>
+                    <image mode="aspectFit" class="avatar" src="{{$user.avatarUrl}}"></image>
                 </button>
                 <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按修改头像</text>
             </view>
             <view slot="title" style="margin-left: 20px; margin-top: 2px;">
-                <text class="{{'main-title  ~college-' + collegeIndex}}">{{ nickname }}</text>
-                <text class="second-title">{{ realname }}</text>
+                <text class="{{'main-title  ~college-' + $user.collegeIndex}}">{{ $user.nickname }}</text>
+                <text class="second-title">{{ $user.realname }}</text>
             </view>
-            <text bindtap="onTapSteps" wx:if="{{totalSteps}}">本月总步数：{{totalSteps}}</text>
+            <text bindtap="onTapSteps" style="font-size: smaller;">本月步数(点击刷新): {{$user.totalSteps}}</text>
         </van-cell>
 
-        <van-field model:value="{{bio}}" placeholder="说点什么" label="个性签名">
+        <van-field value="{{$user.bio}}" placeholder="说点什么" label="个性签名" data-key="bio" bind:change="onFieldUpdate">
         </van-field>
 
-        <van-field model:value="{{nickname}}" maxlength="12" type="nickname" required clearable label="昵称" placeholder="请输入昵称">
+        <van-field value="{{$user.nickname}}" maxlength="12" type="nickname" required clearable label="昵称" placeholder="请输入昵称" data-key="nickname" bind:change="onFieldUpdate">
         </van-field>
 
-        <van-field model:value="{{realname}}" maxlength="10"  required placeholder="请输入真实姓名" label="真实姓名"></van-field>
-        <van-field model:value="{{hobby}}" required placeholder="输入运动喜好" label="运动喜好">
+        <van-field value="{{$user.realname}}" maxlength="10" required placeholder="请输入真实姓名" label="真实姓名" data-key="realname" bind:change="onFieldUpdate"></van-field>
+        <van-field value="{{$user.hobby}}" required placeholder="输入运动喜好" label="运动喜好" data-key="hobby" bind:change="onFieldUpdate">
         </van-field>
-        <picker bindchange="onPickerChange" value="{{collegeIndex}}" range="{{collegeList}}">
+        <picker bindchange="onPickerChange" value="{{$user.collegeIndex}}" range="{{collegeList}}">
             <van-field label="神秘符号">
-                <view slot="input">{{college}}
+                <view slot="input">{{college ? college : collegeList[$user.collegeIndex]}}
                     <van-icon name="arrow-down" />
                 </view>
             </van-field>
@@ -38,7 +38,7 @@
         </picker>
     </van-field> -->
 
-        <van-field model:value="{{year}}" placeholder="输入入学年份" type="digit" label="入学年份">
+        <van-field value="{{$user.year}}" placeholder="输入入学年份" type="digit" label="入学年份" data-key="year" bind:change="onFieldUpdate">
         </van-field>
         <!-- <van-field model:value="{{age}}" placeholder="输入年龄" type="digit" label="年龄">
         </van-field> -->

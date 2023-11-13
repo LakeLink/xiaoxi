@@ -8,6 +8,7 @@
   "dependencies": {
     "@vant/weapp": "^1.10.13",
     "dayjs": "^1.11.7",
+    "mini-stores": "^2.0.0",
     "tdesign-miniprogram": "^1.2.3"
   }
 }

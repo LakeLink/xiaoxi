@@ -1,28 +1,28 @@
 // pages/about/index.js
-
+import userStore from '~/stores/userStore'
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-        nickname: "",
-        realname: "",
-        bio: "",
-        hobby: "",
-        college: "请选择",
-        collegeIndex: null,
         collegeList: ["暂无", "α", "β", "γ", "δ", "博士生", "教职工"],
+        college: null,
         year: "",
         // age: "",
-        defaultAvatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
-        avatarUrl: null,
+
         skeletonRowWidth: [],
-        loading: true,
+        loading: false,
         syncWeRunStepInfo: false,
         showOpenSettingButton: false,
-        totalSteps: null,
         submitting: false
+    },
+
+    onFieldUpdate(e) {
+        // console.log(e)
+        this.setData({
+            [`$user.${e.currentTarget.dataset.key}`]: e.detail
+        })
     },
 
     onChooseAvatar(e) {
@@ -43,7 +43,7 @@ Page({
                 filePath: avatarUrl
             }).then(r => {
                 this.setData({
-                    avatarUrl: r.fileID
+                    "$user.avatarUrl": r.fileID
                 })
                 wx.hideLoading()
             })
@@ -60,7 +60,7 @@ Page({
         //        const collegeIndex = e.detail.value, college = this.data.collegeList[e.detail.value] 
         // console.log('picker_college发送选择改变，携带值为', e.detail.value)
         this.setData({
-            collegeIndex: e.detail.value,
+            "$user.collegeIndex": e.detail.value,
             college: this.data.collegeList[e.detail.value]
         })
     },
@@ -132,7 +132,7 @@ Page({
             hobby,
             collegeIndex,
             year
-        } = this.data
+        } = this.data.$user
         if (!avatarUrl) {
             wx.showToast({
                 title: '请设置头像',
@@ -186,12 +186,12 @@ Page({
                                 }
                             })
                         } else {
+                            userStore.load()
                             wx.showToast({
                                 title: '保存成功',
                                 icon: 'success'
                             })
                         }
-                        getApp().globalData.userExist = true
                     } else {
                         wx.showToast({
                             title: '发生错误',
@@ -311,38 +311,6 @@ Page({
     },
 
     async refresh() {
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'getUser',
-                q: this.query
-            }
-        }).then(r => {
-            if (r.result.collegeIndex) {
-                r.result.college = this.data.collegeList[r.result.collegeIndex]
-            }
-            this.setData({
-                loading: false,
-                ...r.result
-            })
-            getApp().globalData.userExist = true
-        }).catch(e => {
-            this.setData({
-                loading: false
-            })
-            getApp().globalData.userExist = false
-        })
-
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'getWeRunTotalSteps'
-            }
-        }).then(r => {
-            this.setData({
-                totalSteps: r.result.totalSteps
-            })
-        })
     },
 
     /**
@@ -351,8 +319,8 @@ Page({
 
 
     onLoad(options) {
+        userStore.bind(this, '$user')
         this.avatarTapped = 0
-        this.query = options
 
         let skeletonRowWidth = []
         for (let i = 0; i < 7; i++) {
