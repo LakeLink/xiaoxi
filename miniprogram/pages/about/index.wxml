@@ -6,7 +6,7 @@
                 <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" bindtap="onTapChooseAvatar">
                     <image mode="aspectFit" class="avatar" src="{{$user.avatarUrl}}"></image>
                 </button>
-                <text wx:if="{{ !avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按修改头像</text>
+                <text wx:if="{{ !$user.avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按修改头像</text>
             </view>
             <view slot="title" style="margin-left: 20px; margin-top: 2px;">
                 <text class="{{'main-title  ~college-' + $user.collegeIndex}}">{{ $user.nickname }}</text>
