@@ -42,3 +42,7 @@
     gap: 24rpx;
     flex-wrap: wrap;
 }
+
+.image {
+    border: lightgrey dashed;
+}
