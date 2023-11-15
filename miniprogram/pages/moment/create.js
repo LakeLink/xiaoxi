@@ -73,6 +73,7 @@ Page({
                         })
                     })
                 wx.navigateBack()
+                this.getOpenerEventChannel().emit('newPostCreated')
             }).catch(e => {
                 wx.showToast({
                     title: '数据错误',

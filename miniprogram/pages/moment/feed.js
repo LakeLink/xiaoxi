@@ -65,6 +65,9 @@ Page({
     onTapCreate(e) {
         wx.navigateTo({
             url: '/pages/moment/create',
+            events: {
+                newPostCreated: wx.startPullDownRefresh
+            }
         })
     },
 
