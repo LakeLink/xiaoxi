@@ -4,6 +4,7 @@
         "t-search": "tdesign-miniprogram/search/search",
         "t-swiper": "tdesign-miniprogram/swiper/swiper",
         "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav",
+        "t-message": "tdesign-miniprogram/message/message",
         "brief-post": "/components/brief-post"
     },
     "enablePullDownRefresh": true

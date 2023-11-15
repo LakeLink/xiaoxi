@@ -1,6 +1,8 @@
 // app.js
 import Message from 'tdesign-miniprogram/message/index';
 import userStore from '~/stores/userStore'
+import tabBarStore from '~/stores/tabBarStore'
+
 App({
     onLaunch(options) {
         wx.getUpdateManager().onUpdateReady((e) => {
@@ -58,47 +60,21 @@ App({
 
     onShow() {
         this.globalData.active = true
-        let lastUnreadPosts = 0
         let updateBadge = async () => {
             if (!this.globalData.active) return
 
-            await wx.cloud.callFunction({
-                name: 'fn',
-                data: {
-                    type: 'countUserUnreadPosts'
-                }
-            }).then(r => {
-                let pages = getCurrentPages()
-                let p = pages[pages.length - 1]
-                if (p.getTabBar()) {
-                    if (r.result > 0) {
-                        if (r.result > 99) {
-                            p.getTabBar().setBadgeOfPage("/pages/moment/feed", {
-                                count: "99+"
-                            })
-                        } else {
-                            p.getTabBar().setBadgeOfPage("/pages/moment/feed", {
-                                count: r.result
-                            })
-                        }
-
-
-                        if (lastUnreadPosts != r.result && p.route == "pages/moment/feed") {
-                        console.log(lastUnreadPosts, p.route)
-                            Message.info({
-                                context: p,
-                                offset: [60, 32],
-                                duration: 0,
-                                content: `有${r.result}条新内容！点我刷新`,
-                            });
-                            lastUnreadPosts = r.result
-                        }
-                    } else {
-                        p.getTabBar().setBadgeOfPage("/pages/moment/feed", {})
-                    }
+            userStore.updateUnreadPosts()
+            .then(r => {
+                // console.log(r)
+                if (r > 0) {
+                    tabBarStore.setBadgeOfPage("/pages/moment/feed", {
+                        count: r
+                    })
+                } else {
+                    tabBarStore.setBadgeOfPage("/pages/moment/feed", {})
                 }
             })
-            setTimeout(updateBadge, 10000)
+            setTimeout(updateBadge, 5000)
         }
         updateBadge()
     },

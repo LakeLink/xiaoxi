@@ -1,9 +1,9 @@
 <!--pages/moment/feed.wxml-->
 <view class="safe-area">
-
     <view class="example-search">
         <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
     </view>
+    <t-message id="t-message" bind:tap="onTapMessage" />
     <block wx:for="{{posts}}" wx:for-item="listItem" wx:for-index="listIndex">
         <view wx:for="{{listItem}}" wx:for-index="postIndex">
             <brief-post post="{{item}}"></brief-post>

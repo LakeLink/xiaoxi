@@ -1,4 +1,6 @@
 // pages/moment/feed.js
+import Message from 'tdesign-miniprogram/message/index';
+import tabBarStore from '~/stores/tabBarStore';
 Page({
 
     /**
@@ -54,7 +56,7 @@ Page({
                 this.lastPostUpdatedAt = r.result.list[r.result.list.length-1].updatedAt
             }
 
-            this.getTabBar().setBadge({})
+            tabBarStore.setBadgeOfPage('/' + this.route, {})
             return r.result.list.length
         })
     },
@@ -63,6 +65,11 @@ Page({
         wx.navigateTo({
             url: '/pages/moment/create',
         })
+    },
+
+    onTapMessage(e) {
+        Message.hide()
+        wx.startPullDownRefresh()
     },
 
     /**
