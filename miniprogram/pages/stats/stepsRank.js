@@ -30,7 +30,7 @@ Page({
             })
 
             const y = rankForChart.map(e => e.totalSteps)
-            console.log(y)
+
             var option = {
                 title: {
                     text: (new Date().getMonth() + 1) + '月步数排行榜'

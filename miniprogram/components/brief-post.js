@@ -35,7 +35,6 @@ Component({
     methods: {
 
         onTapImage(e) {
-            console.log(e)
             let d = e.currentTarget.dataset
             wx.previewImage({
               urls: this.properties.post.images,
