@@ -39,7 +39,7 @@ Component({
             let d = e.currentTarget.dataset
             wx.previewImage({
               urls: this.properties.post.images,
-              current: this.properties.post.images[d.idx3]
+              current: this.properties.post.images[d.idx]
             })
         },
     }

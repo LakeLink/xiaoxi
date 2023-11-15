@@ -1,6 +1,7 @@
 // pages/moment/feed.js
 import Message from 'tdesign-miniprogram/message/index';
 import tabBarStore from '~/stores/tabBarStore';
+import userStore from '~/stores/userStore';
 Page({
 
     /**
@@ -68,7 +69,9 @@ Page({
     },
 
     onTapMessage(e) {
-        Message.hide()
+        Message.hide({
+            context: this
+        })
         wx.startPullDownRefresh()
     },
 
@@ -90,6 +93,15 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
+        // console.log(userStore.data)
+        if (userStore.data.unreadPostCount) {
+            Message.info({
+                context: this,
+                offset: ['60rpx', '32rpx'],
+                duration: 0,
+                content: `有${userStore.data.unreadPostCount}条新内容，点我刷新！`,
+            });
+        }
         // wx.startPullDownRefresh()
     },
 
@@ -97,7 +109,7 @@ Page({
      * 生命周期函数--监听页面隐藏
      */
     onHide() {
-
+        Message.hide()
     },
 
     /**
