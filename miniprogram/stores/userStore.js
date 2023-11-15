@@ -1,4 +1,4 @@
-const create = require('mini-stores')
+const create = require('./mini-stores')
 
 class UserStore extends create.Store {
     data = {
@@ -9,6 +9,20 @@ class UserStore extends create.Store {
         hobby: "",
         collegeIndex: 0,
         avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
+        unreadPostCount: 0
+    }
+
+    async updateUnreadPosts() {
+        return await wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'countUserUnreadPosts'
+            }
+        }).then(r => {
+            this.data.unreadPostCount = r.result
+            this.update()
+            return r.result
+        })
     }
 
     async load() {
