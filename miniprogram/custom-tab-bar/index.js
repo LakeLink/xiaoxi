@@ -26,6 +26,7 @@ Component({
         ready() {
             try {
                 let pages = getCurrentPages()
+                console.log('/' + pages[pages.length-1].route)
                 this.setData({
                     current: tabBarStore.indexOfPage('/' + pages[pages.length-1].route)
                 })
@@ -42,21 +43,16 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        onChange(e) {
-            // this.setData({
-            //     value: e.detail.value,
-            // });
+        async onChange(e) {
             // tabBarStore.switchTab(e.detail.value)
-            wx.switchTab({
+            await wx.switchTab({
                 url: tabBarStore.data.list[e.detail.value].url,
             })
-        },
-
-        onPageShow(page) {
-            //但是 page.route 返回没有/
-            // tabBarStore.data.current = '/' + page.route
-            // tabBarStore.update()
-        },
-
+            // switch it back: no flickering
+            this.setData({
+                current: this.data.current,
+            });
+            console.log(this.data.current)
+        }
     }
 })
