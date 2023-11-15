@@ -67,7 +67,6 @@ Page({
 
     onTapChooseAvatar(e) {
         this.avatarTapped++
-        console.log(this.avatarTapped)
         if (this.avatarTapped >= 3) {
             wx.showModal({
                 title: '温馨提示',
@@ -84,7 +83,6 @@ Page({
                 title: '正在刷新'
             })
             await wx.getWeRunData().then(async r => {
-                console.log(r)
                 await wx.cloud.callFunction({
                     name: 'fn',
                     data: {
@@ -355,7 +353,7 @@ Page({
      * 生命周期函数--监听页面卸载
      */
     onUnload() {
-
+        userStore.unbind(this)
     },
 
     /**

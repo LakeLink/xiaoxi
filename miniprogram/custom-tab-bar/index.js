@@ -26,7 +26,7 @@ Component({
         ready() {
             try {
                 let pages = getCurrentPages()
-                console.log('/' + pages[pages.length-1].route)
+                // console.log('/' + pages[pages.length-1].route)
                 this.setData({
                     current: tabBarStore.indexOfPage('/' + pages[pages.length-1].route)
                 })
@@ -52,7 +52,6 @@ Component({
             this.setData({
                 current: this.data.current,
             });
-            console.log(this.data.current)
         }
     }
 })
