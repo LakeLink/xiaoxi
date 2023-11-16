@@ -57,6 +57,9 @@ Page({
             const {
                 posts
             } = this.data;
+            // this.setData({
+            //     posts: []
+            // })
             let unreadPost = null
             for (let i = 0; i < r.result.list.length; i++) {
                 const e = r.result.list[i];
