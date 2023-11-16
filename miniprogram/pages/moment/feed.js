@@ -23,6 +23,9 @@ Page({
                 }, {
                     label: "吹水",
                     value: 2
+                }, {
+                    label: "「唐人」街",
+                    value: 3
                 }
             ],
             value: 0

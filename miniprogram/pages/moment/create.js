@@ -13,6 +13,9 @@ Page({
         }, {
             label: "吹水",
             value: "吹水"
+        }, {
+            label: "「唐人」街",
+            value: "「唐人」街"
         }],
         visibilityValue: ['all'],
         visibilityLabel: '所有人',
