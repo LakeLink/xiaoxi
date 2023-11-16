@@ -17,5 +17,5 @@
     </block>
     <!-- <view wx:if="">没有更多了</view> -->
 
-    <t-fab style="right: 32rpx; bottom: 140rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
+    <t-fab style="right: 32rpx; bottom: 200rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
 </view>
