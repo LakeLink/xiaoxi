@@ -12,7 +12,7 @@
         <view wx:for="{{listItem}}" wx:for-index="postIndex">
             <brief-post post="{{item}}"></brief-post>
             <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
-            <view wx:if="{{unreadPost == postIndex}}">上次读到这里</view>
+            <view wx:if="{{unreadPost == postIndex}}" style="margin-left: 32rpx;">上次读到这里</view>
         </view>
     </block>
     <!-- <view wx:if="">没有更多了</view> -->
