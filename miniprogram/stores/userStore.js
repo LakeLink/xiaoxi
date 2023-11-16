@@ -35,22 +35,17 @@ class UserStore extends create.Store {
                 type: 'getUser'
             }
         }).then(r => {
-            const {
-                nickname,
-                realname,
-                bio,
-                hobby,
-                collegeIndex,
-                avatarUrl
-            } = r.result
+            // const {
+            //     nickname,
+            //     realname,
+            //     bio,
+            //     hobby,
+            //     collegeIndex,
+            //     avatarUrl
+            // } = r.result
 
             this.data = {
-                nickname,
-                realname,
-                bio,
-                hobby,
-                collegeIndex,
-                avatarUrl,
+                ...r.result,
                 exist: true
             }
 

@@ -1,3 +1,5 @@
+import userStore from "~/stores/userStore"
+
 // pages/moment/create.js
 Page({
 
@@ -39,12 +41,22 @@ Page({
         visibilityPickerVisible: false,
         textValue: "",
         mediaList: [],
+        useStagename: false,
+        stagename: "",
         loading: false,
         uploadConfig: {
             count: 9,
             // sizeType: 'compressed'
         }
     },
+
+    onToggleStagename(e) {
+        // console.log(e)
+        this.setData({
+            useStagename: e.detail.value
+        })
+    },
+
     onTapBack(e) {
         console.log(e)
         wx.navigateBack()
@@ -72,6 +84,8 @@ Page({
                 name: 'fn',
                 data: {
                     type: 'addPost',
+                    useStagename: this.data.useStagename,
+                    stagename: this.data.useStagename ? this.data.stagename : undefined,
                     topic: this.data.topic,
                     text: this.data.textValue,
                     visibility: this.data.visibilityValue[0]
@@ -80,9 +94,11 @@ Page({
             .then(r => r.result)
             .then(async r => {
                 if (!r.success) {
-                    wx.showToast({
-                      title: r.reason,
-                      icon: 'error'
+                    wx.showModal({
+                        title: '发送失败',
+                        content: r.reason,
+                        showCancel: false,
+                        confirmText: '知道了'
                     })
                     return
                 }
@@ -124,6 +140,15 @@ Page({
         const {
             value
         } = e.detail;
+        if (value[0] == "三行诗大赛" && !userStore.data.verifiedIdentity) {
+            wx.showModal({
+                title: '需要认证',
+                content: '投稿三行诗需要在“我的”中设置特殊符号，并通过认证。',
+                showCancel: false,
+                confirmText: '知道了'
+            })
+            return
+        }
         this.setData({
             topicPickerVisible: false,
             topicValue: value,

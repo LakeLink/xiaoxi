@@ -35,25 +35,27 @@ exports.getPosts = async (event, context) => {
     let agg = col.aggregate()
     // console.log(user)
     let cond = []
-    if (user.verifiedIdentity) {
-        cond.push(_.or([{
+    // if(!user.admin) {
+        if (user.verifiedIdentity) {
+            cond.push(_.or([{
+                    visibility: 'all'
+                },
+                {
+                    visibility: 'verified'
+                },
+                {
+                    visibility: user.verifiedIdentity
+                },
+                {
+                    author: OPENID
+                }
+            ]))
+        } else {
+            cond.push({
                 visibility: 'all'
-            },
-            {
-                visibility: 'verified'
-            },
-            {
-                visibility: user.verifiedIdentity
-            },
-            {
-                author: OPENID
-            }
-        ]))
-    } else {
-        cond.push({
-            visibility: 'all'
-        })
-    }
+            })
+        }
+    // }
 
     if(event.updatedBefore) {
         cond.push({
@@ -99,16 +101,22 @@ exports.getPosts = async (event, context) => {
 
     r.list.forEach(e => {
         e.authorInfo = e.authorInfo[0]
-        // e.mine = e.author == OPENID
+        if (e.useStagename) {
+            e.authorInfo = {
+                nickname: e.stagename,
+                // collegeIndex: e.authorInfo.collegeIndex
+            }
+        }
+        e.mine = e.author == OPENID
         e.relUpdatedAt = dayjs(e.updatedAt).toNow()
     })
-    r.list.forEach(e => {
-        e.comments.forEach(c => {
-            c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
-            c.canDelete = c.author == OPENID
-        })
-        // e.comments.sort((a, b) => a.when > b.when)
-    })
+    // r.list.forEach(e => {
+    //     e.comments.forEach(c => {
+    //         c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
+    //         c.canDelete = c.author == OPENID
+    //     })
+    //     // e.comments.sort((a, b) => a.when > b.when)
+    // })
 
     await db.collection('users').doc(OPENID).update({
         data: {
@@ -140,7 +148,7 @@ exports.add = async (event, context) => {
     if (event.topic == "三行诗大赛" && !user.verifiedIdentity) {
         return {
             success: false,
-            reason: "投稿三行诗需要在“我的”中设置特殊符号"
+            reason: "投稿三行诗需要在“我的”中设置特殊符号，并通过认证。"
         }
     }
 
@@ -168,6 +176,8 @@ exports.add = async (event, context) => {
     } = await col.add({
         data: {
             author: OPENID,
+            useStagename: event.useStagename ? true : false,
+            stagename: event.stagename,
             publishedAt: t.unix(),
             updatedAt: t.valueOf(),
             pinned: false,
@@ -221,4 +231,18 @@ exports.setMedia = async (event, context) => {
     })
 
     return r.stats.updated == 1
+}
+
+exports.like = async (event, context, undo) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('posts')
+    const _ = db.command
+    const $ = _.aggregate
 }
