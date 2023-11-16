@@ -143,7 +143,7 @@ Page({
         if (value[0] == "三行诗大赛" && !userStore.data.verifiedIdentity) {
             wx.showModal({
                 title: '需要认证',
-                content: '投稿三行诗需要在“我的”中设置特殊符号，并通过认证。',
+                content: '投稿三行诗需要在“我的”页面中设置「神秘符号」，并通过认证。',
                 showCancel: false,
                 confirmText: '知道了'
             })
