@@ -8,12 +8,13 @@ Component({
     properties: {
         //https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html#dataset
         //大写变小写，横线变驼峰
+        postId: String,
         comments: Object,
-        userInfo: Object,
-        showPopup: Boolean,
+        // userInfo: Object,
+        // showPopup: Boolean,
         showInput: Boolean,
-        rid: String,
-        collection: String
+        // rid: String,
+        // collection: String
     },
 
     /**
@@ -22,6 +23,8 @@ Component({
     data: {
         showAllComments: false,
         sending: false,
+        replyTo: null,
+        replyPrefix: '',
         newComment: ''
     },
 
@@ -35,21 +38,35 @@ Component({
             })
         },
 
-        onSubmitComment(e) {
-            if (!getApp().globalData.userExist) {
-                wx.showModal({
-                    title: '个人信息',
-                    content: '你尚未完善个人信息',
-                    complete: (res) => {
-                        if (res.confirm) {
-                            wx.switchTab({
-                                url: '/pages/about/index',
-                            })
-                        }
-                    }
+        onNewCommentInput(e) {
+            if(!e.detail.value.startsWith(this.data.replyPrefix)) {
+                this.setData({
+                    newComment: '',
+                    replyTo: null,
+                    replyPrefix: ''
                 })
-                return
+            } else {
+                this.setData({
+                    newComment: e.detail.value
+                })
             }
+        },
+
+        onSubmitComment(e) {
+            // if (!getApp().globalData.userExist) {
+            //     wx.showModal({
+            //         title: '个人信息',
+            //         content: '你尚未完善个人信息',
+            //         complete: (res) => {
+            //             if (res.confirm) {
+            //                 wx.switchTab({
+            //                     url: '/pages/about/index',
+            //                 })
+            //             }
+            //         }
+            //     })
+            //     return
+            // }
             if (this.data.newComment.length == 0) {
                 wx.showToast({
                     title: '请输入评论',
@@ -65,35 +82,35 @@ Component({
             wx.cloud.callFunction({
                 name: 'fn',
                 data: {
-                    type: 'comment',
-                    col: this.properties.collection,
-                    id: this.properties.rid,
+                    type: 'commentPost',
+                    id: this.data.replyTo ? this.data.replyTo : this.data.postId,
                     content: this.data.newComment
                 }
             }).then((r) => {
-                if (r.result.updated == 1) {
+                if (r.result.success) {
                     this.setData({
-                        sending: false,
-                        newComment: ''
+                        newComment: '',
+                        comments: r.result.comments
                     })
-                    this.triggerEvent('refresh')
+                    // this.triggerEvent('')
                 } else {
                     throw new Error()
                 }
             }).catch(e => {
-                this.setData({
-                    sending: false
-                })
                 wx.showToast({
                     title: '数据错误',
                     icon: 'error'
+                })
+            }).finally(() => {
+                this.setData({
+                    sending: false
                 })
             })
         },
 
         onDelete(e) {
-            const c = this.properties.comments[e.target.dataset.idx]
-            if (!c.canDelete) return
+            const c = this.data.comments[e.currentTarget.dataset.idx]
+            if (!c.canEdit) return
             wx.showModal({
                 title: '删除评论',
                 content: '是否要删除该评论',
@@ -102,21 +119,20 @@ Component({
                         wx.cloud.callFunction({
                             name: 'fn',
                             data: {
-                                type: 'delComment',
-                                id: this.properties.rid,
-                                col: this.properties.collection,
-                                content: c.content
+                                type: 'undoCommentPost',
+                                cid: c._id,
+                                id: this.data.postId
                             }
                         }).then((r) => {
-                            if (r.result.updated == 1) {
+                            if (r.result.success) {
+                                this.setData({
+                                    comments: r.result.comments
+                                })
                                 wx.showToast({
                                     title: '删除成功',
                                     icon: 'success'
                                 })
-                            } else {
-                                throw new Error()
                             }
-                            this.triggerEvent('refresh')
                         }).catch(e => {
                             wx.showToast({
                                 title: '数据错误',
@@ -129,10 +145,12 @@ Component({
         },
 
         onReply(e) {
-            const c = this.properties.comments[e.target.dataset.idx]
+            const c = this.data.comments[e.currentTarget.dataset.idx]
             this.setData({
                 showInput: true,
-                newComment: `回复 ${this.properties.userInfo[c.userIndex].nickname}: `
+                replyTo: c._id,
+                replyPrefix: `回复 ${c.userInfo.nickname}: `,
+                newComment: `回复 ${c.userInfo.nickname}: `
             })
         }
     }

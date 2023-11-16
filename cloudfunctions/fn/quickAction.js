@@ -27,7 +27,7 @@ exports.hasSubscribed = async (event, context) => {
     return r.data.templateIds.includes(event.templateId)
 }
 
-exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
+exports.postsLookupLiked = (agg, _, $, OPENID) =>
     agg.lookup({
         from: 'users',
         let: {
@@ -35,52 +35,48 @@ exports.postsLookupLikedAndComments = (agg, _, $, OPENID) =>
         },
         pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$l']))).project({
             nickname: true,
-            realname: true,
             avatarUrl: true,
-            collegeIndex: true,
-            hobby: true,
-            bio: true
+            collegeIndex: true
         }).done(),
         as: 'likedUserInfo'
     })
-    .lookup({
+
+
+exports.lookupUserInfo = (key, agg, _, $, OPENID) =>
+    agg.lookup({
+        from: 'users',
+        localField: key,
+        foreignField: '_id',
+        as: 'userInfo'
+    }).addFields({
+        userInfo: $.arrayElemAt(['$userInfo', 0]),
+        canEdit: $.eq(['$' + key, OPENID])
+    })
+
+exports.lookupComments = (agg, _, $, OPENID) =>
+    agg.lookup({
         from: 'comments',
         let: {
             id: '$_id'
         },
         pipeline: $.pipeline()
-            .match({
-                parentId: _.eq(_.expr('$$id'))
+            .match(_.expr($.eq(['$parentId', '$$id'])))
+            .sort({
+                publishedAt: 1
             })
             .lookup({
                 from: 'users',
                 localField: 'author',
                 foreignField: '_id',
                 as: 'userInfo'
-            }).project({
-                userInfo: $.arrayElemAt(['$userInfo', 0])
+            }).addFields({
+                userInfo: $.arrayElemAt(['$userInfo', 0]),
+                canEdit: $.eq(['$author', OPENID])
             }).done(),
         as: 'comments'
     })
-    .lookup({
-        from: 'users',
-        let: {
-            c: $.map({
-                input: '$comments',
-                as: 't',
-                in: '$$t.author'
-            })
-        },
-        pipeline: $.pipeline().match(_.expr($.in(['$_id', '$$c']))).project({
-            nickname: true,
-            avatarUrl: true,
-            collegeIndex: true
-        }).done(),
-        as: 'commentUserInfo'
-    }).addFields({
-        alreadyLiked: $.in([OPENID, '$likedBy'])
-    })
 
+/*
 exports.like = async (event, context, collection) => {
     // 获取基础信息
     const {
@@ -181,4 +177,4 @@ exports.delComment = async (event, context) => {
             })
         }
     }).then(r => r.stats)
-}
+}*/

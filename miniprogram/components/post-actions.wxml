@@ -1,0 +1,30 @@
+<!--components/post-actions.wxml-->
+<view class="action">
+    <t-button bindtap="onLike">
+        <view style="display: flex; align-items: center;">
+            <block wx:if="{{post.alreadyLiked}}">
+                <t-icon color="red" name="heart-filled" />
+                <text wx:if="{{post.likedBy.length}}" style="margin-left: 5px; color: pink;">{{post.likedBy.length}}</text>
+            </block>
+            <block wx:else>
+                <t-icon color="pink" name="heart-filled" />
+                <text wx:if="{{post.likedBy.length}}" style="margin-left: 5px; color: grey;">{{post.likedBy.length}}</text>
+            </block>
+        </view>
+    </t-button>
+    <t-button bindtap="onComment">
+        <view style="display: flex; align-items: center;">
+            <t-icon name="chat-message"></t-icon>
+            <text wx:if="{{post.comments.length}}" style="margin-left: 5px; color: grey;">{{post.comments.length}}</text>
+        </view>
+    </t-button>
+    <!-- <t-button bindtap="onShare" open-type="share">
+        <t-icon name="share" />
+    </t-button> -->
+    <t-button bindtap="onEdit" wx:if="{{post.canEdit}}">
+        <view style="display: flex;">
+            <t-icon name="delete"></t-icon>
+            <!-- <t-icon name="edit"></t-icon> -->
+        </view>
+    </t-button>
+</view>

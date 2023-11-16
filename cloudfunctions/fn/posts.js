@@ -36,35 +36,35 @@ exports.getPosts = async (event, context) => {
     // console.log(user)
     let cond = []
     // if(!user.admin) {
-        if (user.verifiedIdentity) {
-            cond.push(_.or([{
-                    visibility: 'all'
-                },
-                {
-                    visibility: 'verified'
-                },
-                {
-                    visibility: user.verifiedIdentity
-                },
-                {
-                    author: OPENID
-                }
-            ]))
-        } else {
-            cond.push({
+    if (user.verifiedIdentity) {
+        cond.push(_.or([{
                 visibility: 'all'
-            })
-        }
+            },
+            {
+                visibility: 'verified'
+            },
+            {
+                visibility: user.verifiedIdentity
+            },
+            {
+                author: OPENID
+            }
+        ]))
+    } else {
+        cond.push({
+            visibility: 'all'
+        })
+    }
     // }
 
-    if(event.updatedBefore) {
+    if (event.updatedBefore) {
         cond.push({
             updatedAt: _.lt(event.updatedBefore),
             pinned: false
         })
     }
 
-    if(event.topic) {
+    if (event.topic) {
         cond.push({
             topic: event.topic
         })
@@ -85,35 +85,31 @@ exports.getPosts = async (event, context) => {
         }
     }*/
 
-    agg = agg.lookup({
-            from: 'users',
-            localField: 'author',
-            foreignField: '_id',
-            as: 'authorInfo'
-        })
+    agg = quickAction.lookupUserInfo('author', agg, _, $, OPENID)
         .sort({
             pinned: -1,
             updatedAt: -1
         })
         .limit(20)
 
-    let r = await quickAction.postsLookupLikedAndComments(agg, _, $, OPENID).end()
+    let r = await quickAction.lookupComments(agg, _, $, OPENID).end()
 
     r.list.forEach(e => {
-        e.authorInfo = e.authorInfo[0]
+        // e.authorInfo = e.authorInfo[0]
         if (e.useStagename) {
-            e.authorInfo = {
+            e.userInfo = {
                 nickname: e.stagename,
                 // collegeIndex: e.authorInfo.collegeIndex
             }
         }
-        e.mine = e.author == OPENID
+        e.canEdit = e.author == OPENID
         e.relUpdatedAt = dayjs(e.updatedAt).toNow()
+
+        e.alreadyLiked = e.likedBy.includes(OPENID)
     })
     // r.list.forEach(e => {
     //     e.comments.forEach(c => {
-    //         c.userIndex = e.commentUserInfo.findIndex(x => x._id == c.author)
-    //         c.canDelete = c.author == OPENID
+    //         c.canDelete = c.author == OPENID || user.admin
     //     })
     //     // e.comments.sort((a, b) => a.when > b.when)
     // })
@@ -143,7 +139,7 @@ exports.add = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    
+
     let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
     if (event.topic == "三行诗大赛" && !user.verifiedIdentity) {
         return {
@@ -192,6 +188,27 @@ exports.add = async (event, context) => {
     return {
         success: true,
         id: _id
+    }
+}
+
+exports.remove = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('posts')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let success = await col.doc(event.id).remove().then(r => r.stats.removed == 1)
+
+    return {
+        success,
+        post: null
     }
 }
 
@@ -245,4 +262,94 @@ exports.like = async (event, context, undo) => {
     const col = db.collection('posts')
     const _ = db.command
     const $ = _.aggregate
+
+    await col.doc(event.id)
+        .update({
+            data: {
+                likedBy: undo ? _.pull(OPENID) : _.addToSet(OPENID)
+            }
+        })
+
+    return await col.doc(event.id).get().then(r => {
+        return {
+            alreadyLiked: r.data.likedBy.includes(OPENID),
+            likedBy: r.data.likedBy
+        }
+    })
+}
+
+exports.comment = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('comments')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let suggest = await cloud.openapi.security.msgSecCheck({
+        content: event.content,
+        version: 2,
+        scene: 2,
+        openid: OPENID
+    }).then(r => r.result.suggest)
+
+    if (suggest == 'risky') {
+        return {
+            success: false,
+            reason: "似乎文字不太合适，换个说法吧"
+        }
+    }
+
+    await col.add({
+        data: {
+            author: OPENID,
+            parentId: event.id,
+            publishedAt: dayjs().unix(),
+            textContent: event.content,
+            images: [],
+            likedBy: [],
+            // subComments: []
+        }
+    })
+
+    let agg = await col
+        .aggregate()
+        .match({
+            parentId: event.id
+        })
+
+    return {
+        success: true,
+        comments: await quickAction.lookupUserInfo('author', agg, _, $, OPENID).end().then(r => r.list)
+    }
+}
+
+exports.undoComment = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('comments')
+    const _ = db.command
+    const $ = _.aggregate
+
+    await col.doc(event.cid).remove()
+
+    let agg = col.aggregate().match({
+        parentId: event.id
+    })
+
+    return {
+        success: true,
+        comments: await quickAction.lookupUserInfo('author', agg, _, $, OPENID).end().then(r => r.list)
+    }
 }

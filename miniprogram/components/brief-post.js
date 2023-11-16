@@ -5,14 +5,15 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        post: {}
+        post: Object
     },
 
     /**
      * 组件的初始数据
      */
     data: {
-        pvImages: []
+        pvImages: [],
+        showCommentInput: false
     },
 
 
@@ -41,5 +42,19 @@ Component({
               current: this.properties.post.images[d.idx]
             })
         },
+
+        onShowCommentInput(e) {
+            // console.log(e)
+            this.setData({
+                showCommentInput: !this.data.showCommentInput
+            })
+        },
+
+        onPostEdited(e) {
+            console.log(e)
+            this.setData({
+                post: e.detail.post
+            })
+        }
     }
 })

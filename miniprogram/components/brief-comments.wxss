@@ -1,0 +1,15 @@
+
+.comment-input-container {
+    display: flex;
+    gap: 24rpx;
+    margin: 24rpx 32rpx 0;
+    align-items: center;
+    margin-top: 8px
+}
+
+.comment-input {
+    background: white;
+    padding: 12rpx;
+    border-radius: 4px;
+    flex-grow: 1;
+}

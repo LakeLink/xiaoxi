@@ -1,12 +1,12 @@
 <!--components/brief-post.wxml-->
-<view class="post">
+<view wx:if="{{post}}" class="post">
     <view class="meta">
         <view wx:if="{{post.pinned}}" class="pinned">
             <text>置顶</text>
             <t-icon name="arrow-triangle-up"/>
         </view>
-        <t-avatar image="{{post.authorInfo.avatarUrl}}" />
-        <text class="{{'author college-' + post.authorInfo.collegeIndex}}">{{post.authorInfo.nickname}}</text>
+        <t-avatar image="{{post.userInfo.avatarUrl}}" />
+        <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
         <text class="when">• {{post.relUpdatedAt}}</text>
         <view wx:if="{{post.topic}}" class="topic">#{{post.topic}}</view>
     </view>
@@ -14,5 +14,10 @@
     <view class="images-container">
         <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
     </view>
+    <post-actions post="{{post}}" bind:showCommentInput="onShowCommentInput" bind:postEdited="onPostEdited"></post-actions>
+    <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" ></brief-comments>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
+</view>
+<view wx:else class="post">
+    这个帖子已经被删除。
 </view>

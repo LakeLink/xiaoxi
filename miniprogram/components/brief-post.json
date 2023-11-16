@@ -3,7 +3,9 @@
     "usingComponents": {
         "t-avatar": "tdesign-miniprogram/avatar/avatar",
         "t-image": "tdesign-miniprogram/image/image",
-        "t-icon": "tdesign-miniprogram/icon/icon"
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "post-actions": "/components/post-actions",
+        "brief-comments": "/components/brief-comments"
     },
     "styleIsolation": "apply-shared"
 }
