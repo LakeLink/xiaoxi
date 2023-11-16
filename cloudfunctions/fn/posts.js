@@ -13,6 +13,10 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
+// exports.getTopics = async (event, context) => {
+//     return ["三行诗"]
+// }
+
 exports.getPosts = async (event, context) => {
     // 获取基础信息
     const {
@@ -53,7 +57,14 @@ exports.getPosts = async (event, context) => {
 
     if(event.updatedBefore) {
         cond.push({
-            updatedAt: _.lt(event.updatedBefore)
+            updatedAt: _.lt(event.updatedBefore),
+            pinned: false
+        })
+    }
+
+    if(event.topic) {
+        cond.push({
+            topic: event.topic
         })
     }
 
@@ -79,6 +90,7 @@ exports.getPosts = async (event, context) => {
             as: 'authorInfo'
         })
         .sort({
+            pinned: -1,
             updatedAt: -1
         })
         .limit(20)
@@ -104,6 +116,7 @@ exports.getPosts = async (event, context) => {
         }
     })
     return {
+        success: true,
         list: r.list,
         lastReadPostAt: user.lastReadPostAt
     }
@@ -121,6 +134,15 @@ exports.add = async (event, context) => {
     const col = db.collection('posts')
     const _ = db.command
     const $ = _.aggregate
+
+    
+    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
+    if (event.topic == "三行诗大赛" && !user.verifiedIdentity) {
+        return {
+            success: false,
+            reason: "投稿三行诗需要在“我的”中设置特殊符号"
+        }
+    }
 
     let ok = await cloud.openapi.security.msgSecCheck({
         content: event.text,
@@ -148,6 +170,7 @@ exports.add = async (event, context) => {
             author: OPENID,
             publishedAt: t.unix(),
             updatedAt: t.valueOf(),
+            pinned: false,
             topic: event.topic,
             visibility: event.visibility,
             textContent: event.text,

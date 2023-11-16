@@ -8,13 +8,18 @@ Page({
         topicPickerVisible: false,
         topicValue: [],
         topics: [{
-            label: "唐人街",
-            value: "唐人街"
+            label: "三行诗大赛",
+            value: "三行诗大赛"
+        }, {
+            label: "吹水",
+            value: "吹水"
+        }, {
+            label: "「唐人」街",
+            value: "「唐人」街"
         }],
         visibilityValue: ['all'],
         visibilityLabel: '所有人',
-        visibilityOptions: [
-            {
+        visibilityOptions: [{
                 label: "所有人",
                 value: 'all',
             },
@@ -46,6 +51,20 @@ Page({
     },
 
     async onTapSubmit(e) {
+        if (!this.data.topic) {
+            wx.showToast({
+                title: '请选择一个话题',
+                icon: 'error'
+            })
+            return
+        }
+        if (!this.data.textValue) {
+            wx.showToast({
+                title: '喂，至少写一个字吧！',
+                icon: 'error'
+            })
+            return
+        }
         this.setData({
             loading: true
         })
@@ -60,6 +79,13 @@ Page({
             })
             .then(r => r.result)
             .then(async r => {
+                if (!r.success) {
+                    wx.showToast({
+                      title: r.reason,
+                      icon: 'error'
+                    })
+                    return
+                }
                 if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `posts/${r.id}`)
                     .then(uploadResult => {
                         console.log(uploadResult)

@@ -8,6 +8,8 @@ const posts = require('./posts')
 exports.main = async function (event, context) {
     console.log(event)
     switch (event.type) {
+        // case 'getTopics':
+        //     return await posts.getTopics(event, context)
         case 'getPosts':
             return await posts.getPosts(event, context)
         case 'addPost':
