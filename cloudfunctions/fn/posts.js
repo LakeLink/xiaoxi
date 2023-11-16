@@ -57,7 +57,8 @@ exports.getPosts = async (event, context) => {
 
     if(event.updatedBefore) {
         cond.push({
-            updatedAt: _.lt(event.updatedBefore)
+            updatedAt: _.lt(event.updatedBefore),
+            pinned: false
         })
     }
 
@@ -89,6 +90,7 @@ exports.getPosts = async (event, context) => {
             as: 'authorInfo'
         })
         .sort({
+            pinned: -1,
             updatedAt: -1
         })
         .limit(20)
@@ -168,6 +170,7 @@ exports.add = async (event, context) => {
             author: OPENID,
             publishedAt: t.unix(),
             updatedAt: t.valueOf(),
+            pinned: false,
             topic: event.topic,
             visibility: event.visibility,
             textContent: event.text,

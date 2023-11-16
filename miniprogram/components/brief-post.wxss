@@ -13,6 +13,15 @@
     gap: 16rpx;
 }
 
+.pinned {
+    border-radius: 8px;
+    padding: 4px;
+    background: rgb(255, 153, 170);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
 .author {
     /* font-size: small; */
 }

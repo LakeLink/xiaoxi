@@ -60,6 +60,7 @@ Page({
             let unreadPost = null
             for (let i = 0; i < r.result.list.length; i++) {
                 const e = r.result.list[i];
+                if (e.pinned) continue
                 // console.log(e.updatedAt, r.result.lastReadPostAt, e.updatedAt > r.result.lastReadPostAt)
                 if (e.updatedAt > r.result.lastReadPostAt) {
                     unreadPost = i

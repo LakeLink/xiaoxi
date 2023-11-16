@@ -2,7 +2,8 @@
     "component": true,
     "usingComponents": {
         "t-avatar": "tdesign-miniprogram/avatar/avatar",
-        "t-image": "tdesign-miniprogram/image/image"
+        "t-image": "tdesign-miniprogram/image/image",
+        "t-icon": "tdesign-miniprogram/icon/icon"
     },
     "styleIsolation": "apply-shared"
 }
