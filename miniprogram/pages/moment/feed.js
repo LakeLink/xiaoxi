@@ -50,7 +50,7 @@ Page({
             data: {
                 type: 'getPosts',
                 updatedBefore: this.lastPostUpdatedAt,
-                topic: this.data.topic.value == 0 ? undefined : this.data.topic.options[this.data.topic.value]
+                topic: this.data.topic.value == 0 ? undefined : this.data.topic.options[this.data.topic.value].label
             }
         }).then(r => {
             // https://developers.weixin.qq.com/community/develop/article/doc/000404cadd0548fd6e48f439455413
