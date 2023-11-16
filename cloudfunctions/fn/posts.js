@@ -114,6 +114,7 @@ exports.getPosts = async (event, context) => {
         }
     })
     return {
+        success: true,
         list: r.list,
         lastReadPostAt: user.lastReadPostAt
     }
@@ -131,6 +132,15 @@ exports.add = async (event, context) => {
     const col = db.collection('posts')
     const _ = db.command
     const $ = _.aggregate
+
+    
+    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
+    if (event.topic == "三行诗大赛" && !user.verifiedIdentity) {
+        return {
+            success: false,
+            reason: "投稿三行诗需要在“我的”中设置特殊符号"
+        }
+    }
 
     let ok = await cloud.openapi.security.msgSecCheck({
         content: event.text,

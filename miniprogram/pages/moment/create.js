@@ -58,7 +58,7 @@ Page({
             })
             return
         }
-        if (!this.data.text) {
+        if (!this.data.textValue) {
             wx.showToast({
                 title: '喂，至少写一个字吧！',
                 icon: 'error'
@@ -79,6 +79,13 @@ Page({
             })
             .then(r => r.result)
             .then(async r => {
+                if (!r.success) {
+                    wx.showToast({
+                      title: r.reason,
+                      icon: 'error'
+                    })
+                    return
+                }
                 if (this.data.mediaList.length) await this.uploadMediaToCloud(this.data.mediaList, `posts/${r.id}`)
                     .then(uploadResult => {
                         console.log(uploadResult)
