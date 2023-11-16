@@ -74,7 +74,7 @@ App({
                     tabBarStore.setBadgeOfPage("/pages/moment/feed", {})
                 }
             })
-            setTimeout(updateBadge, 5000)
+            setTimeout(updateBadge, 7000)
         }
         updateBadge()
     },
