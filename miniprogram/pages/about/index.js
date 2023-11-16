@@ -127,7 +127,7 @@ Page({
             bio,
             nickname,
             realname,
-            hobby,
+            // hobby,
             collegeIndex,
             year
         } = this.data.$user
@@ -138,7 +138,8 @@ Page({
             })
             return
         }
-        if (!avatarUrl || !nickname || !realname || !hobby) {
+        console.log(this.data.$user)
+        if (!avatarUrl || !nickname || !realname) {
             wx.showToast({
                 title: '个人信息不完整',
                 icon: 'error'
@@ -157,7 +158,7 @@ Page({
                             bio,
                             nickname,
                             realname,
-                            hobby,
+                            // hobby,
                             collegeIndex: collegeIndex ? Number(collegeIndex) : 0,
                             year
                         }

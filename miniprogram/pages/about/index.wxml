@@ -6,7 +6,7 @@
                 <button style="width: 50px; height: 50px; padding: 0;" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" bindtap="onTapChooseAvatar">
                     <image mode="aspectFit" class="avatar" src="{{$user.avatarUrl}}"></image>
                 </button>
-                <text wx:if="{{ !$user.avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按修改头像</text>
+                <text wx:if="{{ !$user.avatarUrl }}" style="font-size: smaller; font-weight: lighter; color: orange;">点按设置头像</text>
             </view>
             <view slot="title" style="margin-left: 20px; margin-top: 2px;">
                 <text class="{{'main-title  ~college-' + $user.collegeIndex}}">{{ $user.nickname }}</text>
@@ -22,8 +22,8 @@
         </van-field>
 
         <van-field value="{{$user.realname}}" maxlength="10" required placeholder="请输入真实姓名" label="真实姓名" data-key="realname" bind:change="onFieldUpdate"></van-field>
-        <van-field value="{{$user.hobby}}" required placeholder="输入运动喜好" label="运动喜好" data-key="hobby" bind:change="onFieldUpdate">
-        </van-field>
+        <!-- <van-field value="{{$user.hobby}}" required placeholder="输入运动喜好" label="运动喜好" data-key="hobby" bind:change="onFieldUpdate">
+        </van-field> -->
         <picker bindchange="onPickerChange" value="{{$user.collegeIndex}}" range="{{collegeList}}">
             <van-field label="神秘符号">
                 <view slot="input">{{college ? college : collegeList[$user.collegeIndex]}}
