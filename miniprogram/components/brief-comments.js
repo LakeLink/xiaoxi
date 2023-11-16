@@ -115,7 +115,7 @@ Component({
             if (!c.canEdit) return
             wx.showModal({
                 title: '删除评论',
-                content: '是否要删除该评论',
+                content: `是否要删除评论 “${c.textContent}”`,
                 complete: (res) => {
                     if (res.confirm) {
                         wx.cloud.callFunction({
