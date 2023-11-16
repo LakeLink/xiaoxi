@@ -15,9 +15,10 @@ Component({
         pvImages: []
     },
 
-    observers: {
-        'post.images': function(images) {
-            if (images && images.length > 0) {
+
+    lifetimes: {
+        attached() {
+            if (this.data.post.images && this.data.post.images.length > 0) {
                 wx.cloud.getTempFileURL({
                     fileList: this.properties.post.images
                 }).then(r => {
@@ -33,7 +34,6 @@ Component({
      * 组件的方法列表
      */
     methods: {
-
         onTapImage(e) {
             let d = e.currentTarget.dataset
             wx.previewImage({
