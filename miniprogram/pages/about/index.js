@@ -90,16 +90,7 @@ Page({
                         weRunData: wx.cloud.CloudID(r.cloudID)
                     }
                 })
-                await wx.cloud.callFunction({
-                    name: 'fn',
-                    data: {
-                        type: 'getWeRunTotalSteps'
-                    }
-                }).then(r => {
-                    this.setData({
-                        totalSteps: r.result.totalSteps
-                    })
-                })
+                await userStore.load()
             }).catch(e => {
                 wx.showToast({
                     title: '微信运动数据错误',
@@ -213,6 +204,20 @@ Page({
                     })
                 })
         }
+        this.refreshWeRunPermission().then(r => {
+            if (r.authSetting['scope.werun']) {
+                wx.getWeRunData().then(r => {
+                    console.log(r)
+                    wx.cloud.callFunction({
+                        name: 'fn',
+                        data: {
+                            type: 'updateWeRunStepInfo',
+                            weRunData: wx.cloud.CloudID(r.cloudID)
+                        }
+                    })
+                })
+            }
+        })
         return
         // const db = wx.cloud.database()
         // const col = db.collection('WeUser_InfDetails')
@@ -274,6 +279,7 @@ Page({
         this.setData({
             syncWeRunStepInfo: r.authSetting['scope.werun'] ?? false
         });
+        return r
     },
 
     async onChangeSync() {
@@ -289,7 +295,9 @@ Page({
                     title: '请打开设置页授权运动数据',
                     icon: 'error'
                 })
-            }).then(this.refreshWeRunPermission).then(() => {
+            }).then(async () => {
+                return await this.refreshWeRunPermission()
+            }).then((r) => {
                 if (r.authSetting['scope.werun']) {
                     wx.getWeRunData().then(r => {
                         console.log(r)
@@ -312,9 +320,6 @@ Page({
                 icon: 'error'
             })
         }
-    },
-
-    async refresh() {
     },
 
     /**
@@ -345,7 +350,7 @@ Page({
      */
     onShow() {
         this.refreshWeRunPermission()
-        this.refresh()
+
     },
 
     /**
