@@ -13,6 +13,10 @@ cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 });
 
+// exports.getTopics = async (event, context) => {
+//     return ["三行诗"]
+// }
+
 exports.getPosts = async (event, context) => {
     // 获取基础信息
     const {
@@ -54,6 +58,12 @@ exports.getPosts = async (event, context) => {
     if(event.updatedBefore) {
         cond.push({
             updatedAt: _.lt(event.updatedBefore)
+        })
+    }
+
+    if(event.topic) {
+        cond.push({
+            topic: event.topic
         })
     }
 

@@ -1,8 +1,12 @@
 <!--pages/moment/feed.wxml-->
 <view class="safe-area">
-    <view class="example-search">
+    <!-- <view class="example-search">
         <t-search model:value="{{searchValue}}" placeholder="搜索预设文案" />
-    </view>
+    </view> -->
+    <t-dropdown-menu>
+        <t-dropdown-item options="{{topic.options}}" value="{{topic.value}}" bindchange="onTopicChange" />
+        <t-dropdown-item options="{{sorter.options}}" default-value="{{sorter.value}}" />
+    </t-dropdown-menu>
     <t-message id="t-message" bind:tap="onTapMessage" />
     <block wx:for="{{posts}}" wx:for-item="listItem" wx:for-index="listIndex">
         <view wx:for="{{listItem}}" wx:for-index="postIndex">
@@ -11,7 +15,7 @@
             <view wx:if="{{unreadPost == postIndex}}">上次读到这里</view>
         </view>
     </block>
-    <view wx:if=""></view>
+    <!-- <view wx:if="">没有更多了</view> -->
 
     <t-fab style="right: 32rpx; bottom: 140rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
 </view>

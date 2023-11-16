@@ -8,13 +8,15 @@ Page({
         topicPickerVisible: false,
         topicValue: [],
         topics: [{
-            label: "唐人街",
-            value: "唐人街"
+            label: "三行诗大赛",
+            value: "三行诗大赛"
+        }, {
+            label: "吹水",
+            value: "吹水"
         }],
         visibilityValue: ['all'],
         visibilityLabel: '所有人',
-        visibilityOptions: [
-            {
+        visibilityOptions: [{
                 label: "所有人",
                 value: 'all',
             },
@@ -46,6 +48,20 @@ Page({
     },
 
     async onTapSubmit(e) {
+        if (!this.data.topic) {
+            wx.showToast({
+                title: '请选择一个话题',
+                icon: 'error'
+            })
+            return
+        }
+        if (!this.data.text) {
+            wx.showToast({
+                title: '喂，至少写一个字吧！',
+                icon: 'error'
+            })
+            return
+        }
         this.setData({
             loading: true
         })

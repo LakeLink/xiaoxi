@@ -8,9 +8,9 @@
     <t-upload media-type="{{['image']}}" config="{{uploadConfig}}" files="{{mediaList}}" bind:success="handleMediaAdd" bind:remove="handleMediaRemove" />
 </view>
 
-<t-cell left-icon="user-invisible" title="使用面具">
+<!-- <t-cell left-icon="user-invisible" title="使用面具">
   <t-switch defaultValue="{{false}}" slot="note" />
-</t-cell>
+</t-cell> -->
 
 <t-cell left-icon="chat-double" right-icon="chevron-down" title="可见范围" hover note="{{visibilityLabel}}" bind:click="onVisibilityPicker" />
 

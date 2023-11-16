@@ -5,6 +5,8 @@
         "t-swiper": "tdesign-miniprogram/swiper/swiper",
         "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav",
         "t-message": "tdesign-miniprogram/message/message",
+        "t-dropdown-menu": "tdesign-miniprogram/dropdown-menu/dropdown-menu",
+        "t-dropdown-item": "tdesign-miniprogram/dropdown-item/dropdown-item",
         "brief-post": "/components/brief-post"
     },
     "enablePullDownRefresh": true

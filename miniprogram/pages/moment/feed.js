@@ -11,7 +11,22 @@ Page({
         searchValue: '',
         posts: [],
         lastReadPost: null,
-        noMorePost: false
+        noMorePost: false,
+        topic: {
+            options: [{
+                    label: "所有话题",
+                    value: 0
+                },
+                {
+                    label: "三行诗大赛",
+                    value: 1
+                }, {
+                    label: "吹水",
+                    value: 2
+                }
+            ],
+            value: 0
+        }
     },
 
     lastPostUpdatedAt: null,
@@ -24,7 +39,8 @@ Page({
             name: 'fn',
             data: {
                 type: 'getPosts',
-                updatedBefore: this.lastPostUpdatedAt
+                updatedBefore: this.lastPostUpdatedAt,
+                topic: this.data.topic.value == 0 ? undefined : this.data.topic.options[this.data.topic.value]
             }
         }).then(r => {
             // https://developers.weixin.qq.com/community/develop/article/doc/000404cadd0548fd6e48f439455413
@@ -54,12 +70,23 @@ Page({
             }
             // console.log(r.result)
             if (r.result.list.length) {
-                this.lastPostUpdatedAt = r.result.list[r.result.list.length-1].updatedAt
+                this.lastPostUpdatedAt = r.result.list[r.result.list.length - 1].updatedAt
             }
 
             tabBarStore.setBadgeOfPage('/' + this.route, {})
+
+            Message.hide({
+                context: this
+            })
             return r.result.list.length
         })
+    },
+
+    onTopicChange(e) {
+        this.setData({
+            'topic.value': e.detail.value
+        })
+        wx.startPullDownRefresh()
     },
 
     onTapCreate(e) {
@@ -69,9 +96,6 @@ Page({
     },
 
     onTapMessage(e) {
-        Message.hide({
-            context: this
-        })
         wx.startPullDownRefresh()
     },
 
@@ -108,9 +132,7 @@ Page({
     /**
      * 生命周期函数--监听页面隐藏
      */
-    onHide() {
-        Message.hide()
-    },
+    onHide() {},
 
     /**
      * 生命周期函数--监听页面卸载
