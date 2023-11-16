@@ -1,13 +1,11 @@
 {
     "pages": [
         "pages/stats/stepsRank",
-        "pages/feed/placeholder",
+        "pages/stats/foods",
+        "pages/moment/feed",
         "pages/moment/create",
         "pages/about/index",
-        "pages/together/create",
-        "pages/about/verify",
-        "pages/moment/feed",
-        "pages/stats/foods"
+        "pages/about/verify"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
