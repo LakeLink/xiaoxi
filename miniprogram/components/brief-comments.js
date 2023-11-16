@@ -92,7 +92,9 @@ Component({
                         newComment: '',
                         comments: r.result.comments
                     })
-                    // this.triggerEvent('')
+                    this.triggerEvent('commentsChange', {
+                        comments: r.result.comments
+                    })
                 } else {
                     throw new Error()
                 }
@@ -126,6 +128,9 @@ Component({
                         }).then((r) => {
                             if (r.result.success) {
                                 this.setData({
+                                    comments: r.result.comments
+                                })
+                                this.triggerEvent('commentsChange', {
                                     comments: r.result.comments
                                 })
                                 wx.showToast({

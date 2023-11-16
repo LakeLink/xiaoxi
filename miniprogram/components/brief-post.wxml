@@ -14,8 +14,8 @@
     <view class="images-container">
         <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
     </view>
-    <post-actions post="{{post}}" bind:showCommentInput="onShowCommentInput" bind:postEdited="onPostEdited"></post-actions>
-    <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" ></brief-comments>
+    <post-actions post="{{post}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit"></post-actions>
+    <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange" ></brief-comments>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>
 <view wx:else class="post">

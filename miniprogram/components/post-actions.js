@@ -72,7 +72,7 @@ Component({
                             }
                         }).then(r => {
                             if (r.result.success) {
-                                this.triggerEvent('postEdited', {
+                                this.triggerEvent('postEdit', {
                                     post: r.result.post
                                 })
 

@@ -50,10 +50,17 @@ Component({
             })
         },
 
-        onPostEdited(e) {
-            console.log(e)
+        onPostEdit(e) {
+            // console.log(e)
             this.setData({
                 post: e.detail.post
+            })
+        },
+
+        onCommentsChange(e) {
+            // console.log(e)
+            this.setData({
+                'post.comments': e.detail.comments
             })
         }
     }
