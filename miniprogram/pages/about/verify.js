@@ -73,6 +73,7 @@ Page({
                     icon: 'success',
                     title: '认证成功'
                 })
+                this.getOpenerEventChannel().emit('userVerified')
                 setTimeout(wx.navigateBack, 1000)
             } else {
                 wx.showToast({

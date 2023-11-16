@@ -176,6 +176,11 @@ Page({
                                     if (res.confirm) {
                                         wx.navigateTo({
                                             url: `/pages/about/verify?collegeIndex=${collegeIndex}`,
+                                            events: {
+                                                userVerified: () => {
+                                                    userStore.load()
+                                                }
+                                            }
                                         })
                                     }
                                     if (res.cancel) {
