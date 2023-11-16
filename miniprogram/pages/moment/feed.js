@@ -26,6 +26,13 @@ Page({
                 }
             ],
             value: 0
+        },
+        sorter: {
+            options: [{
+                label: "最新发布",
+                value: 0
+            }],
+            value: 0
         }
     },
 
