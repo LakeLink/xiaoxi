@@ -60,7 +60,7 @@ Page({
                     type: 'addPost',
                     useStagename: this.data.useStagename,
                     stagename: this.data.useStagename ? this.data.stagename : undefined,
-                    topic: this.data.topic,
+                    topicValue: this.data.topicValue[0],
                     text: this.data.textValue,
                     visibilityValue: this.data.visibilityValue[0]
                 }
