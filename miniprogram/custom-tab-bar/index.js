@@ -6,7 +6,6 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        current: 0,
     },
 
     /**
@@ -14,6 +13,7 @@ Component({
      */
     data: {
 
+        current: 0,
     },
 
     // this doesn't work on custom-tab-bar, known bug
@@ -25,15 +25,15 @@ Component({
     lifetimes: {
         ready() {
             try {
+                tabBarStore.bind(this, '$tabBar')
                 let pages = getCurrentPages()
                 // console.log('/' + pages[pages.length-1].route)
                 this.setData({
                     current: tabBarStore.indexOfPage('/' + pages[pages.length-1].route)
                 })
                 
-                tabBarStore.bind(this, '$tabBar')
             } catch (error) {
-                console.log('ε=ε=ε=(~￣▽￣)~')
+                console.log('ε=ε=ε=(~￣▽￣)~', error)
             }
         }
     },

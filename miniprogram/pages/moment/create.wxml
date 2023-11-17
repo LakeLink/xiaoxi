@@ -1,7 +1,7 @@
 <view class="safe-area">
     <view class="title">发帖咯</view>
 
-    <t-cell left-icon="chat-double" title="话题" arrow hover note="{{topic}}" bind:click="onTopicPicker" />
+    <t-cell left-icon="chat-double" title="话题" arrow hover note="{{topicLabel}}" bind:click="onTopicPicker" />
 
     <t-textarea placeholder="讲点什么…" model:value="{{textValue}}" />
 
@@ -28,6 +28,6 @@
     </t-picker>
 
     <t-picker visible="{{visibilityPickerVisible}}" value="{{visibilityValue}}" title="选择可见范围" cancelBtn="取消" confirmBtn="确认" bindconfirm="onVisibilityChange">
-        <t-picker-item options="{{visibilityOptions}}" />
+        <t-picker-item options="{{visibilities}}" />
     </t-picker>
 </view>

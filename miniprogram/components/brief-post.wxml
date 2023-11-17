@@ -10,7 +10,7 @@
             <text>置顶</text>
             <t-icon name="arrow-triangle-up-filled" />
         </view>
-        <view wx:if="{{post.topic}}" class="topic">#{{post.topic}}</view>
+        <view wx:if="{{post.topicValue}}" class="topic">#{{$f.post.topics[post.topicValue].label}}</view>
     </view>
     <text class="content">{{post.textContent}}</text>
     <view class="images-container">
@@ -20,6 +20,6 @@
     <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></brief-comments>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>
-<view wx:else class="post">
+<view wx:else style="margin-left: 32rpx;">
     这个帖子已经被删除。
 </view>

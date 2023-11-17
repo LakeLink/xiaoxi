@@ -1,5 +1,5 @@
 import userStore from "~/stores/userStore"
-
+import featureStore from "~/stores/featureStore"
 // pages/moment/create.js
 Page({
 
@@ -9,35 +9,9 @@ Page({
     data: {
         topicPickerVisible: false,
         topicValue: [],
-        topics: [{
-            label: "三行诗大赛",
-            value: "三行诗大赛"
-        }, {
-            label: "吹水",
-            value: "吹水"
-        }, {
-            label: "「唐人」街",
-            value: "「唐人」街"
-        }],
-        visibilityValue: ['all'],
-        visibilityLabel: '所有人',
-        visibilityOptions: [{
-                label: "所有人",
-                value: 'all',
-            },
-            {
-                label: "认证用户",
-                value: 'verified'
-            },
-            {
-                label: "同学",
-                value: 'student'
-            },
-            {
-                label: "教职工",
-                value: 'faculty'
-            }
-        ],
+        topicLabel: '',
+        visibilityValue: [],
+        visibilityLabel: '',
         visibilityPickerVisible: false,
         textValue: "",
         mediaList: [],
@@ -63,7 +37,7 @@ Page({
     },
 
     async onTapSubmit(e) {
-        if (!this.data.topic) {
+        if (!this.data.topicValue.length || this.data.topicValue[0] == 0) {
             wx.showToast({
                 title: '请选择一个话题',
                 icon: 'error'
@@ -138,9 +112,11 @@ Page({
 
     onTopicChange(e) {
         const {
-            value
+            value,
+            label
         } = e.detail;
-        if (value[0] == "三行诗大赛" && !userStore.data.verifiedIdentity) {
+        console.log(e.detail)
+        if (value[0] == 0 && !userStore.data.verifiedIdentity) {
             wx.showModal({
                 title: '需要认证',
                 content: '投稿三行诗需要在“我的”页面中设置「神秘符号」，并通过认证。',
@@ -152,7 +128,7 @@ Page({
         this.setData({
             topicPickerVisible: false,
             topicValue: value,
-            topic: value.join(' ')
+            topicLabel: label
         })
     },
 
@@ -242,7 +218,19 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
+        let topics = featureStore.data.post.topics.slice(1) // 删除第一个（全部话题）
 
+        // Needed, otherwise topic and sorter label would be empty by default
+        // let topicValue = 0
+        let visibilityValue = featureStore.data.post.defaultVisibilityValue
+        this.setData({
+            topics,
+            topicValue: [0],
+            topicLabel: [''],
+            visibilities: featureStore.data.post.visibilities,
+            visibilityValue: [visibilityValue],
+            visibilityLabel: [featureStore.data.post.visibilities[visibilityValue].label]
+        })
     },
 
     /**

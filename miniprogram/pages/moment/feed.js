@@ -2,6 +2,8 @@
 import Message from 'tdesign-miniprogram/message/index';
 import tabBarStore from '~/stores/tabBarStore';
 import userStore from '~/stores/userStore';
+import featureStore from '~/stores/featureStore';
+
 Page({
 
     /**
@@ -11,32 +13,7 @@ Page({
         searchValue: '',
         posts: [],
         lastReadPost: null,
-        noMorePost: false,
-        topic: {
-            options: [{
-                    label: "所有话题",
-                    value: 0
-                },
-                {
-                    label: "三行诗大赛",
-                    value: 1
-                }, {
-                    label: "吹水",
-                    value: 2
-                }, {
-                    label: "「唐人」街",
-                    value: 3
-                }
-            ],
-            value: 0
-        },
-        sorter: {
-            options: [{
-                label: "最新发布",
-                value: 0
-            }],
-            value: 0
-        }
+        noMorePost: false
     },
 
     lastPostUpdatedAt: null,
@@ -48,40 +25,30 @@ Page({
         return await wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getPosts',
+                type: 'getPostsV2',
                 updatedBefore: this.lastPostUpdatedAt,
-                topic: this.data.topic.value == 0 ? undefined : this.data.topic.options[this.data.topic.value].label
+                topicValue: this.data.topicValue
             }
         }).then(r => {
             // https://developers.weixin.qq.com/community/develop/article/doc/000404cadd0548fd6e48f439455413
             const {
                 posts
             } = this.data;
-            // this.setData({
-            //     posts: []
-            // })
-            let unreadPost = null
-            for (let i = 0; i < r.result.list.length; i++) {
-                const e = r.result.list[i];
-                if (e.pinned) continue
-                // console.log(e.updatedAt, r.result.lastReadPostAt, e.updatedAt > r.result.lastReadPostAt)
-                if (e.updatedAt > r.result.lastReadPostAt) {
-                    unreadPost = i
-                }
-            }
+
             if (!clear) {
                 this.setData({
                     [`posts[${posts.length}]`]: r.result.list,
                     noMorePost: r.result.list.length == 0,
-                    unreadPost
+                    lastUnreadPost: r.result.lastUnreadPost
                 })
             } else {
                 this.setData({
                     posts: [r.result.list],
                     noMorePost: r.result.list.length == 0,
-                    unreadPost
+                    lastUnreadPost: r.result.lastUnreadPost
                 })
             }
+
             // console.log(r.result)
             if (r.result.list.length) {
                 this.lastPostUpdatedAt = r.result.list[r.result.list.length - 1].updatedAt
@@ -98,7 +65,14 @@ Page({
 
     onTopicChange(e) {
         this.setData({
-            'topic.value': e.detail.value
+            topicValue: e.detail.value
+        })
+        wx.startPullDownRefresh()
+    },
+
+    onSorterChange(e) {
+        this.setData({
+            sorterValue: e.detail.value
         })
         wx.startPullDownRefresh()
     },
@@ -120,14 +94,21 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        this.refresh(true)
     },
 
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-
+        // this.data.$f = {}
+        featureStore.bind(this, '$f')
+        // Needed, otherwise topic and sorter label would be empty by default
+        this.setData({
+            topicValue: featureStore.data.post.defaultTopicValue,
+            sorterValue: featureStore.data.post.defaultSorterValue
+        })
+        // console.log(this.data.$f)
+        this.refresh(true)
     },
 
     /**

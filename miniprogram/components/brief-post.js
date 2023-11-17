@@ -1,4 +1,5 @@
 // components/brief-post.js
+import featureStore from "~/stores/featureStore"
 Component({
 
     /**
@@ -17,16 +18,24 @@ Component({
     },
 
     observers: {
-        'post.images': function(images) {
+        'post': function (post) {
+            if (!post) return
+            let images = post.images
             if (images && images.length > 0) {
                 wx.cloud.getTempFileURL({
-                    fileList: this.properties.post.images
+                    fileList: images
                 }).then(r => {
                     this.setData({
                         pvImages: r.fileList.map(f => f.tempFileURL + '/small_pv')
                     })
                 })
             }
+        }
+    },
+
+    lifetimes: {
+        ready() {
+            featureStore.bind(this, '$f')
         }
     },
 
@@ -37,8 +46,8 @@ Component({
         onTapImage(e) {
             let d = e.currentTarget.dataset
             wx.previewImage({
-              urls: this.properties.post.images,
-              current: this.properties.post.images[d.idx]
+                urls: this.properties.post.images,
+                current: this.properties.post.images[d.idx]
             })
         },
 
