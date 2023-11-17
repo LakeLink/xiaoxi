@@ -8,7 +8,7 @@
 }
 
 .comment-input {
-    background: white;
+    background: rgb(230, 230, 230);
     padding: 12rpx;
     border-radius: 4px;
     flex-grow: 1;
