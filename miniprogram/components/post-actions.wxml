@@ -12,7 +12,7 @@
             </block>
         </view>
     </t-button>
-    <t-avatar-group class="liked-avatar-group" max="5" collapseAvatar="+5" >
+    <t-avatar-group class="liked-avatar-group" max="5" collapseAvatar="+{{post.likedUserInfo.length-5}}" >
         <t-avatar wx:for="{{post.likedUserInfo}}" wx:for-item="u" wx:key="index" size="small" image="{{u.avatarUrl}}" />
     </t-avatar-group>
     <t-button bindtap="onComment" class="action-button">
