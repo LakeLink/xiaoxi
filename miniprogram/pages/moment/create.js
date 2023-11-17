@@ -62,7 +62,7 @@ Page({
                     stagename: this.data.useStagename ? this.data.stagename : undefined,
                     topic: this.data.topic,
                     text: this.data.textValue,
-                    visibility: this.data.visibilityValue[0]
+                    visibilityValue: this.data.visibilityValue[0]
                 }
             })
             .then(r => r.result)
