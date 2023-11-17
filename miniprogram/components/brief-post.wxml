@@ -5,7 +5,7 @@
             <text>置顶</text>
             <t-icon name="arrow-triangle-up"/>
         </view>
-        <t-avatar image="{{post.userInfo.avatarUrl}}" />
+        <t-avatar wx:if="{{post.userInfo.avatarUrl}}" image="{{post.userInfo.avatarUrl}}" />
         <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
         <text class="when">• {{post.relUpdatedAt}}</text>
         <view wx:if="{{post.topic}}" class="topic">#{{post.topic}}</view>

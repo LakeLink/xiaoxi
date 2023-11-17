@@ -99,7 +99,7 @@ exports.getPosts = async (event, context) => {
         if (e.useStagename) {
             e.userInfo = {
                 nickname: e.stagename,
-                // collegeIndex: e.authorInfo.collegeIndex
+                collegeIndex: e.userInfo.collegeIndex
             }
         }
         e.canEdit = e.author == OPENID
