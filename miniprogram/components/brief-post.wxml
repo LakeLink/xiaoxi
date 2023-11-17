@@ -12,7 +12,7 @@
         </view>
         <view wx:if="{{post.topicValue}}" class="topic">#{{$f.post.topics[post.topicValue].label}}</view>
     </view>
-    <text class="content">{{post.textContent}}</text>
+    <text class="content" user-select>{{post.textContent}}</text>
     <view class="images-container">
         <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
     </view>
