@@ -35,6 +35,28 @@ function getNewVisibilityValue(oldValue) {
     throw Error(`invalid oldValue ${oldValue}`)
 }
 
+function hashCode(s) {
+    var hash = 0, i, chr;
+    if (s.length === 0) return 0;
+    for (i = 0; i < s.length; i++) {
+      chr   = s.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash >= 0 ? hash : -hash;
+}
+
+function getAvatarUrlforStagename(s) {
+    let avatars = [
+        'https://tdesign.gtimg.com/miniprogram/images/avatar1.png',
+        'https://tdesign.gtimg.com/miniprogram/images/avatar2.png',
+        'https://tdesign.gtimg.com/miniprogram/images/avatar3.png',
+        'https://tdesign.gtimg.com/miniprogram/images/avatar4.png',
+        'https://tdesign.gtimg.com/miniprogram/images/avatar5.png'
+    ]
+    return avatars[hashCode(s)%5]
+}
+
 exports.getPostsV2 = async (event, context) => {
     // 获取基础信息
     const {
@@ -126,6 +148,7 @@ exports.getPostsV2 = async (event, context) => {
         if (e.useStagename) {
             r.list[i].userInfo = {
                 nickname: e.stagename,
+                avatarUrl: getAvatarUrlforStagename(e.author + e.stagename),
                 collegeIndex: e.userInfo.collegeIndex
             }
         }
