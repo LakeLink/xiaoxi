@@ -102,17 +102,23 @@ exports.getPosts = async (event, context) => {
                 collegeIndex: e.userInfo.collegeIndex
             }
         }
-        e.canEdit = e.author == OPENID
+
+        if (user.admin) {
+            e.canEdit = true
+        }
+        // e.canEdit = e.author == OPENID
         e.relUpdatedAt = dayjs(e.updatedAt).toNow()
 
         e.alreadyLiked = e.likedBy.includes(OPENID)
     })
-    // r.list.forEach(e => {
-    //     e.comments.forEach(c => {
-    //         c.canDelete = c.author == OPENID || user.admin
-    //     })
-    //     // e.comments.sort((a, b) => a.when > b.when)
-    // })
+    r.list.forEach(e => {
+        e.comments.forEach(c => {
+            if(user.admin) {
+                c.canEdit = true
+            }
+        })
+        // e.comments.sort((a, b) => a.when > b.when)
+    })
 
     await db.collection('users').doc(OPENID).update({
         data: {
