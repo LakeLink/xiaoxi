@@ -8,10 +8,6 @@ dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
 dayjs.locale('zh-cn')
 
-cloud.init({
-    env: cloud.DYNAMIC_CURRENT_ENV
-});
-
 exports.nudge = async (event, context) => {
     const {
         ENV,

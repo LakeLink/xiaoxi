@@ -1,4 +1,10 @@
-const together = require('./together')
+const cloud = require('wx-server-sdk');
+
+cloud.init({
+    env: cloud.DYNAMIC_CURRENT_ENV
+});
+
+const features = require('./features')
 const user = require('./user')
 const weRun = require('./weRun')
 const quickAction = require('./quickAction')
@@ -8,10 +14,14 @@ const posts = require('./posts')
 exports.main = async function (event, context) {
     console.log(event)
     switch (event.type) {
+        case 'getFeatures':
+            return await features.get(event, context)
         // case 'getTopics':
         //     return await posts.getTopics(event, context)
         case 'getPosts':
             return await posts.getPosts(event, context)
+        case 'getPostsV2':
+            return await posts.getPostsV2(event, context)
         case 'addPost':
             return await posts.add(event, context)
         case 'removePost':

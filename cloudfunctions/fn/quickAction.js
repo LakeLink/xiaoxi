@@ -1,9 +1,5 @@
 const cloud = require('wx-server-sdk');
 
-cloud.init({
-    env: cloud.DYNAMIC_CURRENT_ENV
-});
-
 // exports.invitedUser = async (id) => {
 //     const db = cloud.database()
 //     const col = db.collection('InvitedUsers')

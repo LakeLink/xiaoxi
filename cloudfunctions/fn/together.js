@@ -2,10 +2,6 @@ const cloud = require('wx-server-sdk');
 const quickAction = require('./quickAction')
 const dayjs = require('dayjs')
 
-cloud.init({
-    env: cloud.DYNAMIC_CURRENT_ENV
-});
-
 exports.join = async (event, context) => {
     // 获取基础信息
     const {

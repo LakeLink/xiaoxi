@@ -1,5 +1,6 @@
 const cloud = require('wx-server-sdk');
 const quickAction = require('./quickAction')
+const features = require('./features.js')
 
 const dayjs = require('dayjs')
 
@@ -9,15 +10,165 @@ dayjs.extend(require('dayjs/plugin/timezone'))
 dayjs.extend(require('dayjs/plugin/relativeTime'))
 dayjs.locale('zh-cn')
 
-cloud.init({
-    env: cloud.DYNAMIC_CURRENT_ENV
-});
-
 // exports.getTopics = async (event, context) => {
 //     return ["三行诗"]
 // }
 
+function getTopicValue(label) {
+    const t = features.config.post.topics
+    for (let i = 0; i < t.length; i++) {
+        if (t[i].label == label) return t[i].value
+    }
+    throw Error(`invalid topic label ${label}`)
+}
+
+function getTopicLabel(value) {
+    const t = features.config.post.topics
+    return t[value].label
+}
+
+function getNewVisibilityValue(oldValue) {
+    if (oldValue == 'all') return 0
+    if (oldValue == 'verified') return 1
+    if (oldValue == 'student') return 2
+    if (oldValue == 'faculty') return 3
+    throw Error(`invalid oldValue ${oldValue}`)
+}
+
+exports.getPostsV2 = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('posts')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
+
+    let agg = col.aggregate()
+    // console.log(user)
+    let cond = []
+
+    // admin override: no limitation
+    if (!user.admin) {
+        // verified user
+        if (user.verifiedIdentity) {
+            cond.push(_.or([{
+                    visibilityValue: 0
+                },
+                {
+                    visibilityValue: 1
+                },
+                {
+                    visibilityValue: user.verifiedIdentity == 'student' ? 2 : 3
+                },
+                {
+                    author: OPENID
+                }
+            ]))
+        } else {
+            cond.push({
+                visibilityValue: 0
+            })
+        }
+    }
+
+    // filter: get certain topic
+    if (event.topicValue) {
+        cond.push({
+            topicValue: event.topicValue
+        })
+    }
+
+
+    // filter: get older posts
+    if (event.updatedBefore)
+        cond.push({
+            updatedAt: _.lt(event.updatedBefore),
+            pinned: false // pinned posts already displayed
+        })
+
+    if (cond.length) agg = agg.match(_.and(cond))
+    /*if (event.id) {
+        filtered = false
+        agg = agg.match({
+            _id: event.id
+        })
+    } else {
+        filtered = !await quickAction.invitedUser(OPENID)
+        if (filtered) {
+            agg = agg.match({
+                _openid: OPENID
+            })
+        }
+    }*/
+
+    agg = quickAction.lookupUserInfo('author', agg, _, $, OPENID)
+        .sort({
+            pinned: -1,
+            updatedAt: -1
+        })
+        .limit(20)
+
+    let r = await quickAction.lookupComments(agg, _, $, OPENID).end()
+
+    let lastUnreadPost = null
+    for (let i = 0; i < r.list.length; i++) {
+        const e = r.list[i];
+        // e.authorInfo = e.authorInfo[0]
+        if (e.useStagename) {
+            r.list[i].userInfo = {
+                nickname: e.stagename,
+                collegeIndex: e.userInfo.collegeIndex
+            }
+        }
+
+        if (user.admin) {
+            r.list[i].canEdit = true
+        }
+        // e.canEdit = e.author == OPENID
+        r.list[i].relUpdatedAt = dayjs(e.updatedAt).toNow()
+
+        r.list[i].alreadyLiked = e.likedBy.includes(OPENID)
+
+        if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
+            lastUnreadPost = i
+        }
+
+    }
+
+    r.list.forEach(e => {
+        e.comments.forEach(c => {
+            if (user.admin) {
+                c.canEdit = true
+            }
+        })
+        // e.comments.sort((a, b) => a.when > b.when)
+    })
+
+    await db.collection('users').doc(OPENID).update({
+        data: {
+            lastReadPostAt: dayjs().valueOf()
+        }
+    })
+    return {
+        success: true,
+        list: r.list,
+        lastReadPostAt: user.lastReadPostAt,
+        lastUnreadPost
+    }
+}
+
 exports.getPosts = async (event, context) => {
+    if(event.topic) {
+        event.topicValue = getTopicValue(event.topic)
+    }
+    return await exports.getPostsV2(event, context)
     // 获取基础信息
     const {
         ENV,
@@ -113,7 +264,7 @@ exports.getPosts = async (event, context) => {
     })
     r.list.forEach(e => {
         e.comments.forEach(c => {
-            if(user.admin) {
+            if (user.admin) {
                 c.canEdit = true
             }
         })
@@ -173,6 +324,14 @@ exports.add = async (event, context) => {
 
     let t = dayjs()
 
+    if (event.visibility) {
+        event.visibilityValue = getNewVisibilityValue(event.visibility)
+    }
+
+    if(event.topic) {
+        event.topicValue = getTopicValue(event.topic)
+    }
+
     const {
         _id
     } = await col.add({
@@ -183,8 +342,8 @@ exports.add = async (event, context) => {
             publishedAt: t.unix(),
             updatedAt: t.valueOf(),
             pinned: false,
-            topic: event.topic,
-            visibility: event.visibility,
+            topicValue: event.topicValue,
+            visibilityValue: event.visibilityValue,
             textContent: event.text,
             images: [],
             likedBy: [],
