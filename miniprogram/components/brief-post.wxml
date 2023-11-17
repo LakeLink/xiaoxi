@@ -1,13 +1,15 @@
 <!--components/brief-post.wxml-->
 <view wx:if="{{post}}" class="post">
     <view class="meta">
+        <t-avatar image="{{post.userInfo.avatarUrl}}" />
+        <view class="userinfo">
+            <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
+            <text class="when">• {{post.relUpdatedAt}}</text>
+        </view>
         <view wx:if="{{post.pinned}}" class="pinned">
             <text>置顶</text>
-            <t-icon name="arrow-triangle-up"/>
+            <t-icon name="arrow-triangle-up-filled" />
         </view>
-        <t-avatar image="{{post.userInfo.avatarUrl}}" />
-        <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
-        <text class="when">• {{post.relUpdatedAt}}</text>
         <view wx:if="{{post.topic}}" class="topic">#{{post.topic}}</view>
     </view>
     <text class="content">{{post.textContent}}</text>
@@ -15,7 +17,7 @@
         <t-image wx:for="{{post.images}}" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
     </view>
     <post-actions post="{{post}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit"></post-actions>
-    <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange" ></brief-comments>
+    <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></brief-comments>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>
 <view wx:else class="post">
