@@ -108,6 +108,8 @@ exports.getPostsV2 = async (event, context) => {
         }
     }*/
 
+    agg = quickAction.lookupLiked(agg, _, $, OPENID)
+
     agg = quickAction.lookupUserInfo('author', agg, _, $, OPENID)
         .sort({
             pinned: -1,
@@ -134,7 +136,7 @@ exports.getPostsV2 = async (event, context) => {
         // e.canEdit = e.author == OPENID
         r.list[i].relUpdatedAt = dayjs(e.updatedAt).toNow()
 
-        r.list[i].alreadyLiked = e.likedBy.includes(OPENID)
+        // r.list[i].alreadyLiked = e.likedBy.includes(OPENID)
 
         if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
             lastUnreadPost = i
@@ -447,12 +449,11 @@ exports.like = async (event, context, undo) => {
             })
     }
 
-    return await col.doc(event.id).get().then(r => {
-        return {
-            alreadyLiked: r.data.likedBy.includes(OPENID),
-            likedBy: r.data.likedBy
-        }
-    })
+
+
+    return await quickAction.lookupLiked(await col.aggregate().match({
+        _id: event.id
+    }), _, $, OPENID).end().then(r => r.list[0])
 }
 
 exports.comment = async (event, context) => {

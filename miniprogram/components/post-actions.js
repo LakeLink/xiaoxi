@@ -31,6 +31,7 @@ Component({
                 }).then(r => {
                     this.setData({
                         'post.likedBy': r.result.likedBy,
+                        'post.likedUserInfo': r.result.likedUserInfo,
                         'post.alreadyLiked': r.result.alreadyLiked
                     })
                 })
@@ -44,6 +45,7 @@ Component({
                 }).then(r => {
                     this.setData({
                         'post.likedBy': r.result.likedBy,
+                        'post.likedUserInfo': r.result.likedUserInfo,
                         'post.alreadyLiked': r.result.alreadyLiked
                     })
                 })

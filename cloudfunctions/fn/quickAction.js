@@ -23,7 +23,7 @@ exports.hasSubscribed = async (event, context) => {
     return r.data.templateIds.includes(event.templateId)
 }
 
-exports.postsLookupLiked = (agg, _, $, OPENID) =>
+exports.lookupLiked = (agg, _, $, OPENID) =>
     agg.lookup({
         from: 'users',
         let: {
@@ -35,6 +35,8 @@ exports.postsLookupLiked = (agg, _, $, OPENID) =>
             collegeIndex: true
         }).done(),
         as: 'likedUserInfo'
+    }).addFields({
+        alreadyLiked: $.in([OPENID, '$likedBy'])
     })
 
 

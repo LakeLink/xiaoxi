@@ -1,6 +1,6 @@
 <!--components/post-actions.wxml-->
 <view class="action">
-    <t-button bindtap="onLike">
+    <t-button bindtap="onLike" class="action-button">
         <view style="display: flex; align-items: center;">
             <block wx:if="{{post.alreadyLiked}}">
                 <t-icon color="red" name="heart-filled" />
@@ -12,7 +12,10 @@
             </block>
         </view>
     </t-button>
-    <t-button bindtap="onComment">
+    <t-avatar-group class="liked-avatar-group" max="5" collapseAvatar="+5" >
+        <t-avatar wx:for="{{post.likedUserInfo}}" wx:for-item="u" wx:key="index" size="small" image="{{u.avatarUrl}}" />
+    </t-avatar-group>
+    <t-button bindtap="onComment" class="action-button">
         <view style="display: flex; align-items: center;">
             <t-icon name="chat-message"></t-icon>
             <text wx:if="{{post.comments.length}}" style="margin-left: 5px; color: grey;">{{post.comments.length}}</text>
@@ -21,7 +24,7 @@
     <!-- <t-button bindtap="onShare" open-type="share">
         <t-icon name="share" />
     </t-button> -->
-    <t-button bindtap="onEdit" wx:if="{{post.canEdit}}">
+    <t-button bindtap="onEdit" wx:if="{{post.canEdit}}" class="action-button">
         <view style="display: flex;">
             <t-icon name="delete"></t-icon>
             <!-- <t-icon name="edit"></t-icon> -->

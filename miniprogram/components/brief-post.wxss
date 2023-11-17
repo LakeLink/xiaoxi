@@ -52,6 +52,7 @@
 }
 
 .images-container {
+    margin-left: 16rpx;
     display: flex;
     gap: 24rpx;
     flex-wrap: wrap;
