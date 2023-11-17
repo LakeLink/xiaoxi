@@ -15,7 +15,7 @@ exports.config = {
         }],
         defaultTopicValue: 0,
         sorters: [{
-            label: "最新发布",
+            label: "最新动态",
             value: 0
         }],
         defaultSorterValue: 0,

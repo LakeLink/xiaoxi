@@ -167,7 +167,7 @@ exports.getPostsV2 = async (event, context) => {
 }
 
 exports.getPosts = async (event, context) => {
-    if(event.topic) {
+    if (event.topic) {
         event.topicValue = getTopicValue(event.topic)
     }
     return await exports.getPostsV2(event, context)
@@ -330,7 +330,7 @@ exports.add = async (event, context) => {
         event.visibilityValue = getNewVisibilityValue(event.visibility)
     }
 
-    if(event.topic) {
+    if (event.topic) {
         event.topicValue = getTopicValue(event.topic)
     }
 
@@ -430,12 +430,22 @@ exports.like = async (event, context, undo) => {
     const _ = db.command
     const $ = _.aggregate
 
-    await col.doc(event.id)
-        .update({
-            data: {
-                likedBy: undo ? _.pull(OPENID) : _.addToSet(OPENID)
-            }
-        })
+    if (undo) {
+        await col.doc(event.id)
+            .update({
+                data: {
+                    likedBy: _.pull(OPENID)
+                }
+            })
+    } else {
+        await col.doc(event.id)
+            .update({
+                data: {
+                    likedBy: _.addToSet(OPENID),
+                    updatedAt: dayjs().valueOf()
+                }
+            })
+    }
 
     return await col.doc(event.id).get().then(r => {
         return {
@@ -481,6 +491,12 @@ exports.comment = async (event, context) => {
             images: [],
             likedBy: [],
             // subComments: []
+        }
+    })
+
+    await db.collection('posts').doc(event.id).update({
+        data: {
+            updatedAt: dayjs().valueOf()
         }
     })
 
