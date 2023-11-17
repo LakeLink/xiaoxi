@@ -47,7 +47,9 @@ function getNowPage() {
 }
 
 function setState(vm, data) {
-  vm._new_data = vm._new_data || {}
+    const diffState = getDiffState(data, vm.data)
+    vm.setData(diffState)
+  /*vm._new_data = vm._new_data || {}
   Object.assign(vm._new_data, data)
   return new Promise(resolve => {
     Promise.resolve().then(() => {
@@ -59,7 +61,7 @@ function setState(vm, data) {
         resolve()
       }
     })
-  })
+  })*/
 }
 
 function getDiffState(state, preState) {
@@ -157,7 +159,10 @@ class Store {
     this._setComputed();
     this.__vms.push({ vm, key });
     setState(vm, { [key]: this.data });
-    setTimeout(() => initComponent(vm), 360);
+
+    // sometimes setData is not ready yet
+    // vm.data[key] = this.data;
+    /*setTimeout(() => initComponent(vm), 360);*/
   }
 
   unbind(vm) {
@@ -165,9 +170,9 @@ class Store {
   }
 
   update() {
-    const currRoutes = getCurrentRoutes();
+    /*const currRoutes = getCurrentRoutes();
     const nowVmRoute = currRoutes[currRoutes.length - 1];
-    const delayVms = [];
+    const delayVms = [];*/
     this.__vms = (this.__vms || []).filter(f => {
     
       setState(f.vm, { [f.key]: this.data });
@@ -182,11 +187,11 @@ class Store {
         return true;
       }*/
     })
-    if (!delayVms.length) return;
-    clearTimeout(this.__delayTimer);
+    /*if (!delayVms.length) return;
+    // clearTimeout(this.__delayTimer);
     this.__delayTimer = setTimeout(() => {
       delayVms.forEach(f => setState(f.vm, { [f.key]: this.data }))
-    }, 360)
+    }, 360)*/
   }
 }
 
