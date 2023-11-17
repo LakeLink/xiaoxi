@@ -1,5 +1,5 @@
 <!--components/brief-post.wxml-->
-<view wx:if="{{post}}" class="post">
+<view wx:if="{{post}}">
     <view class="meta">
         <t-avatar image="{{post.userInfo.avatarUrl}}" />
         <view class="userinfo">

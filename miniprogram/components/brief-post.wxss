@@ -1,12 +1,3 @@
-.post {
-    /* border: solid; */
-    /* border-style: dashed; */
-    padding-bottom: 32rpx;
-    /* margin-top: 16rpx; */
-    margin: 32rpx 32rpx;
-    border-bottom: solid lightgray;
-}
-
 .meta {
     display: flex;
     justify-content: space-between;

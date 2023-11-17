@@ -5,3 +5,13 @@
     background-color: #fff;
     padding: 16rpx 32rpx;
 }
+.post {
+    /* border: solid; */
+    /* border-style: dashed; */
+    /* padding-bottom: 32rpx; */
+    /* margin-top: 16rpx; */
+    padding: 32rpx 32rpx;
+
+    background-color: white;
+    border-bottom: dashed lightgray;
+}
