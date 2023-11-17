@@ -23,7 +23,7 @@
 }
 
 .author {
-    /* font-size: small; */
+    font-size: small;
 }
 
 .when {
