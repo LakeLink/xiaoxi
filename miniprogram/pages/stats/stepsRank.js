@@ -136,6 +136,13 @@ Page({
             editable: true,
             complete: (res) => {
                 if (res.confirm) {
+                    if (!res.content.length) {
+                        wx.showToast({
+                            title: '喂，至少写一个字吧！',
+                            icon: 'error'
+                        })
+                        return
+                    }
                     console.log(res)
                     wx.cloud.callFunction({
                         name: 'fn',
