@@ -16,10 +16,9 @@ Component({
         showCommentInput: false
     },
 
-
-    lifetimes: {
-        attached() {
-            if (this.data.post.images && this.data.post.images.length > 0) {
+    observers: {
+        'post.images': function(images) {
+            if (images && images.length > 0) {
                 wx.cloud.getTempFileURL({
                     fileList: this.properties.post.images
                 }).then(r => {
