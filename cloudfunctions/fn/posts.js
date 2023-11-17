@@ -140,6 +140,8 @@ exports.getPostsV2 = async (event, context) => {
             lastUnreadPost = i
         }
 
+        r.list[i].topic = getTopicLabel(e.topicValue)
+
     }
 
     r.list.forEach(e => {
