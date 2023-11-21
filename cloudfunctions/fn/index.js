@@ -22,6 +22,8 @@ exports.main = async function (event, context) {
             return await posts.getPosts(event, context)
         case 'getPostsV2':
             return await posts.getPostsV2(event, context)
+        case 'getTopicVotes':
+            return await posts.getTopicVotes(event, context)
         case 'addPost':
             return await posts.add(event, context)
         case 'removePost':
@@ -36,6 +38,10 @@ exports.main = async function (event, context) {
             return await posts.comment(event, context)
         case 'undoCommentPost':
             return await posts.undoComment(event, context)
+        case 'votePost':
+            return await posts.vote(event, context)
+        case 'undoVotePost':
+            return await posts.undoVote(event, context)
 
         /*case 'commentTogether':
             return await quickAction.comment(event, context, 'TogetherDetails')

@@ -36,12 +36,13 @@ function getNewVisibilityValue(oldValue) {
 }
 
 function hashCode(s) {
-    var hash = 0, i, chr;
+    var hash = 0,
+        i, chr;
     if (s.length === 0) return 0;
     for (i = 0; i < s.length; i++) {
-      chr   = s.charCodeAt(i);
-      hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
+        chr = s.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
     }
     return hash >= 0 ? hash : -hash;
 }
@@ -54,7 +55,7 @@ function getAvatarUrlforStagename(s) {
         'https://tdesign.gtimg.com/miniprogram/images/avatar4.png',
         'https://tdesign.gtimg.com/miniprogram/images/avatar5.png'
     ]
-    return avatars[hashCode(s)%5]
+    return avatars[hashCode(s) % 5]
 }
 
 exports.getPostsV2 = async (event, context) => {
@@ -310,6 +311,95 @@ exports.getPosts = async (event, context) => {
     }
 }
 
+exports.getTopicVotes = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('posts')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
+
+    let agg = col.aggregate()
+    // console.log(user)
+    let cond = []
+
+    if (event.topicValue !== 1) throw Error(`votes not enabled for topicValue ${event.topicValue}`)
+
+    cond.push({
+        topicValue: event.topicValue
+    })
+
+    // admin override: no limitation
+    // if (!user.admin) {
+    //     // verified user
+    //     if (user.verifiedIdentity) {
+    //         cond.push(_.or([{
+    //                 visibilityValue: 0
+    //             },
+    //             {
+    //                 visibilityValue: 1
+    //             },
+    //             {
+    //                 visibilityValue: user.verifiedIdentity == 'student' ? 2 : 3
+    //             },
+    //             {
+    //                 author: OPENID
+    //             }
+    //         ]))
+    //     } else {
+    //         cond.push({
+    //             visibilityValue: 0
+    //         })
+    //     }
+    // }
+
+    let t = dayjs().startOf('day').unix()
+
+    return await agg
+        .match(_.and(cond))
+        .lookup({
+            from: 'votes',
+            let: {
+                id: '$_id'
+            },
+            pipeline: $.pipeline()
+                .match(_.expr($.in(['$$id', '$topicIds'])))
+                .project({
+                    day: true,
+                    user: true
+                })
+                // .count()
+                .done(),
+            as: 'votes'
+        })
+        .sort({
+            updatedAt: -1
+        })
+        .limit(100)
+        .project({
+            _id: true,
+            votes: true
+        })
+        .end().then(r => {
+            r.list.forEach(e => {
+                e.hasVoted = false
+                e.votes.forEach(v => {
+                    if (v.day == t && v.user == OPENID) {
+                        e.hasVoted = true
+                    }
+                });
+            });
+            return r.list
+        })
+}
+
 exports.add = async (event, context) => {
     // 获取基础信息
     const {
@@ -395,9 +485,16 @@ exports.remove = async (event, context) => {
     const col = db.collection('posts')
     const _ = db.command
     const $ = _.aggregate
+    try {
+        let p = await col.doc(event.id).get().then(r => r.data)
+        wx.cloud.deleteFile({
+            fileList: p.images
+        })
+    } catch (error) {
+
+    }
 
     let success = await col.doc(event.id).remove().then(r => r.stats.removed == 1)
-
     return {
         success,
         post: null
@@ -440,6 +537,27 @@ exports.setMedia = async (event, context) => {
     })
 
     return r.stats.updated == 1
+}
+
+exports.pin = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('posts')
+
+    let success = await col.doc(event.id).update({
+        data: {
+            pinned: event.pin
+        }
+    }).then(r => r.stats.updated == 1)
+    return {
+        success
+    }
 }
 
 exports.like = async (event, context, undo) => {
@@ -559,4 +677,82 @@ exports.undoComment = async (event, context) => {
         success: true,
         comments: await quickAction.lookupUserInfo('author', agg, _, $, OPENID).end().then(r => r.list)
     }
+}
+
+exports.vote = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('votes')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let t = dayjs().startOf('day').unix()
+    try {
+        let r = await col.doc(OPENID + '^' + t).get().then(r => r.data)
+        if (r.topicIds.length >= 3) {
+            return {
+                success: false,
+                reason: '每天最多投三票哦'
+            }
+        } else {
+            if (r.topicIds.includes(event.id)) {
+                return {
+                    success: false,
+                    reason: '当天不能重复投票哦'
+                }
+            } else {
+                r.topicIds.push(event.id)
+                let stats = await col.doc(OPENID + '^' + t).update({
+                    data: {
+                        topicIds: r.topicIds
+                    }
+                }).then(r => r.stats)
+                if (stats.updated) {
+                    return {
+                        success: true
+                    }
+                } else {
+                    return {
+                        success: false,
+                        reason: '数据库错误'
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        // 今日第一次投票
+        await col.add({
+            data: {
+                _id: OPENID + '^' + t,
+                day: t,
+                user: OPENID,
+                topicIds: [event.id]
+            }
+        })
+        return {
+            success: true
+        }
+    }
+}
+
+exports.undoVote = async (event, context) => {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('votes')
+    const _ = db.command
+    const $ = _.aggregate
+
 }

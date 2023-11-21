@@ -31,3 +31,12 @@
         </view>
     </t-button>
 </view>
+<view class="action" wx:if="{{votes}}">
+    <t-button disabled="{{votes.hasVoted}}" bindtap="onVote" class="action-button">
+        <view style="display: flex; align-items: center;">
+            <t-icon name="chart"></t-icon>
+            投票
+            <text wx:if="{{votes.count}}" style="margin-left: 5px; color: grey;">{{votes.count}}</text>
+        </view>
+    </t-button>
+</view>

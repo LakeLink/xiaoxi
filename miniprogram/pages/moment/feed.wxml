@@ -10,7 +10,7 @@
     <t-message id="t-message" bind:tap="onTapMessage" />
     <block wx:for="{{posts}}" wx:for-item="listItem" wx:for-index="listIndex">
         <view wx:for="{{listItem}}" wx:for-index="postIndex" wx:key="{{item._id}}" class="post">
-            <brief-post post="{{item}}"></brief-post>
+            <brief-post post="{{item}}" votes="{{votes[item._id]}}" bind:postVote="onPostVote"></brief-post>
             <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
             <view wx:if="{{lastUnreadPost == postIndex}}" style="margin-left: 32rpx;">上次读到这里</view>
         </view>

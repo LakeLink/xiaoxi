@@ -12,16 +12,47 @@ Page({
     data: {
         searchValue: '',
         posts: [],
+        votes: {},
         lastReadPost: null,
         noMorePost: false
     },
 
     lastPostUpdatedAt: null,
 
+    async refreshVotes() {
+        await wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                type: 'getTopicVotes',
+                topicValue: 1
+            }
+        }).then(r => {
+            r.result.sort((a, b) => {
+                return a.votes.length > b.votes.length ? -1 : 1
+            })
+            // console.log(r.result)
+            let votes = {}, current = 1
+            for (let i = 0; i < r.result.length; i++) {
+                const e = r.result[i];
+                if (i > 0 && r.result[i-1].votes.length !== e.votes.length) current++
+                votes[e._id] = {
+                    rank: current,
+                    count: e.votes.length,
+                    hasVoted: e.hasVoted
+                }
+            }
+            this.setData({
+                votes
+            })
+        })
+
+    },
+
     async refresh(clear) {
         if (clear) {
             this.lastPostUpdatedAt = null
         }
+
         return await wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -90,6 +121,11 @@ Page({
         wx.startPullDownRefresh()
     },
 
+    onPostVote(e) {
+        // console.log(e)
+        this.refreshVotes()
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -108,6 +144,7 @@ Page({
             sorterValue: featureStore.data.post.defaultSorterValue
         })
         // console.log(this.data.$f)
+        this.refreshVotes()
         this.refresh(true)
     },
 
@@ -143,6 +180,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
+        this.refreshVotes()
         this.refresh(true).then(setTimeout(wx.stopPullDownRefresh, 500))
     },
 

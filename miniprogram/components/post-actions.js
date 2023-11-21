@@ -5,7 +5,8 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        post: Object
+        post: Object,
+        votes: Object
     },
 
     /**
@@ -57,6 +58,29 @@ Component({
             // this.setData({
             //     showInput: !this.data.showInput
             // })
+        },
+
+        onVote(e) {
+            wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    type: 'votePost',
+                    id: this.data.post._id
+                }
+            }).then(r => {
+                if (!r.result.success) {
+                    wx.showToast({
+                        title: r.result.reason,
+                        icon: 'error'
+                    })
+                } else {
+                    // https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html#%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6
+                    this.triggerEvent('postVote', {}, {
+                        bubbles: true,
+                        composed: true
+                    })
+                }
+            })
         },
 
         onEdit(e) {

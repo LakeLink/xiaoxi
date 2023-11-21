@@ -79,6 +79,12 @@ post -> comment -> subComment
 * author (openid)
 * content (string)
 
+#### votes
+
+* day (timestamp)
+* user (openid)
+* topicIds (string[])
+
 
 ## 3rdparty 目录
 因为微信不懂 npm 构建，很多包中非直接引用的文件无法使用

@@ -6,7 +6,8 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        post: Object
+        post: Object,
+        votes: Object
     },
 
     /**
@@ -70,6 +71,10 @@ Component({
             this.setData({
                 'post.comments': e.detail.comments
             })
-        }
+        },
+
+        // onPostVote(e) {
+        //     console.log(e)
+        // }
     }
 })
