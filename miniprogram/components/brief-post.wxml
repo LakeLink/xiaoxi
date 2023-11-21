@@ -11,7 +11,7 @@
             <t-icon name="arrow-triangle-up-filled" />
         </view>
         <view wx:if="{{post.topicValue}}" class="topic">#{{$f.post.topics[post.topicValue].label}}</view>
-    <text wx:if="{{votes}}">得票排名：{{votes.rank}}</text>
+        <text wx:if="{{votes}}">得票排名：{{votes.rank}}</text>
     </view>
     <text class="content" user-select>{{post.textContent}}</text>
     <view class="images-container">
