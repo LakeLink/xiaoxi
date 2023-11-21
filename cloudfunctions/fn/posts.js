@@ -714,6 +714,11 @@ exports.vote = async (event, context) => {
                     }
                 }).then(r => r.stats)
                 if (stats.updated) {
+                    await db.collection('posts').doc(event.id).update({
+                        data: {
+                            updatedAt: dayjs().valueOf()
+                        }
+                    })
                     return {
                         success: true
                     }
@@ -755,4 +760,21 @@ exports.undoVote = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
+    let t = dayjs().startOf('day').unix()
+    let stats = await col.doc(OPENID + '^' + t).update({
+        data: {
+            topicIds: _.pull(event.id)
+        }
+    }).then(r => r.stats)
+
+    if (stats.updated) {
+        return {
+            success: true
+        }
+    } else {
+        return {
+            success: false,
+            reason: '数据库错误'
+        }
+    }
 }
