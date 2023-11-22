@@ -30,7 +30,7 @@
 
 .rank--prefix {
     vertical-align: super;
-    color: rgba(119, 136, 153, 0.5);
+    color: rgba(119, 136, 153, 0.4);
     font-weight: bold;
     font-size: 40rpx;
 }
@@ -40,7 +40,7 @@
 }
 
 .rank--normal {
-    color: rgba(119, 136, 153, 0.5)
+    color: rgba(119, 136, 153, 0.4)
 }
 
 .userinfo {
