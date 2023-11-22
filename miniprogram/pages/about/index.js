@@ -35,7 +35,7 @@ Page({
         wx.cloud.callFunction({
             name: 'fn',
             data: {
-                type: 'getUserAvatarPath'
+                type: 'newUserAvatarPath'
             }
         }).then(r => {
             wx.cloud.uploadFile({

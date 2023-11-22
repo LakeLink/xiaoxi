@@ -65,7 +65,9 @@ exports.main = async function (event, context) {
         case 'saveUser':
             return await user.save(event, context)
         case 'getUserAvatarPath':
-            return await user.getAvatarPath(event, context)
+            return await user.newAvatarPath(event, context)
+        case 'newUserAvatarPath':
+            return await user.newAvatarPath(event, context)
         case 'verifyUser':
             return await user.verify(event, context)
         case 'countUserUnreadPosts':

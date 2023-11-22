@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk');
+const dayjs = require('dayjs')
 
 exports.countUnreadPosts = async (event, context) => {
     
@@ -202,7 +203,7 @@ exports.save = async (event, context) => {
     }
 }
 
-exports.getAvatarPath = async (event, context) => {
+exports.newAvatarPath = async (event, context) => {
     // 获取基础信息
     const {
         ENV,
@@ -210,5 +211,5 @@ exports.getAvatarPath = async (event, context) => {
         APPID
     } = cloud.getWXContext()
 
-    return `Avatars/${OPENID}`
+    return `Avatars/${OPENID}^${dayjs().unix()}`
 }

@@ -91,7 +91,7 @@ function votesSorter(event, _, $, agg, cond) {
     }).addFields({
       votes: $.arrayElemAt(['$votes', 0])
     }).sort({
-      pinned: -1,
+    //   pinned: -1,
       'votes.count': -1
     }).limit(features.config.post.sorters[1].limit)
 
