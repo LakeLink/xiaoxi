@@ -2,6 +2,8 @@
 import * as echarts from '@3rdparty/ec-canvas/echarts';
 import Message from 'tdesign-miniprogram/message/index';
 
+const dayjs = require('dayjs')
+
 Page({
 
     /**
@@ -15,6 +17,8 @@ Page({
         collegeList: ["", "α", "β", "γ", "δ", "教", "博"],
         notices: []
     },
+
+    pauseNudge: {},
 
     async loadRank() {
         wx.cloud.callFunction({
@@ -78,7 +82,6 @@ Page({
                 type: 'getWeRunNotices'
             }
         }).then(r => {
-            console.log(r)
             this.setData({
                 notices: r.result
             })
@@ -100,8 +103,28 @@ Page({
     },
 
     onTapAvatar(e) {
-        console.log(e)
+        function hint() {
+            Message.warning({
+                context: this,
+                offset: [20, 32],
+                duration: 5000,
+                content: '一分钟只能拍TA一次哦',
+            });
+        }
+
         let u = this.data.rankForList[e.target.dataset.idx]
+
+        if (this.pauseNudge[u._id]) {
+            let t = dayjs().startOf('minute').unix()
+            if (t <= this.pauseNudge[u._id]) {
+                console.log('pause nudge:', t, this.pauseNudge[u._id])
+                hint()
+                return
+            }
+        }
+
+        this.pauseNudge[u._id] = dayjs().unix()
+
         wx.cloud.callFunction({
             name: 'fn',
             data: {
@@ -118,13 +141,7 @@ Page({
                 });
                 this.loadRank()
             } else {
-                Message.warning({
-                    context: this,
-                    offset: [20, 32],
-                    duration: 5000,
-                    content: '一分钟只能拍TA一次哦',
-                });
-
+                hint()
             }
         })
     },
@@ -143,7 +160,6 @@ Page({
                         })
                         return
                     }
-                    console.log(res)
                     wx.cloud.callFunction({
                         name: 'fn',
                         data: {
