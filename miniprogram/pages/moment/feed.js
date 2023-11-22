@@ -57,6 +57,10 @@ Page({
             loading: true
         })
 
+        Message.hide({
+            context: this
+        })
+
         if (clear) {
             this.lastPostUpdatedAt = null
         }
@@ -107,9 +111,6 @@ Page({
 
             tabBarStore.setBadgeOfPage('/' + this.route, {})
 
-            Message.hide({
-                context: this
-            })
             return r.result.list.length
         }).finally(() => {
             this.setData({
