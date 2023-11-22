@@ -16,7 +16,7 @@
         </view>
     </block>
     <view wx:if="{{noMorePost}}" class="end-hint">
-        <text wx:if="{{$f.post.sorters[sorterValue].limit}}">—— 仅显示前 {{$f.post.sorters[sorterValue].limit}} 条 ——</text>
+        <text wx:if="{{$f.post.sorters[sorterValue].limit}}">—— 「{{$f.post.sorters[sorterValue].label}}」仅显示前 {{$f.post.sorters[sorterValue].limit}} 条 ——</text>
         <text wx:else>—— 没有更多了 ——</text>
     </view>
 
