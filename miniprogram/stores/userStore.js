@@ -23,7 +23,7 @@ class UserStore extends create.Store {
             }
         }).then(r => {
             this.data.unreadPostCount = r.result
-            this.update()
+            // this.update()
             return r.result
         })
     }
