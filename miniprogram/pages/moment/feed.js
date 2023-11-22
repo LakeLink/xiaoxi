@@ -15,6 +15,7 @@ Page({
         sorterValue: 0,
         posts: [],
         votes: {},
+        loading: true,
         lastReadPost: null,
         noMorePost: false
     },
@@ -52,6 +53,10 @@ Page({
     },
 
     async refresh(clear) {
+        this.setData({
+            loading: true
+        })
+
         if (clear) {
             this.lastPostUpdatedAt = null
         }
@@ -106,6 +111,10 @@ Page({
                 context: this
             })
             return r.result.list.length
+        }).finally(() => {
+            this.setData({
+                loading: false
+            })
         })
     },
 
