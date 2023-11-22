@@ -1,52 +1,95 @@
 // pages/stats/foods.js
-const items = new Array(12).fill({
-    label: '标题文字'
-}, 0, 12);
+const image = 'https://tdesign.gtimg.com/miniprogram/images/example2.png';
+// const items = new Array(12).fill({
+//     label: '标题文字',
+//     image
+// }, 0, 12);
 Page({
     /**
      * 页面的初始数据
      */
     data: {
+        luckyVisible: false,
         sideBarIndex: 1,
         scrollTop: 0,
         categories: [{
-                label: '选项一',
-                title: '标题一',
+                label: 'C17',
+                title: 'C17',
                 badgeProps: {},
-                items,
+                items: [{
+                    label: '￥1.8',
+                    image
+                }, {
+                    label: '彩虹碟',
+                    image
+                }],
             },
             {
-                label: '选项二',
-                title: '标题二',
+                label: 'C18-1F',
+                title: 'C18-1F',
                 badgeProps: {
                     dot: true,
                 },
-                items: items.slice(0, 9),
+                items: [{
+                    label: '茶泡饭',
+                    image
+                },{
+                    label: '拌/汤面',
+                    image
+                }],
             },
             {
-                label: '选项三',
-                title: '标题三',
+                label: 'C18-2F',
+                title: 'C18-2F',
                 badgeProps: {},
-                items: items.slice(0, 9),
+                items: [{
+                    label: '麻辣烫',
+                    image
+                }, {
+                    label: '水饺',
+                    image
+                }, {
+                    label: '烧仙草',
+                    image
+                }],
             },
             {
-                label: '选项四',
-                title: '标题四',
+                label: 'C19-1F',
+                title: 'C19',
+                badgeProps: {},
+                items: [{
+                    label: '???',
+                    image
+                }],
+            },
+            {
+                label: 'C19-西餐',
+                title: 'C19-西餐',
                 badgeProps: {
                     count: 6,
                 },
-                items: items.slice(0, 6),
-            },
-            {
-                label: '选项五',
-                title: '标题五',
-                badgeProps: {},
-                items: items.slice(0, 3),
-            },
+                items: [{
+                    label: '披萨',
+                    image
+                }, {
+                    label: '沙拉',
+                    image
+                }, {
+                    label: '牛排',
+                    image
+                }, {
+                    label: '咖喱饭',
+                    image
+                }, {
+                    label: '虾仁炒饭',
+                    image
+                }],
+            }
         ],
         subscribed: false
     },
-
+    offsetTopList: [],
+    allDishes: [],
     refresh() {
         wx.cloud.callFunction({
             name: 'fn',
@@ -60,7 +103,23 @@ Page({
             })
         })
     },
-
+    onLuckyVisibleChange(e) {
+        this.setData({
+            luckyVisible: e.detail.visible,
+        });
+    },
+    onTapLucky(e) {
+        let item = this.allDishes[Math.trunc(Math.random() * this.allDishes.length)]
+        this.setData({
+            luckyVisible: true,
+            luckyItem: item
+        })
+    },
+    onTapCloseLucky(e) {
+        this.setData({
+            luckyVisible: false
+        })
+    },
     onTapSubscribe(e) {
         console.log(e)
 
@@ -81,7 +140,11 @@ Page({
     },
 
     onLoad() {
-        /*
+        this.data.categories.forEach(e => {
+            this.allDishes = this.allDishes.concat(e.items)
+        })
+        console.log(this.allDishes)
+
         const query = wx.createSelectorQuery().in(this);
         const {
             sideBarIndex
@@ -95,7 +158,7 @@ Page({
                     scrollTop: rects[sideBarIndex].top
                 });
             })
-            .exec();*/
+            .exec();
         // this.refresh();
     },
     onSideBarChange(e) {
@@ -140,8 +203,7 @@ Page({
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow() {
-    },
+    onShow() {},
 
     /**
      * 生命周期函数--监听页面隐藏

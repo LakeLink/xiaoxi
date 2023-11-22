@@ -2,3 +2,51 @@
     background-color: #fff;
     padding: 16rpx 32rpx;
 }
+
+page {
+    background-color: #fff;
+}
+
+.side-bar-wrapper {
+    display: flex;
+    height: calc(100vh - var(--bottom-safe-area));
+}
+
+.side-bar-wrapper .content {
+    flex: 1;
+}
+
+.side-bar-wrapper .section {
+    padding: 32rpx 0;
+}
+
+.side-bar-wrapper .title {
+    padding-left: 40rpx;
+    margin-bottom: 8rpx;
+    line-height: 52rpx;
+}
+
+.side-bar-wrapper .image {
+    width: 96rpx;
+    height: 96rpx;
+}
+
+.block {
+    /*background: #fff;*/
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.block--center {
+    width: 480rpx;
+    height: 480rpx;
+}
+
+.close-btn {
+    position: absolute;
+    left: 50%;
+    margin-left: -32rpx;
+    bottom: -100rpx;
+}
