@@ -18,7 +18,7 @@ Page({
         notices: []
     },
 
-    pauseNudge: {},
+    lastNudge: {},
 
     async loadRank() {
         wx.cloud.callFunction({
@@ -114,16 +114,17 @@ Page({
 
         let u = this.data.rankForList[e.target.dataset.idx]
 
-        if (this.pauseNudge[u._id]) {
+        if (this.lastNudge[u._id]) {
             let t = dayjs().startOf('minute').unix()
-            if (t <= this.pauseNudge[u._id]) {
-                console.log('pause nudge:', t, this.pauseNudge[u._id])
+            // 一分钟一次
+            if (t <= this.lastNudge[u._id]) {
+                console.log('pause nudge:', t, this.lastNudge[u._id])
                 hint()
                 return
             }
         }
 
-        this.pauseNudge[u._id] = dayjs().unix()
+        this.lastNudge[u._id] = dayjs().unix()
 
         wx.cloud.callFunction({
             name: 'fn',
