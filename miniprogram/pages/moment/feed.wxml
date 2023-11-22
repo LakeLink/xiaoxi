@@ -23,5 +23,5 @@
         <text wx:else>—— 没有更多了 ——</text>
     </view>
 
-    <t-fab style="right: 32rpx; bottom: 200rpx;" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
+    <t-fab style="right: 32rpx; bottom: calc(var(--bottom-safe-area) + 32rpx);" icon="add" bind:click="onTapCreate" aria-label="增加"></t-fab>
 </view>

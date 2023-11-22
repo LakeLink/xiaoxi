@@ -5,13 +5,14 @@ page {
     --td-brand-color: #66cc66;
     --td-brand-color-active: #43b443;
     --td-brand-color-disabled: #8fd68f;
+    --bottom-safe-area: calc(env(safe-area-inset-bottom) + var(--td-tab-bar-height, 80rpx) + calc(2*16rpx));
     /* @brand-color-focus: var(--td-brand-color-focus, @primary-color-1);
     @brand-color-light: var(--td-brand-color-light, @primary-color-1);
     @brand-color-light-active: var(--td-brand-color-light-active, @primary-color-2); */
 }
 
 .safe-area {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 80rpx + 40rpx)
+    padding-bottom: var(--bottom-safe-area)
 }
 
 .college-0 {
@@ -41,4 +42,3 @@ page {
 .college-6 {
     color: #00498F
 }
-
