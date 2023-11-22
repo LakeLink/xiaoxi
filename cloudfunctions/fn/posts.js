@@ -58,6 +58,46 @@ function getAvatarUrlforStagename(s) {
     return avatars[hashCode(s) % 5]
 }
 
+function updatedAtSorter(event, _, $, agg, cond) {
+    // filter: get older posts
+    if (event.updatedBefore)
+        cond.push({
+            updatedAt: _.lt(event.updatedBefore),
+            pinned: false // pinned posts already displayed
+        })
+
+    if (cond.length) agg = agg.match(_.and(cond))
+        .sort({
+            pinned: -1,
+            updatedAt: -1
+        })
+        .limit(20)
+    return agg
+}
+
+function votesSorter(event, _, $, agg, cond) {
+    if (cond.length) agg = agg.match(_.and(cond))
+
+    agg = agg.lookup({
+        from: 'votes',
+        let: {
+            id: '$_id'
+        },
+        pipeline: $.pipeline()
+            .match(_.expr($.in(['$$id', '$topicIds'])))
+            .count('count')
+            .done(),
+        as: 'votes'
+    }).addFields({
+      votes: $.arrayElemAt(['$votes', 0])
+    }).sort({
+      pinned: -1,
+      'votes.count': -1
+    }).limit(features.config.post.sorters[1].limit)
+
+    return agg
+}
+
 exports.getPostsV2 = async (event, context) => {
     // 获取基础信息
     const {
@@ -108,15 +148,19 @@ exports.getPostsV2 = async (event, context) => {
         })
     }
 
+    switch (event.sorterValue) {
+        case 0:
+            agg = updatedAtSorter(event, _, $, agg, cond)
+            break;
+        case 1:
+            agg = votesSorter(event, _, $, agg, cond)
+            break;
+        default:
+            agg = updatedAtSorter(event, _, $, agg, cond)
+            break;
+    }
 
-    // filter: get older posts
-    if (event.updatedBefore)
-        cond.push({
-            updatedAt: _.lt(event.updatedBefore),
-            pinned: false // pinned posts already displayed
-        })
 
-    if (cond.length) agg = agg.match(_.and(cond))
     /*if (event.id) {
         filtered = false
         agg = agg.match({
@@ -134,11 +178,6 @@ exports.getPostsV2 = async (event, context) => {
     agg = quickAction.lookupLiked(agg, _, $, OPENID)
 
     agg = quickAction.lookupUserInfo('author', agg, _, $, OPENID)
-        .sort({
-            pinned: -1,
-            updatedAt: -1
-        })
-        .limit(20)
 
     let r = await quickAction.lookupComments(agg, _, $, OPENID).end()
 
@@ -162,9 +201,12 @@ exports.getPostsV2 = async (event, context) => {
 
         // r.list[i].alreadyLiked = e.likedBy.includes(OPENID)
 
-        if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
-            lastUnreadPost = i
+        if (!event.sorterValue) {
+            if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
+                lastUnreadPost = i
+            }
         }
+
 
         r.list[i].topic = getTopicLabel(e.topicValue)
 

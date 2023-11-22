@@ -17,6 +17,10 @@ exports.config = {
         sorters: [{
             label: "最新动态",
             value: 0
+        },{
+            label: "得票最高",
+            value: 1,
+            limit: 10
         }],
         defaultSorterValue: 0,
         visibilities: [{
