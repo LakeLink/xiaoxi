@@ -35,8 +35,10 @@
 
 * author (openid)
 * publishedAt (timestamp)
-* updatedAt (timestamp, milliseconds)
-* topic (string)
+* updatedAt (timestamp, milliseconds, index)
+* topicValue (number, index)
+* visibilityValue (number, index)
+* pinned (boolean, index)
 * textContent (String)
 * images (string[])
 * likedBy (openid[])
@@ -44,7 +46,7 @@
 #### comments
 
 * author (openid)
-* parentId (string)
+* parentId (string, index)
 * publishedAt (timestamp)
 * textContent (String)
 * images (string[])
@@ -85,6 +87,11 @@ post -> comment -> subComment
 * user (openid)
 * topicIds (string[])
 
+## Cloud Functions
+
+### Timezone
+
+TZ = Asia/Shanghai
 
 ## 3rdparty 目录
 因为微信不懂 npm 构建，很多包中非直接引用的文件无法使用
