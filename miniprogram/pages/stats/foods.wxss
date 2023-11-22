@@ -3,9 +3,9 @@
     padding: 16rpx 32rpx;
 }
 
-page {
+/* page {
     background-color: #fff;
-}
+} */
 
 .side-bar-wrapper {
     display: flex;

@@ -6,16 +6,16 @@
             <t-icon t-class="close-btn" name="close-circle" size="32" color="#fff" bind:tap="onTapCloseLucky" />
         </view>
     </t-popup>
-    <!-- <view style=" margin: 32rpx; padding: 32rpx; border-radius: 8rpx; background-color: white;">
+    <view style=" margin: 32rpx; padding: 32rpx; border-radius: 8rpx; background-color: white;">
         <text style="display: block; font-size:large; font-weight: bold;">什么是“爱干饭”？</text>
         <text style="display: block; margin-top: 16rpx;">“爱干饭”将汇集各大食堂的优质菜品，为你提供打分评价、“今天吃什么”等欢乐的饮食服务。</text>
         <t-button wx:if="{{!subscribed}}" style="margin-top: 24px;" theme="primary" bind:tap="onTapSubscribe">订阅开放通知</t-button>
         <t-button wx:if="{{subscribed}}" style="margin-top: 24px;" disabled bind:tap="onTapSubscribe">已订阅开放通知</t-button>
-    </view> -->
+    </view>
     <!-- <view class="example-search">
         <t-search model:value="{{searchValue}}" placeholder="搜吃的" />
     </view> -->
-    <view class="side-bar-wrapper">
+    <!-- <view class="side-bar-wrapper">
         <t-side-bar value="{{sideBarIndex}}" bind:change="onSideBarChange">
             <t-side-bar-item wx:for="{{categories}}" wx:key="index" value="{{item.value || index}}" label="{{item.label}}" badge-props="{{item.badgeProps}}" />
         </t-side-bar>
@@ -31,5 +31,5 @@
             </view>
         </scroll-view>
     </view>
-    <t-fab style="right: 32rpx; bottom: calc(var(--bottom-safe-area) + 32rpx);" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab>
+    <t-fab style="right: 32rpx; bottom: calc(var(--bottom-safe-area) + 32rpx);" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab> -->
 </view>
