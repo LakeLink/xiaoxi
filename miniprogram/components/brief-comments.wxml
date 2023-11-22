@@ -6,12 +6,12 @@
 </view>
 
 <view wx:if="{{comments.length > 7 && !showAllComments}}" style="margin-top: 12px; margin-bottom: 4px; margin-left: 8px; font-size: small; color: grey;" bindtap="onShowEarlier">······ 更早 {{comments.length-7}} / {{comments.length}}</view>
-<view style="margin-top: 8px;">
+<view wx:if="{{comments.length}}" class="comments-container">
     <view wx:for="{{comments}}" wx:for-item="c">
         <view wx:if="{{ index >= comments.length-7 || showAllComments }}" bind:longtap="onDelete" data-idx="{{index}}">
             <!-- <popup-user-name-avatar style="display: inline-block" user="{{c.userInfo}}" showPopup="{{showPopup}}">
             </popup-user-name-avatar> -->
-            <text class="{{'~college-' + c.userInfo.collegeIndex}}">{{c.userInfo.nickname}}：</text>
+            <text class="author ~college-{{c.userInfo.collegeIndex}}">{{c.userInfo.nickname}}：</text>
             <text>{{c.textContent}}</text>
         </view>
     </view>
