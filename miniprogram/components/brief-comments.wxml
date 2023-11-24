@@ -12,7 +12,7 @@
             <!-- <popup-user-name-avatar style="display: inline-block" user="{{c.userInfo}}" showPopup="{{showPopup}}">
             </popup-user-name-avatar> -->
             <text class="author ~college-{{c.userInfo.collegeIndex}}">{{c.userInfo.nickname}}：</text>
-            <text>{{c.textContent}}</text>
+            <text user-select>{{c.textContent}}</text>
         </view>
     </view>
 </view>

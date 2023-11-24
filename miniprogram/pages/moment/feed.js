@@ -177,10 +177,11 @@ Page({
      */
     onShow() {
         // console.log(userStore.data)
-        if (userStore.data.unreadPostCount) {
+        // 不是首次刷新
+        if (userStore.data.unreadPostCount && this.lastPostUpdatedAt) {
             Message.info({
                 context: this,
-                offset: ['60rpx', '32rpx'],
+                offset: ['120rpx', '32rpx'],
                 duration: 0,
                 content: `有${userStore.data.unreadPostCount}条新内容，点我刷新！`,
             });
