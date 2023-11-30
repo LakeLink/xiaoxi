@@ -1,0 +1,24 @@
+.comment-input-container {
+    display: flex;
+    gap: 24rpx;
+    margin: 24rpx 0 0 0;
+    align-items: center;
+    margin-top: 8px
+}
+
+.comment-input {
+    background: rgb(230, 230, 230);
+    padding: 12rpx;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.comments-container {
+    margin-top: 32rpx;
+    border-top: dotted 2px lightgray;
+    padding-top: 16rpx;
+}
+
+.author {
+    font-weight: bold;
+}

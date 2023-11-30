@@ -1,0 +1,40 @@
+<!--pages/stats/feast/food.wxml-->
+<view class="safe-area-nobar">
+
+    <view class="food">
+        <view class="food--title">
+            <t-image width="72" height="72"></t-image>
+            <text>{{food.name}} / ??? / ???</text>
+            <text>￥17</text>
+        </view>
+        <view class="food--meta">
+            <view>
+                Average
+                <text class="big-score">{{avgRating}}</text>
+            </view>
+            <view style="flex-grow: 1;">
+                <view wx:for="{{ratingInfo}}" class="food--rate">
+                    <t-rate value="{{item.rating}}" gap="0" size="10" />
+                    <t-progress class="food--progress" percentage="{{item.percent}}" />
+                </view>
+            </view>
+        </view>
+        <view class="food--meta">
+            <view>
+                <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" />
+                立刻评分
+            </view>
+            <t-rate value="{{myRating}}" bind:change="onRateChange" bind:touchend="onTouchRateEnd" />
+        </view>
+    </view>
+    <view class="sorter">
+        评论排序
+        <t-tabs defaultValue="new" theme="tag" space-evenly="{{false}}">
+            <t-tab-panel label="最新" value="new" />
+            <t-tab-panel label="最热" value="hot" />
+        </t-tabs>
+    </view>
+    <view wx:for="{{comments}}" class="comment">
+        <comment post="{{item}}"></comment>
+    </view>
+</view>

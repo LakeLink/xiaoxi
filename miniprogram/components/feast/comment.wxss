@@ -1,0 +1,80 @@
+.meta {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.pinned {
+    flex-shrink: 0;
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 8px;
+    padding: 4rpx 8rpx 6rpx 12rpx;
+    background: rgb(255, 153, 170);
+    color: white;
+}
+
+.rank {
+    vertical-align: text-top;
+    position: absolute;
+    font-weight: bolder;
+    font-size: 128rpx;
+    right: -40rpx;
+    top: -80rpx;
+}
+
+.rank--prefix {
+    vertical-align: super;
+    color: rgba(119, 136, 153, 0.4);
+    font-weight: bold;
+    font-size: 40rpx;
+}
+
+.rank--top {
+    color: rgba(255, 123, 0, 0.4);
+}
+
+.rank--normal {
+    color: rgba(119, 136, 153, 0.4)
+}
+
+.userinfo {
+    flex-shrink: 1;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.author {
+    /* display: block; */
+    font-weight: bold;
+    /* font-size: small; */
+}
+
+.when {
+    color: gray;
+    font-size: small;
+}
+
+.content {
+    display: block;
+    margin: 24rpx 24rpx 0;
+}
+
+.images-container {
+    margin-top: 16rpx;
+    /* margin-left: 16rpx; */
+    display: flex;
+    gap: 24rpx;
+    flex-wrap: wrap;
+}
+
+.image {
+    border: lightgrey dashed;
+}

@@ -1,0 +1,12 @@
+{
+    "component": true,
+    "usingComponents": {
+        "t-avatar": "tdesign-miniprogram/avatar/avatar",
+        "t-image": "tdesign-miniprogram/image/image",
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "t-rate": "tdesign-miniprogram/rate/rate",
+        "comment-actions": "/components/feast/comment-actions",
+        "sub-comments": "/components/feast/sub-comments"
+    },
+    "styleIsolation": "apply-shared"
+}

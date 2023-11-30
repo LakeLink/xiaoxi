@@ -1,0 +1,102 @@
+/* pages/stats/feast/food.wxss */
+.food {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16rpx;
+
+    background: white;
+    padding: 32rpx;
+    border-bottom: dashed lightgray;
+}
+
+.food--title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+}
+
+.food--meta {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: space-between;
+    gap: 64rpx;
+}
+
+.food--rate {
+    display: flex;
+    gap: 8rpx;
+    /* flex-direction: column; */
+}
+
+.food--progress {
+    /* width: 140rpx; */
+    flex-grow: 1;
+}
+
+.big-score {
+    display: block;
+    font-weight: bolder;
+    font-size: xx-large;
+}
+
+.sorter {
+    display: flex;
+    align-items: center;
+
+    padding: 0 32rpx;
+    background-color: white;
+}
+
+.comment {
+    background-color: white;
+    padding: 32rpx;
+
+    border-bottom: dashed lightgray;
+}
+
+.meta {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.userinfo {
+    flex-shrink: 1;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.author {
+    /* display: block; */
+    font-weight: bold;
+    /* font-size: small; */
+}
+
+.when {
+    color: gray;
+    font-size: small;
+}
+
+.content {
+    display: block;
+    margin: 24rpx 24rpx 0;
+}
+
+.images-container {
+    margin-top: 16rpx;
+    /* margin-left: 16rpx; */
+    display: flex;
+    gap: 24rpx;
+    flex-wrap: wrap;
+}
+
+.image {
+    border: lightgrey dashed;
+}

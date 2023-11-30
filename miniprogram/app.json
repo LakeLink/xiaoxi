@@ -5,7 +5,11 @@
         "pages/moment/feed",
         "pages/moment/create",
         "pages/about/index",
-        "pages/about/verify"
+        "pages/about/verify",
+        "pages/stats/feast/index",
+        "pages/stats/feast/canteen",
+        "pages/stats/feast/die",
+        "pages/stats/feast/food"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
@@ -15,7 +19,8 @@
     },
     "tabBar": {
         "custom": true,
-        "list": [{
+        "list": [
+            {
                 "pagePath": "pages/stats/stepsRank",
                 "text": "爱步行"
             },
@@ -24,7 +29,7 @@
                 "text": "爱水贴"
             },
             {
-                "pagePath": "pages/stats/foods",
+                "pagePath": "pages/stats/feast/index",
                 "text": "爱干饭"
             },
             {

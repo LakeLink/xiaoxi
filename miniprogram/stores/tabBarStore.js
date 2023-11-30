@@ -20,7 +20,7 @@ class TabBarStore extends create.Store {
             },
             {
                 value: 2,
-                url: '/pages/stats/foods',
+                url: '/pages/stats/feast/index',
                 label: '爱干饭',
                 icon: 'rice',
                 badge: {}

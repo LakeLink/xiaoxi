@@ -1,0 +1,7 @@
+{
+    "usingComponents": {
+        "t-fab": "tdesign-miniprogram/fab/fab",
+        "t-rate": "tdesign-miniprogram/rate/rate",
+        "t-image": "tdesign-miniprogram/image/image"
+      }
+}

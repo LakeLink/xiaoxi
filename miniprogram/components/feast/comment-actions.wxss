@@ -1,0 +1,19 @@
+.action {
+    display: flex;
+    gap: 16rpx;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.action-button {
+    margin: 0;
+    /* margin-left: 16rpx; */
+    /* margin-right: 16rpx; */
+}
+
+.liked-avatar-group {
+    margin-left: 16px;
+    --td-avatar-margin-left: -16px;
+}
+

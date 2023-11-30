@@ -1,0 +1,22 @@
+/* pages/stats/feast/index.wxss */
+
+.canteen {
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+
+    background: white;
+    padding: 32rpx;
+    border-bottom: dashed lightgray;
+}
+.canteen--title {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.canteen--meta {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
