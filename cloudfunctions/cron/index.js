@@ -17,7 +17,7 @@ async function getPreviousDayRank() {
     const $ = _.aggregate
 
     let t2 = dayjs().tz('Asia/Shanghai').subtract(1, 'day').endOf('day'),
-        t1 = dayjs().tz('Asia/Shanghai').startOf('month')
+        t1 = dayjs().tz('Asia/Shanghai').subtract(1, 'day').startOf('month')
     const r = await db.collection('werun_steps').aggregate().match({
         timestamp: _.and(_.gte(t1.unix()), _.lte(t2.unix()))
     }).group({
