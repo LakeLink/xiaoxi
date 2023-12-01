@@ -3,12 +3,13 @@ const quickAction = require('./quickAction')
 const features = require('./features.js')
 
 const dayjs = require('dayjs')
-
 require('dayjs/locale/zh-cn')
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
 dayjs.extend(require('dayjs/plugin/relativeTime'))
+
 dayjs.locale('zh-cn')
+dayjs.tz.setDefault("Asia/Shanghai")
 
 // exports.getTopics = async (event, context) => {
 //     return ["三行诗"]
@@ -733,6 +734,13 @@ exports.vote = async (event, context) => {
     const col = db.collection('votes')
     const _ = db.command
     const $ = _.aggregate
+
+    if (dayjs().isAfter(dayjs.tz('2023-12-02 00:00', 'Asia/Shanghai'))) {
+        return {
+            success: false,
+            reason: '嘿！投票结束了哦'
+        }
+    }
 
     let t = dayjs().startOf('day').unix()
     try {
