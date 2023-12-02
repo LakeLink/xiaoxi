@@ -1,15 +1,8 @@
 const cloud = require('wx-server-sdk');
 const quickAction = require('./quickAction')
 const features = require('./features.js')
-
-const dayjs = require('dayjs')
-require('dayjs/locale/zh-cn')
-dayjs.extend(require('dayjs/plugin/utc'))
-dayjs.extend(require('dayjs/plugin/timezone'))
-dayjs.extend(require('dayjs/plugin/relativeTime'))
-
-dayjs.locale('zh-cn')
-dayjs.tz.setDefault("Asia/Shanghai")
+const common = require('./common')
+const dayjs = common.dayjs
 
 // exports.getTopics = async (event, context) => {
 //     return ["三行诗"]
@@ -90,10 +83,10 @@ function votesSorter(event, _, $, agg, cond) {
             .done(),
         as: 'votes'
     }).addFields({
-      votes: $.arrayElemAt(['$votes', 0])
+        votes: $.arrayElemAt(['$votes', 0])
     }).sort({
-    //   pinned: -1,
-      'votes.count': -1
+        //   pinned: -1,
+        'votes.count': -1
     }).limit(features.config.post.sorters[1].limit)
 
     return agg
@@ -183,43 +176,29 @@ exports.getPostsV2 = async (event, context) => {
     let r = await quickAction.lookupComments(agg, _, $, OPENID).end()
 
     let lastUnreadPost = null
-    for (let i = 0; i < r.list.length; i++) {
-        const e = r.list[i];
-        // e.authorInfo = e.authorInfo[0]
-        if (e.useStagename) {
-            r.list[i].userInfo = {
-                nickname: e.stagename,
-                avatarUrl: getAvatarUrlforStagename(e.author + e.stagename),
-                collegeIndex: e.userInfo.collegeIndex
+    common.each(r.list, {
+        stagename: true,
+        relativeTime: {
+            k1: 'updatedAt',
+            k2: 'relUpdatedAt'
+        },
+        adminEdit: user.admin,
+        customFunc: (arr, idx) => {
+            const e = arr[idx]
+            arr[idx].topic = getTopicLabel(e.topicValue)
+
+            if (!event.sorterValue) {
+                if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
+                    lastUnreadPost = i
+                }
             }
+            arr[idx].comments.forEach(c => {
+                if (user.admin) {
+                    c.canEdit = true
+                }
+            })
+                // e.comments.sort((a, b) => a.when > b.when)
         }
-
-        if (user.admin) {
-            r.list[i].canEdit = true
-        }
-        // e.canEdit = e.author == OPENID
-        r.list[i].relUpdatedAt = dayjs(e.updatedAt).toNow()
-
-        // r.list[i].alreadyLiked = e.likedBy.includes(OPENID)
-
-        if (!event.sorterValue) {
-            if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
-                lastUnreadPost = i
-            }
-        }
-
-
-        r.list[i].topic = getTopicLabel(e.topicValue)
-
-    }
-
-    r.list.forEach(e => {
-        e.comments.forEach(c => {
-            if (user.admin) {
-                c.canEdit = true
-            }
-        })
-        // e.comments.sort((a, b) => a.when > b.when)
     })
 
     await db.collection('users').doc(OPENID).update({
@@ -232,125 +211,6 @@ exports.getPostsV2 = async (event, context) => {
         list: r.list,
         lastReadPostAt: user.lastReadPostAt,
         lastUnreadPost
-    }
-}
-
-exports.getPosts = async (event, context) => {
-    if (event.topic) {
-        event.topicValue = getTopicValue(event.topic)
-    }
-    return await exports.getPostsV2(event, context)
-    // 获取基础信息
-    const {
-        ENV,
-        OPENID,
-        APPID
-    } = cloud.getWXContext()
-    console.log(OPENID)
-    const db = cloud.database()
-    const col = db.collection('posts')
-    const _ = db.command
-    const $ = _.aggregate
-
-    let user = await db.collection('users').doc(OPENID).get().then(r => r.data)
-
-    let agg = col.aggregate()
-    // console.log(user)
-    let cond = []
-    // if(!user.admin) {
-    if (user.verifiedIdentity) {
-        cond.push(_.or([{
-                visibility: 'all'
-            },
-            {
-                visibility: 'verified'
-            },
-            {
-                visibility: user.verifiedIdentity
-            },
-            {
-                author: OPENID
-            }
-        ]))
-    } else {
-        cond.push({
-            visibility: 'all'
-        })
-    }
-    // }
-
-    if (event.updatedBefore) {
-        cond.push({
-            updatedAt: _.lt(event.updatedBefore),
-            pinned: false
-        })
-    }
-
-    if (event.topic) {
-        cond.push({
-            topic: event.topic
-        })
-    }
-
-    agg = agg.match(_.and(cond))
-    /*if (event.id) {
-        filtered = false
-        agg = agg.match({
-            _id: event.id
-        })
-    } else {
-        filtered = !await quickAction.invitedUser(OPENID)
-        if (filtered) {
-            agg = agg.match({
-                _openid: OPENID
-            })
-        }
-    }*/
-
-    agg = quickAction.lookupUserInfo('author', agg, _, $, OPENID)
-        .sort({
-            pinned: -1,
-            updatedAt: -1
-        })
-        .limit(20)
-
-    let r = await quickAction.lookupComments(agg, _, $, OPENID).end()
-
-    r.list.forEach(e => {
-        // e.authorInfo = e.authorInfo[0]
-        if (e.useStagename) {
-            e.userInfo = {
-                nickname: e.stagename,
-                collegeIndex: e.userInfo.collegeIndex
-            }
-        }
-
-        if (user.admin) {
-            e.canEdit = true
-        }
-        // e.canEdit = e.author == OPENID
-        e.relUpdatedAt = dayjs(e.updatedAt).toNow()
-
-        e.alreadyLiked = e.likedBy.includes(OPENID)
-    })
-    r.list.forEach(e => {
-        e.comments.forEach(c => {
-            if (user.admin) {
-                c.canEdit = true
-            }
-        })
-        // e.comments.sort((a, b) => a.when > b.when)
-    })
-
-    await db.collection('users').doc(OPENID).update({
-        data: {
-            lastReadPostAt: dayjs().valueOf()
-        }
-    })
-    return {
-        success: true,
-        list: r.list,
-        lastReadPostAt: user.lastReadPostAt
     }
 }
 
