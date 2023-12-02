@@ -735,7 +735,7 @@ exports.vote = async (event, context) => {
     const _ = db.command
     const $ = _.aggregate
 
-    if (dayjs().isAfter(dayjs.tz('2023-12-02 00:00', 'Asia/Shanghai'))) {
+    if (dayjs().isAfter(dayjs.tz('2023-12-04 00:00', 'Asia/Shanghai'))) {
         return {
             success: false,
             reason: '嘿！投票结束了哦'
