@@ -10,7 +10,7 @@
             <text>置顶</text>
             <t-icon name="arrow-triangle-up-filled" />
         </view>
-        <view wx:if="{{post.topicValue}}" class="topic">#{{$f.post.topics[post.topicValue].label}}</view>
+        <view wx:if="{{post.topicValue}}" class="topic">#{{topics[post.topicValue].label}}</view>
         <view wx:if="{{votes}}" class="rank">
             <text class="rank--prefix">No.</text>
             <text class="{{votes.rank <= 3 ? 'rank--top' : 'rank--normal'}}">{{votes.rank}}</text>

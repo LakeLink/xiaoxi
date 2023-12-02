@@ -1,5 +1,4 @@
 // components/brief-post.js
-import featureStore from "~/stores/featureStore"
 Component({
 
     /**
@@ -7,7 +6,8 @@ Component({
      */
     properties: {
         post: Object,
-        votes: Object
+        votes: Object,
+        topics: Array
     },
 
     /**
@@ -36,7 +36,6 @@ Component({
 
     lifetimes: {
         ready() {
-            featureStore.bind(this, '$f')
         }
     },
 
