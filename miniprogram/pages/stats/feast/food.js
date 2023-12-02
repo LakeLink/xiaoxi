@@ -8,49 +8,49 @@ Page({
         food: {},
         ratingInfo: [],
         avgRating: "0.0",
-        comments: [{
+        ratings: [{
             userInfo: {
                 nickname: '小西'
             },
             relUpdatedAt: '三小时前',
             textContent: '吃吃喝喝睡睡美滋滋'
         }],
-        myRating: 0,
-        ratingSubmitting: false
+        // myRating: 0,
+        // ratingSubmitting: false
     },
 
     foodId: "",
 
-    onRateChange(e) {
-        this.setData({
-            myRating: e.detail.value
-        })
-    },
+    // onRateChange(e) {
+    //     this.setData({
+    //         myRating: e.detail.value
+    //     })
+    // },
 
-    onTouchRateEnd(e) {
-        if (this.data.ratingSubmitting) return
-        if (this.data.myRating >= 1 && this.data.myRating <= 5) {
-            this.setData({
-                ratingSubmitting: true
-            })
-            wx.cloud.callFunction({
-                name: 'fn',
-                data: {
-                    mod: 'feast',
-                    func: 'rate',
-                    targetId: this.foodId,
-                    targetType: 'food',
-                    rating: this.data.myRating
-                }
-            }).then(r => {
-                this.refresh()
-            }).finally(() => {
-                this.setData({
-                    ratingSubmitting: false
-                })
-            })
-        }
-    },
+    // onTouchRateEnd(e) {
+    //     if (this.data.ratingSubmitting) return
+    //     if (this.data.myRating >= 1 && this.data.myRating <= 5) {
+    //         this.setData({
+    //             ratingSubmitting: true
+    //         })
+    //         wx.cloud.callFunction({
+    //             name: 'fn',
+    //             data: {
+    //                 mod: 'feast',
+    //                 func: 'rate',
+    //                 targetId: this.foodId,
+    //                 targetType: 'food',
+    //                 rating: this.data.myRating
+    //             }
+    //         }).then(r => {
+    //             this.refresh()
+    //         }).finally(() => {
+    //             this.setData({
+    //                 ratingSubmitting: false
+    //             })
+    //         })
+    //     }
+    // },
 
     async refresh() {
         let {
@@ -91,9 +91,25 @@ Page({
         this.setData({
             food,
             ratingInfo,
-            avgRating: (sumRatings / totalRatings).toFixed(1),
-            myRating: myRating.taste
+            avgRating: (sumRatings / totalRatings).toFixed(1)
         })
+
+        if (myRating) {
+            this.setData({
+                draft: {
+                    rating: myRating.taste,
+                    stagename: myRating.stagename,
+                    useStagename: myRating.useStagename,
+                    textValue: myRating.textContent,
+                    mediaList: myRating.images?.map(i => {
+                        return {
+                            type: 'image',
+                            url: i
+                        }
+                    })
+                }
+            })
+        }
     },
 
     /**

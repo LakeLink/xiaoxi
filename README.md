@@ -111,8 +111,12 @@ post -> comment -> subComment
 
 * type (canteen, window, food)
 * targetId (string)
-* user (openid)
 * when (timestamp)
+* user (openid)
+* useStagename (boolean)
+* stagename (string)
+* textContent (String)
+* images (string[])
 
 if type == canteen:
 * env (number)
@@ -122,6 +126,15 @@ if type == window:
 
 if type == food:
 * taste (number)
+
+
+#### feast_comments
+
+* author (openid)
+* parentId (string, index)
+* publishedAt (timestamp)
+* textContent (String)
+* images (string[])
 
 
 ## Cloud Functions

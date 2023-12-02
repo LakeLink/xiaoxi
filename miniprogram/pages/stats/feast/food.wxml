@@ -21,20 +21,21 @@
         </view>
         <view class="food--meta">
             <view>
-                <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" />
+                <!-- <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" /> -->
                 立刻评分
             </view>
-            <t-rate value="{{myRating}}" bind:change="onRateChange" bind:touchend="onTouchRateEnd" />
+            <!-- <t-rate value="{{myRating}}" bind:change="onRateChange" bind:touchend="onTouchRateEnd" /> -->
         </view>
     </view>
+    <new-rating foodId="{{food._id}}" draft="{{draft}}"></new-rating>
     <view class="sorter">
-        评论排序
+        评价排序
         <t-tabs defaultValue="new" theme="tag" space-evenly="{{false}}">
             <t-tab-panel label="最新" value="new" />
             <t-tab-panel label="最热" value="hot" />
         </t-tabs>
     </view>
-    <view wx:for="{{comments}}" class="comment">
-        <comment post="{{item}}"></comment>
+    <view wx:for="{{food.ratings}}" class="comment">
+        <rating post="{{item}}"></rating>
     </view>
 </view>

@@ -1,5 +1,4 @@
 // components/brief-post.js
-import featureStore from "~/stores/featureStore"
 Component({
 
     /**
@@ -36,7 +35,6 @@ Component({
 
     lifetimes: {
         ready() {
-            featureStore.bind(this, '$f')
         }
     },
 

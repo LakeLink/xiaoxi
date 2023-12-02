@@ -16,8 +16,8 @@
                 <t-rate value="5" gap="0" size="16" />
             </view>
             <view class="canteen--rate">
-                美食 5/5
-                <t-rate value="5" gap="0" size="16" />
+                美食 {{canteen.foodAvgRating}}/5
+                <t-rate value="{{canteen.foodAvgRating}}" gap="0" size="16" allow-half="true" />
             </view>
         </view>
     </view>

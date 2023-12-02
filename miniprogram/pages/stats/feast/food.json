@@ -8,6 +8,7 @@
         "t-progress": "tdesign-miniprogram/progress/progress",
         "t-avatar": "tdesign-miniprogram/avatar/avatar",
         "t-loading": "tdesign-miniprogram/loading/loading",
-        "comment": "/components/feast/comment"
+        "rating": "/components/feast/rating",
+        "new-rating": "/components/feast/new-rating"
     }
 }

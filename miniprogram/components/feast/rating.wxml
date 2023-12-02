@@ -1,12 +1,14 @@
 <!--components/brief-post.wxml-->
+
+<wxs module="util" src="/components/util.wxs"></wxs>
 <view wx:if="{{post}}">
     <view class="meta">
         <t-avatar image="{{post.userInfo.avatarUrl}}" />
         <view class="userinfo">
             <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
             <view style="display: flex; gap: 8rpx;">
-                <t-rate value="{{item}}" gap="0" size="10" />
-                <text class="when">• {{post.relUpdatedAt}}</text>
+                <t-rate value="{{post.taste}}" gap="0" size="10" />
+                <text class="when">• {{post.relWhen}}</text>
             </view>
         </view>
         <view wx:if="{{post.pinned}}" class="pinned">
@@ -19,12 +21,13 @@
         </view>
     </view>
     <view class="content">
-        <text user-select>{{post.textContent}}</text>
+        <text wx:if="{{post.textContent}}" user-select>{{post.textContent}}</text>
+        <text wx:else>（给出了 {{post.taste}} 星的评分）</text>
         <view class="images-container">
-            <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
+            <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{util.useThumbnail(item)}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
         </view>
-        <comment-actions post="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></comment-actions>
-        <sub-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></sub-comments>
+        <rating-actions post="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></rating-actions>
+        <comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></comments>
     </view>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>

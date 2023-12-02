@@ -1,10 +1,12 @@
 const cloud = require('wx-server-sdk');
-const dayjs = require('dayjs')
+const common = require('./common')
 
 exports.handler = async (event, context) => {
     switch (event.func) {
         case 'rate':
             return await rate(event, context)
+        case 'updateRatingMedia':
+            return await updateRatingMedia(event, context)
         case 'getCanteen':
             return await getCanteen(event, context)
         case 'getFood':
@@ -59,6 +61,7 @@ async function getCanteen(event, context) {
             }).done(),
         as: 'foods'
     }).end().then(r => r.list)
+
     return {
         canteen,
         windows
@@ -109,7 +112,7 @@ async function getFood(event, context) {
     const _ = db.command
     const $ = _.aggregate
 
-    let r = await col.aggregate().match({
+    let food = await col.aggregate().match({
         _id: event.id
     }).lookup({
         from: 'feast_ratings',
@@ -123,14 +126,48 @@ async function getFood(event, context) {
                 users: $.addToSet('$user')
             }).done(),
         as: 'ratingInfo'
-    }).end().then(r => r.list)
+    }).lookup({
+        from: 'feast_ratings',
+        let: {
+            id: '$_id'
+        },
+        pipeline: $.pipeline()
+            .match(_.expr($.eq(['$targetId', '$$id'])))
+            .lookup({
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'userInfo'
+            }).addFields({
+                userInfo: $.arrayElemAt(['$userInfo', 0]),
+                canEdit: $.eq(['$user', OPENID])
+            }).done(),
+        as: 'ratings'
+    }).end().then(r => r.list[0])
 
-    let myRating = await db.collection('feast_ratings').doc(OPENID+'^'+event.id).get().then(r => r.data)
+    common.each(food.ratings, {
+        stagename: true,
+        relativeTime: {
+            k1: 'when',
+            k2: 'relWhen',
+            unix: true
+        }
+    })
+
+    let myRating = await db.collection('feast_ratings').doc(OPENID + '^' + event.id).get().then(r => r.data)
     return {
-        food: r[0],
+        food,
         myRating
     }
 }
+
+// function calculatedWeightedRating(ratings) {
+//     for (let i = 0; i < ratings.length; i++) {
+//         const e = ratings[i];
+//         .
+
+//     }
+// }
 
 async function rate(event, context) {
     // 获取基础信息
@@ -164,13 +201,74 @@ async function rate(event, context) {
         data: {
             type: event.targetType,
             targetId: event.targetId,
+            when: common.ts(),
             user: OPENID,
-            when: dayjs().unix(),
+            useStagename: event.useStagename ? true : false,
+            stagename: event.useStagename ? event.stagename : null,
+            textContent: event.textContent,
             [key]: event.rating
         }
     }).then(r => r.stats)
 
     return {
-        success: stats.updated || stats.created
+        success: stats.updated || stats.created,
+        id: OPENID + '^' + event.targetId
     }
+}
+
+async function updateRatingMedia(event, context) {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('feast_ratings')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let r = await col.doc(event.id).update({
+        data: {
+            images: event.images
+        }
+    })
+
+    return {
+        success: r.stats.updated == 1
+    }
+}
+
+async function commentFood(event, context) {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('comments')
+    const _ = db.command
+    const $ = _.aggregate
+
+    if (common.commentReview(event.content) == 'risky') {
+        return {
+            success: false,
+            reason: "似乎文字不太合适，换个说法吧"
+        }
+    }
+
+    await col.add({
+        data: {
+            author: OPENID,
+            parentId: event.foodId,
+            publishedAt: common.ts(),
+            textContent: event.content,
+            images: [],
+            likedBy: [],
+            // subComments: []
+        }
+    })
 }

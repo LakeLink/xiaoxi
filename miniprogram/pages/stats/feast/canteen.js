@@ -18,7 +18,7 @@ Page({
     onTapFood(e) {
         console.log(e)
         wx.navigateTo({
-          url: `/pages/stats/feast/food?id=${e.currentTarget.dataset.id}`,
+            url: `/pages/stats/feast/food?id=${e.currentTarget.dataset.id}`,
         })
     },
 
@@ -32,6 +32,21 @@ Page({
                 id: this.canteenId
             }
         }).then(r => r.result)
+
+        let canteenFoodSumRating = 0,
+            canteenFoodCount = 0
+        r.windows.forEach(w => {
+            // let windowAvgRating = 0
+            w.foods.forEach(f => {
+                // windowAvgRating += f.avgRating
+                if (f.avgRating) {
+                    canteenFoodSumRating += f.avgRating
+                    canteenFoodCount += 1
+                }
+            })
+            // windowAvgRating /= w.foods.length
+        })
+        r.canteen.foodAvgRating = (canteenFoodSumRating / canteenFoodCount).toFixed(1)
 
         this.setData({
             canteen: r.canteen,
