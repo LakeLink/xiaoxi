@@ -1,8 +1,8 @@
 {
     "pages": [
+        "pages/moment/feed",
         "pages/stats/stepsRank",
         "pages/stats/foods",
-        "pages/moment/feed",
         "pages/moment/create",
         "pages/about/index",
         "pages/about/verify",

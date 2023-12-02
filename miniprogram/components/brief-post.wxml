@@ -1,4 +1,5 @@
 <!--components/brief-post.wxml-->
+<wxs module="util" src="./util.wxs"></wxs>
 <view wx:if="{{post}}">
     <view class="meta">
         <t-avatar image="{{post.userInfo.avatarUrl}}" />
@@ -10,7 +11,7 @@
             <text>置顶</text>
             <t-icon name="arrow-triangle-up-filled" />
         </view>
-        <view wx:if="{{post.topicValue}}" class="topic">#{{$f.post.topics[post.topicValue].label}}</view>
+        <view wx:if="{{post.topicValue}}" class="topic">#{{topics[post.topicValue].label}}</view>
         <view wx:if="{{votes}}" class="rank">
             <text class="rank--prefix">No.</text>
             <text class="{{votes.rank <= 3 ? 'rank--top' : 'rank--normal'}}">{{votes.rank}}</text>
@@ -19,7 +20,7 @@
     <view class="content">
         <text user-select>{{post.textContent}}</text>
         <view class="images-container">
-            <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{pvImages[index]}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
+            <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{util.useThumbnail(item)}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
         </view>
         <post-actions post="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></post-actions>
         <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></brief-comments>
