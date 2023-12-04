@@ -6,7 +6,8 @@
         "pages/moment/create",
         "pages/about/index",
         "pages/about/verify",
-        "pages/shop/index"
+        "pages/shop/index",
+        "pages/shop/orderList"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
