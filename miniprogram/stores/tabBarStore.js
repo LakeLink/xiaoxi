@@ -20,13 +20,21 @@ class TabBarStore extends create.Store {
             },
             {
                 value: 2,
+                url: '/pages/shop/index',
+                useNavigate: true,
+                label: '爱水果',
+                icon: 'grape',
+                badge: {}
+            },
+            {
+                value: 3,
                 url: '/pages/stats/foods',
                 label: '爱干饭',
                 icon: 'rice',
                 badge: {}
             },
             {
-                value: 3,
+                value: 4,
                 url: '/pages/about/index',
                 label: '我的',
                 icon: 'user',

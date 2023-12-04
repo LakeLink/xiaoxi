@@ -2,6 +2,7 @@
 import Message from 'tdesign-miniprogram/message/index';
 import userStore from '~/stores/userStore'
 import tabBarStore from '~/stores/tabBarStore'
+const miniShopPlugin = requirePlugin('mini-shop-plugin');
 
 App({
     onLaunch(options) {
@@ -17,6 +18,10 @@ App({
                 }
             })
         })
+
+        //https://developers.weixin.qq.com/community/develop/article/doc/00086a45e1092094e0cc7ac0851813
+        miniShopPlugin.initApp(this, wx);
+        miniShopPlugin.initHomePath("/pages/shop/index");
 
         if (!wx.cloud) {
             console.error('请使用 2.2.3 或以上的基础库以使用云能力');

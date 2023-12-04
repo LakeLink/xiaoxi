@@ -1,0 +1,22 @@
+/* bottom: 56
+height: 32
+left: 281
+right: 368
+top: 24
+width: 87 */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* https://geek-docs.com/css/css-ask-answer/248_css_center_a_positionfixed_element.html */
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 9999;
+
+    background: white;
+    border: solid lightgray 1px;
+    border-radius: 9999px;
+    padding-right: 12rpx;
+}

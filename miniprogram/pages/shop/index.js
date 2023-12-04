@@ -5,22 +5,23 @@ Page({
      * 页面的初始数据
      */
     data: {
-        ads: null
+        menu: {},
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'getAds'
-            }
-        }).then(r => {
-            this.setData({
-                ads: r.result
-            })
+        const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+        this.setData({
+            menu: menuButtonInfo
+        })
+        // console.log(menuButtonInfo)
+    },
+
+    onTapLeave(e) {
+        wx.switchTab({
+          url: '/pages/moment/feed'
         })
     },
 

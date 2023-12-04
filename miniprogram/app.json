@@ -5,7 +5,8 @@
         "pages/stats/foods",
         "pages/moment/create",
         "pages/about/index",
-        "pages/about/verify"
+        "pages/about/verify",
+        "pages/shop/index"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
@@ -15,7 +16,8 @@
     },
     "tabBar": {
         "custom": true,
-        "list": [{
+        "list": [
+            {
                 "pagePath": "pages/stats/stepsRank",
                 "text": "爱步行"
             },
@@ -32,6 +34,17 @@
                 "text": "我"
             }
         ]
+    },
+    "plugins": {
+        "mini-shop-plugin": {
+            "version": "latest",
+            "provider": "wx34345ae5855f892d"
+        }
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "你的位置信息将用于小程序小商店提供物流信息提示"
+        }
     },
     "resolveAlias": {
         "~/*": "/*",
