@@ -2,6 +2,7 @@
 import Message from 'tdesign-miniprogram/message/index';
 import userStore from '~/stores/userStore'
 import tabBarStore from '~/stores/tabBarStore'
+import featureStore from './stores/featureStore';
 const miniShopPlugin = requirePlugin('mini-shop-plugin');
 
 App({
@@ -36,6 +37,7 @@ App({
             });
         }
 
+        featureStore.load()
         userStore.load()
 
         this.globalData = {

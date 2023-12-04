@@ -15,6 +15,7 @@ class FeatureStore extends create.Store {
     async load() {
         // console.log(this.loading)
         if (!this.loading) {
+            // console.log('I will load')
             this.loading = wx.cloud.callFunction({
                 name: 'fn',
                 data: {
@@ -31,8 +32,10 @@ class FeatureStore extends create.Store {
 
             await this.loading
         } else if (!this.data.loaded) {
+            // console.log('Not loaded, but loading')
             await this.loading
         }
+        // console.log('already loaded')
     }
 }
 
