@@ -62,16 +62,6 @@
     font-size: small;
 }
 
-.topic {
-    flex-shrink: 0;
-    padding: 10rpx;
-
-    color: white;
-    background: lightgray;
-    border-radius: 8rpx;
-    font-size: small;
-}
-
 .content {
     display: block;
     margin: 24rpx 24rpx 0;

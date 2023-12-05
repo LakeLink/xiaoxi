@@ -1,0 +1,12 @@
+/* components/feast/new-comment.wxss */
+.uploader {
+    padding: 24rpx;
+    background-color: white;
+}
+
+.buttons {
+    margin: 16rpx 32rpx 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32rpx;
+}

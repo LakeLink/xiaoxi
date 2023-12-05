@@ -87,6 +87,56 @@ post -> comment -> subComment
 * user (openid)
 * topicIds (string[])
 
+
+#### feast_canteens
+
+* name (string)
+* avatarUrl (string)
+
+#### feast_windows
+
+* canteenId (string)
+* name (string)
+* avatarUrl (string)
+
+#### feast_foods
+
+* windowId (string)
+* name (string)
+* avatarUrl (string)
+* price (number)
+* time (number[], 0: always, 1: breakfast, 2: lunch, 3: dinner, 4: latenight)
+
+#### feast_ratings
+
+* type (canteen, window, food)
+* targetId (string)
+* when (timestamp)
+* user (openid)
+* useStagename (boolean)
+* stagename (string)
+* textContent (String)
+* images (string[])
+
+if type == canteen:
+* env (number)
+
+if type == window:
+* srv (number)
+
+if type == food:
+* taste (number)
+
+
+#### feast_comments
+
+* author (openid)
+* parentId (string, index)
+* publishedAt (timestamp)
+* textContent (String)
+* images (string[])
+
+
 ## Cloud Functions
 
 ### Timezone

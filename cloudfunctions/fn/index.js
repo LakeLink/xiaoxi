@@ -13,11 +13,18 @@ const posts = require('./posts')
 // 云函数入口函数
 exports.main = async function (event, context) {
     console.log(event)
+    switch (event.mod) {
+        case 'feast':
+            return await require('./feast').handler(event, context)
+        default:
+            break;
+    }
+
     switch (event.type) {
         case 'getFeatures':
             return await features.get(event, context)
-        // case 'getTopics':
-        //     return await posts.getTopics(event, context)
+            // case 'getTopics':
+            //     return await posts.getTopics(event, context)
         case 'getPosts':
             return await posts.getPosts(event, context)
         case 'getPostsV2':
@@ -43,23 +50,6 @@ exports.main = async function (event, context) {
         case 'undoVotePost':
             return await posts.undoVote(event, context)
 
-        /*case 'commentTogether':
-            return await quickAction.comment(event, context, 'TogetherDetails')
-        case 'likeTogether':
-            return await quickAction.like(event, context, 'TogetherDetails')
-        case 'undoLikeTogether':
-            return await quickAction.undoLike(event, context, 'TogetherDetails')
-        case 'joinTogether':
-            return await together.join(event, context)
-        case 'getTogether':
-            return await together.get(event, context)
-        case 'quitTogether':
-            return await together.quit(event, context)
-        case 'createTogetherActivityId':
-            return await together.createActivityId(event, context)
-        case 'afterDeleteTogether':
-            return await together.afterDelete(event, context)*/
-
         case 'getUser':
             return await user.read(event, context)
         case 'saveUser':
@@ -72,16 +62,9 @@ exports.main = async function (event, context) {
             return await user.verify(event, context)
         case 'countUserUnreadPosts':
             return await user.countUnreadPosts(event, context)
-        
+
         case 'hasSubscribed':
             return await quickAction.hasSubscribed(event, context)
-
-       /* case 'commentWeRun':
-            return await quickAction.comment(event, context, 'WeRunDetails')
-        case 'likeWeRun':
-            return await quickAction.like(event, context, 'WeRunDetails')
-        case 'undoLikeWeRun':
-            return await quickAction.undoLike(event, context, 'WeRunDetails')*/
 
         case 'postWeRunNotice':
             return await weRun.postNotice(event, context)
@@ -95,13 +78,7 @@ exports.main = async function (event, context) {
             return await weRun.getTotalSteps(event, context)
         case 'rankWeRunTotalStepsV2':
             return await weRun.rankTotalStepsV2(event, context)
-        
-        /*case 'comment':
-            return await quickAction.comment(event, context, event.col)
-        case 'delComment':
-            return await quickAction.delComment(event, context)
-        case 'getAds':
-            return ["cloud://xiaoxiaiyundong-8g95vuw53cf7c6b4.7869-xiaoxiaiyundong-8g95vuw53cf7c6b4-1317841170/20230413_223142_0000.png"]*/
+
         default:
             throw new Error('Invalid event.type')
     }

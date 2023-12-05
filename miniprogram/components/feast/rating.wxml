@@ -1,29 +1,33 @@
 <!--components/brief-post.wxml-->
-<wxs module="util" src="./util.wxs"></wxs>
+
+<wxs module="util" src="/components/util.wxs"></wxs>
 <view wx:if="{{post}}">
     <view class="meta">
         <t-avatar image="{{post.userInfo.avatarUrl}}" />
         <view class="userinfo">
             <text class="{{'author college-' + post.userInfo.collegeIndex}}">{{post.userInfo.nickname}}</text>
-            <text class="when">• {{post.relUpdatedAt}}</text>
+            <view style="display: flex; gap: 8rpx;">
+                <t-rate value="{{post.taste}}" gap="0" size="10" />
+                <text class="when">• {{post.relWhen}}</text>
+            </view>
         </view>
         <view wx:if="{{post.pinned}}" class="pinned">
             <text>置顶</text>
             <t-icon name="arrow-triangle-up-filled" />
         </view>
-        <view wx:if="{{post.topicValue}}" class="topic">#{{topics[post.topicValue].label}}</view>
         <view wx:if="{{votes}}" class="rank">
             <text class="rank--prefix">No.</text>
-            <text class="{{votes.rank <= 3 ? 'rank--top' : 'rank--normal'}}">{{votes.rank}}</text>
+            <text class="{{votes.rank <= 3 ? 'rank--top' : ''}}">{{votes.rank}}</text>
         </view>
     </view>
     <view class="content">
-        <text user-select>{{post.textContent}}</text>
+        <text wx:if="{{post.textContent}}" user-select>{{post.textContent}}</text>
+        <text wx:else>（给出了 {{post.taste}} 星的评分）</text>
         <view class="images-container">
             <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{util.useThumbnail(item)}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
         </view>
-        <post-actions post="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></post-actions>
-        <brief-comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></brief-comments>
+        <rating-actions post="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></rating-actions>
+        <comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></comments>
     </view>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>

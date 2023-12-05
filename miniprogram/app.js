@@ -2,7 +2,6 @@
 import Message from 'tdesign-miniprogram/message/index';
 import userStore from '~/stores/userStore'
 import tabBarStore from '~/stores/tabBarStore'
-import featureStore from '~/stores/featureStore'
 
 App({
     onLaunch(options) {
@@ -31,8 +30,6 @@ App({
                 traceUser: true,
             });
         }
-
-        featureStore.load()
 
         userStore.load()
 

@@ -1,0 +1,26 @@
+<!--pages/stats/feast/index.wxml-->
+<view class="safe-area">
+    <view wx:for="{{canteens}}" class="canteen" bind:tap="onTapCanteen" data-id="{{item._id}}">
+        <view class="canteen--title">
+            <text>{{item.name}}</text>
+            <t-rate value="5" />
+            5
+        </view>
+        <view class="canteen--meta">
+            <t-image width="72" height="72"></t-image>
+            <view>
+                环境 5/5
+                <t-rate value="5" gap="0" size="16" />
+            </view>
+            <view>
+                服务 5/5
+                <t-rate value="5" gap="0" size="16" />
+            </view>
+            <view>
+                美食 5/5
+                <t-rate value="5" gap="0" size="16" />
+            </view>
+        </view>
+    </view>
+    <t-fab style="right: 32rpx; bottom: calc(var(--bottom-safe-area) + 32rpx);" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab>
+</view>

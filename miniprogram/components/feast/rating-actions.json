@@ -1,0 +1,9 @@
+{
+    "component": true,
+    "usingComponents": {
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "t-button": "tdesign-miniprogram/button/button",
+        "t-avatar": "tdesign-miniprogram/avatar/avatar",
+        "t-avatar-group": "tdesign-miniprogram/avatar-group/avatar-group"
+    }
+}

@@ -1,0 +1,16 @@
+// https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/development/storage/miniapp/compon.html
+// only works when public read available
+var style = "post_thumbnail"
+function useThumbnail(url) {
+    var res = url
+    if (url.indexOf('cloud://') === 0) {
+        var first = url.indexOf('.')
+        var end = url.indexOf('/', first)
+        res = 'https://' + url.slice(first + 1, end) + '.tcb.qcloud.la/' + url.slice(end + 1, url.length)
+    }
+    return res + '/' + style
+}
+
+module.exports = {
+    useThumbnail: useThumbnail
+}
