@@ -5,8 +5,7 @@ Component({
     /**
      * 组件的属性列表
      */
-    properties: {
-    },
+    properties: {},
 
     /**
      * 组件的初始数据
@@ -29,11 +28,11 @@ Component({
                 let pages = getCurrentPages()
                 // console.log('/' + pages[pages.length-1].route)
                 this.setData({
-                    current: tabBarStore.indexOfPage('/' + pages[pages.length-1].route)
+                    current: tabBarStore.indexOfPage('/' + pages[pages.length - 1].route)
                 })
-                
+
             } catch (error) {
-                console.log('ε=ε=ε=(~￣▽￣)~', error)
+                // console.log('ε=ε=ε=(~￣▽￣)~', error)
             }
         }
     },
@@ -45,9 +44,16 @@ Component({
     methods: {
         async onChange(e) {
             // tabBarStore.switchTab(e.detail.value)
-            await wx.switchTab({
-                url: tabBarStore.data.list[e.detail.value].url,
-            })
+            if (tabBarStore.data.list[e.detail.value].useNavigate) {
+                await wx.navigateTo({
+                    url: tabBarStore.data.list[e.detail.value].url,
+                })
+            } else {
+                await wx.switchTab({
+                    url: tabBarStore.data.list[e.detail.value].url,
+                })
+
+            }
             // switch it back: no flickering
             this.setData({
                 current: this.data.current,

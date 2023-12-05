@@ -1,0 +1,7 @@
+<!--pages/index/index.wxml-->
+<view style="top: {{menu.top}}px; height: {{menu.height}}px;" class="nav" bind:tap="onTapLeave">
+    <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+    <text>离开爱水果</text>
+    <!-- <t-icon size="20" bind:tap="onGoHome" aria-role="button" aria-label="首页" name="home" class="custom-capsule__icon" /> -->
+</view>
+<ministore></ministore>

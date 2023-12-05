@@ -1,26 +1,24 @@
-// pages/index/index.js
+// pages/shop/orderList.js
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-        ads: null
+
     },
+
+    went: false,
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        wx.cloud.callFunction({
-            name: 'fn',
-            data: {
-                type: 'getAds'
-            }
-        }).then(r => {
-            this.setData({
-                ads: r.result
-            })
+        wx.navigateTo({
+          url: 'plugin-private://wx34345ae5855f892d/pages/orderList/orderList',
+          complete: () => {
+              this.went = true
+          }
         })
     },
 
@@ -35,7 +33,11 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        if (this.went) {
+            wx.switchTab({
+              url: '/pages/moment/feed',
+            })
+        }
     },
 
     /**

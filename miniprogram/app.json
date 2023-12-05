@@ -9,7 +9,9 @@
         "pages/stats/feast/index",
         "pages/stats/feast/canteen",
         "pages/stats/feast/die",
-        "pages/stats/feast/food"
+        "pages/stats/feast/food",
+        "pages/shop/index",
+        "pages/shop/orderList"
     ],
     "window": {
         "backgroundColor": "#F0F0F0",
@@ -37,6 +39,17 @@
                 "text": "我"
             }
         ]
+    },
+    "plugins": {
+        "mini-shop-plugin": {
+            "version": "latest",
+            "provider": "wx34345ae5855f892d"
+        }
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "你的位置信息将用于小商店物流信息提示"
+        }
     },
     "resolveAlias": {
         "~/*": "/*",

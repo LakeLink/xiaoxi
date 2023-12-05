@@ -1,0 +1,3 @@
+<view class="wrapper">
+    <t-loading theme="dots" size="80rpx" />
+</view>
