@@ -15,11 +15,25 @@ Page({
             relUpdatedAt: '三小时前',
             textContent: '吃吃喝喝睡睡美滋滋'
         }],
+        newRatingVisible: false,
+        draft: null
         // myRating: 0,
         // ratingSubmitting: false
     },
 
     foodId: "",
+
+    onTapRate(e) {
+        this.setData({
+            newRatingVisible: true
+        })
+    },
+
+    onHideRating(e) {
+        this.setData({
+            newRatingVisible: false
+        })
+    },
 
     // onRateChange(e) {
     //     this.setData({
@@ -108,6 +122,10 @@ Page({
                         }
                     })
                 }
+            })
+        } else {
+            this.setData({
+                draft: null
             })
         }
     },

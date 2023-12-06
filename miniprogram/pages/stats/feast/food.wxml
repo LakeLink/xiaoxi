@@ -13,21 +13,28 @@
                 <text class="big-score">{{avgRating}}</text>
             </view>
             <view style="flex-grow: 1;">
-                <view wx:for="{{ratingInfo}}" class="food--rate">
+                <view wx:for="{{ratingInfo}}" class="food--rating">
                     <t-rate value="{{item.rating}}" gap="0" size="10" />
                     <t-progress class="food--progress" percentage="{{item.percent}}" />
                 </view>
+                <block wx:if="{{!newRatingVisible}}">
+                    <t-button wx:if="{{draft}}" class="food--rate" size="small" bind:tap="onTapRate">
+                        <!-- <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" /> -->
+                        修改评分
+                    </t-button>
+                    <t-button wx:else class="food--rate" size="small" theme="primary" bind:tap="onTapRate">
+                        <!-- <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" /> -->
+                        立刻评分
+                    </t-button>
+                </block>
+                <t-button wx:else class="food--rate" size="small" bind:tap="onHideRating">
+                    <!-- <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" /> -->
+                    等下评分
+                </t-button>
             </view>
-        </view>
-        <view class="food--meta">
-            <view>
-                <!-- <t-loading wx:if="{{ratingSubmitting}}" theme="circular" size="40rpx" /> -->
-                立刻评分
-            </view>
-            <!-- <t-rate value="{{myRating}}" bind:change="onRateChange" bind:touchend="onTouchRateEnd" /> -->
         </view>
     </view>
-    <new-rating foodId="{{food._id}}" draft="{{draft}}"></new-rating>
+    <new-rating wx:if="{{newRatingVisible}}" foodId="{{food._id}}" draft="{{draft}}" bind:hide="onHideRating"></new-rating>
     <view class="sorter">
         评价排序
         <t-tabs defaultValue="new" theme="tag" space-evenly="{{false}}">

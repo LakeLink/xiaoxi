@@ -25,10 +25,14 @@
     gap: 64rpx;
 }
 
-.food--rate {
+.food--rating {
     display: flex;
     gap: 8rpx;
     /* flex-direction: column; */
+}
+
+.food--rate {
+    margin-top: 16rpx;
 }
 
 .food--progress {

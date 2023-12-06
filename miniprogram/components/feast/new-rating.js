@@ -82,6 +82,9 @@ Component({
                 useStagename: e.detail.value
             })
         },
+        onTapHide(e) {
+            this.triggerEvent('hide')
+        },
 
         async onTapSubmit(e) {
             if (!this.data.textValue) {

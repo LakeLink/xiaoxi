@@ -1,5 +1,7 @@
 <!--components/feast/new-comment.wxml-->
 <view style="background-color: white;">
+    <t-rate class="rater" value="{{rating}}" bind:change="onRatingChange" />
+
     <t-textarea placeholder="讲点什么…" autosize="true" model:value="{{textValue}}" />
 
     <view class="uploader">
@@ -13,10 +15,8 @@
     <t-input wx:if="{{useStagename}}" prefixIcon="user-unknown" label="花名" placeholder="逍遥子" model:value="{{stagename}}"></t-input>
 
 
-    <t-rate value="{{rating}}" bind:change="onRatingChange" />
-
     <view class="buttons">
-        <t-button loading="{{loading}}" theme="primary" size="large" bind:tap="onTapSubmit">评分，发送!</t-button>
-        <t-button theme="light" size="large" bind:tap="onTapBack">收起</t-button>
+        <t-button loading="{{loading}}" theme="primary" bind:tap="onTapSubmit">评分，发送!</t-button>
+        <t-button theme="light" bind:tap="onTapHide">收起</t-button>
     </view>
 </view>
