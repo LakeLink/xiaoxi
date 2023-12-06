@@ -5,8 +5,7 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        post: Object,
-        votes: Object
+        rating: Object
     },
 
     /**
@@ -29,25 +28,38 @@ Component({
         },
 
         onVote(e) {
-            console.log(e)
-            return
+            let data;
+            if (e.currentTarget.dataset.t == "up") {
+                data = {
+                    mod: 'feast',
+                    func: 'voteRating',
+                    action: "up",
+                    undo: this.data.rating.alreadyVotedUp ? true : false,
+                    ratingId: this.data.rating._id
+                }
+            } else {
+                data = {
+                    mod: 'feast',
+                    func: 'voteRating',
+                    action: "down",
+                    undo: this.data.rating.alreadyVotedDown ? true : false,
+                    ratingId: this.data.rating._id
+                }
+            }
             wx.cloud.callFunction({
                 name: 'fn',
-                data: {
-                    type: 'votePost',
-                    id: this.data.post._id
-                }
+                data
             }).then(r => {
-                if (!r.result.success) {
+                if (r.result.success) {
+                    // https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html#%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6
+                    this.triggerEvent('vote', {}, {
+                        bubbles: true,
+                        composed: true
+                    })
+                } else {
                     wx.showToast({
                         title: r.result.reason,
                         icon: 'error'
-                    })
-                } else {
-                    // https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html#%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6
-                    this.triggerEvent('postVote', {}, {
-                        bubbles: true,
-                        composed: true
                     })
                 }
             })
@@ -56,34 +68,6 @@ Component({
         onEdit(e) {
             console.log(e)
             return
-            // 目前只支持删除
-            wx.showModal({
-                title: '删除帖子',
-                content: '你确定要删除这个帖子吗？',
-                complete: (res) => {
-                    if (res.confirm) {
-                        wx.cloud.callFunction({
-                            name: 'fn',
-                            data: {
-                                type: 'removePost',
-                                id: this.data.post._id
-                            }
-                        }).then(r => {
-                            if (r.result.success) {
-                                this.triggerEvent('postEdit', {
-                                    post: r.result.post
-                                })
-
-                            } else {
-                                wx.showToast({
-                                    title: r.result.reason,
-                                    icon: 'error'
-                                })
-                            }
-                        })
-                    }
-                }
-            })
         }
 
     }

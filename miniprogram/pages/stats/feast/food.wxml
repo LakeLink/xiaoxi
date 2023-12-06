@@ -42,7 +42,7 @@
             <t-tab-panel label="最热" value="hot" />
         </t-tabs>
     </view>
-    <view wx:for="{{food.ratings}}" class="comment">
-        <rating post="{{item}}"></rating>
+    <view wx:for="{{food.ratings}}" wx:key="_id" class="comment">
+        <rating post="{{item}}" bind:vote="onVote"></rating>
     </view>
 </view>

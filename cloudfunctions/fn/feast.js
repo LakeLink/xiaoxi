@@ -7,6 +7,8 @@ exports.handler = async (event, context) => {
             return await rate(event, context)
         case 'updateRatingMedia':
             return await updateRatingMedia(event, context)
+        case 'voteRating':
+            return await voteRating(event, context)
         case 'getCanteen':
             return await getCanteen(event, context)
         case 'getFood':
@@ -151,6 +153,10 @@ async function getFood(event, context) {
             k1: 'when',
             k2: 'relWhen',
             unix: true
+        },
+        customFunc: (arr, idx) => {
+            arr[idx].alreadyVotedUp = arr[idx].upVotedBy?.includes(OPENID)
+            arr[idx].alreadyVotedDown = arr[idx].downVotedBy?.includes(OPENID)
         }
     })
 
@@ -206,7 +212,9 @@ async function rate(event, context) {
             useStagename: event.useStagename ? true : false,
             stagename: event.useStagename ? event.stagename : null,
             textContent: event.textContent,
-            [key]: event.rating
+            [key]: event.rating,
+            upVotedBy: [],
+            downVotedBy: []
         }
     }).then(r => r.stats)
 
@@ -238,6 +246,55 @@ async function updateRatingMedia(event, context) {
     return {
         success: r.stats.updated == 1
     }
+}
+
+async function voteRating(event, context) {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('feast_ratings')
+    const _ = db.command
+    const $ = _.aggregate
+    if (event.undo) {
+        let r = await col.doc(event.ratingId).update({
+            data: {
+                upVotedBy: _.pull(OPENID),
+                downVotedBy: _.pull(OPENID)
+            }
+        })
+        return {
+            success: r.stats.updated == 1
+        }
+    } else {
+        let a, b;
+        if (event.action == "up") {
+            a = "upVotedBy"
+            b = "downVotedBy"
+        } else if (event.action == "down") {
+            a = "downVotedBy"
+            b = "upVotedBy"
+        } else {
+            return {
+                success: false,
+                reason: "不支持该行为"
+            }
+        }
+        let r = await col.doc(event.ratingId).update({
+            data: {
+                [a]: _.addToSet(OPENID),
+                [b]: _.pull(OPENID)
+            }
+        })
+        return {
+            success: r.stats.updated == 1
+        }
+    }
+
 }
 
 async function commentFood(event, context) {

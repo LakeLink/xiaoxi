@@ -1,30 +1,42 @@
 <!--components/post-actions.wxml-->
 <view class="action">
-    <t-button wx:for="{{['up', 'down']}}" bindtap="onVote" data-t="{{item}}" class="action-button">
+    <t-button bindtap="onVote" data-t="up" class="action-button" disable="{{rating.alreadyVotedDown}}">
         <view style="display: flex; align-items: center;">
-            <block wx:if="{{post.alreadyVoted}}">
-                <t-icon name="arrow-{{item}}" />
-                <text wx:if="{{post.likedBy.length}}" style="margin-left: 5px; color: pink;">{{post.upVotedBy.length}}</text>
+            <block wx:if="{{rating.alreadyVotedUp}}">
+                <t-icon name="arrow-up" />
+                <text wx:if="{{rating.upVotedBy.length}}" style="margin-left: 5px; color: pink;">{{rating.upVotedBy.length}}</text>
             </block>
             <block wx:else>
-                <t-icon name="arrow-{{item}}" />
-                <text wx:if="{{post.likedBy.length}}" style="margin-left: 5px; color: grey;">{{post.upVotedBy.length}}</text>
+                <t-icon name="arrow-up" />
+                <text wx:if="{{rating.upVotedBy.length}}" style="margin-left: 5px; color: grey;">{{rating.upVotedBy.length}}</text>
             </block>
         </view>
     </t-button>
-    <t-avatar-group class="liked-avatar-group" max="5" collapseAvatar="+{{post.likedUserInfo.length-5}}" >
-        <t-avatar wx:for="{{post.likedUserInfo}}" wx:for-item="u" wx:key="_id" size="small" image="{{u.avatarUrl}}" />
-    </t-avatar-group>
+    <t-button bindtap="onVote" data-t="down" class="action-button" disable="{{rating.alreadyVotedUp}}">
+        <view style="display: flex; align-items: center;">
+            <block wx:if="{{rating.alreadyVotedDown}}">
+                <t-icon name="arrow-down" />
+                <text wx:if="{{rating.downVotedBy.length}}" style="margin-left: 5px; color: pink;">{{rating.downVotedBy.length}}</text>
+            </block>
+            <block wx:else>
+                <t-icon name="arrow-down" />
+                <text wx:if="{{rating.downVotedBy.length}}" style="margin-left: 5px; color: grey;">{{rating.downVotedBy.length}}</text>
+            </block>
+        </view>
+    </t-button>
+    <!-- <t-avatar-group class="liked-avatar-group" max="5" collapseAvatar="+{{rating.likedUserInfo.length-5}}" >
+        <t-avatar wx:for="{{rating.likedUserInfo}}" wx:for-item="u" wx:key="_id" size="small" image="{{u.avatarUrl}}" />
+    </t-avatar-group> -->
     <t-button bindtap="onComment" class="action-button">
         <view style="display: flex; align-items: center;">
             <t-icon name="chat-message"></t-icon>
-            <text wx:if="{{post.comments.length}}" style="margin-left: 5px; color: grey;">{{post.comments.length}}</text>
+            <text wx:if="{{rating.comments.length}}" style="margin-left: 5px; color: grey;">{{rating.comments.length}}</text>
         </view>
     </t-button>
     <!-- <t-button bindtap="onShare" open-type="share">
         <t-icon name="share" />
     </t-button> -->
-    <t-button bindtap="onEdit" wx:if="{{post.canEdit}}" class="action-button">
+    <t-button bindtap="onEdit" wx:if="{{rating.canEdit}}" class="action-button">
         <view style="display: flex;">
             <t-icon name="delete"></t-icon>
             <!-- <t-icon name="edit"></t-icon> -->

@@ -13,24 +13,7 @@ Component({
      * 组件的初始数据
      */
     data: {
-        pvImages: [],
         showCommentInput: false
-    },
-
-    observers: {
-        'post': function (post) {
-            if (!post) return
-            let images = post.images
-            if (images && images.length > 0) {
-                wx.cloud.getTempFileURL({
-                    fileList: images
-                }).then(r => {
-                    this.setData({
-                        pvImages: r.fileList.map(f => f.tempFileURL + '/small_pv')
-                    })
-                })
-            }
-        }
     },
 
     lifetimes: {

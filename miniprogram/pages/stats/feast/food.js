@@ -35,6 +35,10 @@ Page({
         })
     },
 
+    onVote(e) {
+        this.refresh()
+    },
+
     // onRateChange(e) {
     //     this.setData({
     //         myRating: e.detail.value
