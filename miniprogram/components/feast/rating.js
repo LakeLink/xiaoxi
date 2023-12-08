@@ -40,10 +40,10 @@ Component({
             })
         },
 
-        onPostEdit(e) {
-            // console.log(e)
+        onRatingEdit(e) {
+            console.log(e)
             this.setData({
-                post: e.detail.post
+                post: e.detail.rating
             })
         },
 

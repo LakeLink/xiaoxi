@@ -26,11 +26,11 @@
         <view class="images-container">
             <t-image wx:for="{{post.images}}" wx:key="*this" mode="aspectFill" src="{{util.useThumbnail(item)}}" load width="140rpx" height="140rpx" t-class="image" lazy="{{true}}" data-idx="{{index}}" bindtap="onTapImage"></t-image>
         </view>
-        <rating-actions rating="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:postEdit="onPostEdit" bind:postVote="onPostVote"></rating-actions>
+        <rating-actions rating="{{post}}" votes="{{votes}}" bind:showCommentInput="onShowCommentInput" bind:edit="onRatingEdit" bind:postVote="onPostVote"></rating-actions>
         <comments post-id="{{post._id}}" comments="{{post.comments}}" show-input="{{showCommentInput}}" bind:commentsChange="onCommentsChange"></comments>
     </view>
     <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
 </view>
 <view wx:else style="margin-left: 32rpx;">
-    这个帖子已经被删除。
+    这个评价已经被删除。
 </view>

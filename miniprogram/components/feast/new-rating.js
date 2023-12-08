@@ -87,13 +87,13 @@ Component({
         },
 
         async onTapSubmit(e) {
-            if (!this.data.textValue) {
-                wx.showToast({
-                    title: '喂，至少写一个字吧！',
-                    icon: 'error'
-                })
-                return
-            }
+            // if (!this.data.textValue) {
+            //     wx.showToast({
+            //         title: '喂，至少写一个字吧！',
+            //         icon: 'error'
+            //     })
+            //     return
+            // }
             this.setData({
                 loading: true
             })
@@ -145,6 +145,11 @@ Component({
                     }).finally(() => {
                         this.setData({
                             loading: false
+                        })
+                        this.triggerEvent('hide')
+                        this.triggerEvent('new', {}, {
+                            bubbles: true,
+                            composed: true
                         })
                     })
             } else {

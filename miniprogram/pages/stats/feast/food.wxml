@@ -34,7 +34,7 @@
             </view>
         </view>
     </view>
-    <new-rating wx:if="{{newRatingVisible}}" foodId="{{food._id}}" draft="{{draft}}" bind:hide="onHideRating"></new-rating>
+    <new-rating wx:if="{{newRatingVisible}}" foodId="{{food._id}}" draft="{{draft}}" bind:hide="onHideRating" bind:new="onNewRating" ></new-rating>
     <view class="sorter">
         评价排序
         <t-tabs defaultValue="new" theme="tag" space-evenly="{{false}}">

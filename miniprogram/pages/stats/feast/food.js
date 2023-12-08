@@ -29,6 +29,10 @@ Page({
         })
     },
 
+    onNewRating(e) {
+        this.refresh()
+    },
+
     onHideRating(e) {
         this.setData({
             newRatingVisible: false

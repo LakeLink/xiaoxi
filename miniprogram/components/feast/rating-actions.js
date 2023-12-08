@@ -74,8 +74,10 @@ Component({
                     targetId: this.data.rating.targetId
                 }
             }).then(r => {
-                if (r.result.sucess) {
-                    this.triggerEvent('vote', {}, {
+                if (r.result.success) {
+                    this.triggerEvent('edit', {
+                        rating: null
+                    }, {
                         bubbles: true,
                         composed: true
                     })
