@@ -9,6 +9,8 @@ exports.handler = async (event, context) => {
             return await updateRatingMedia(event, context)
         case 'voteRating':
             return await voteRating(event, context)
+        case 'delRating':
+            return await delRating(event, context)
         case 'getCanteen':
             return await getCanteen(event, context)
         case 'getFood':
@@ -143,6 +145,8 @@ async function getFood(event, context) {
             }).addFields({
                 userInfo: $.arrayElemAt(['$userInfo', 0]),
                 canEdit: $.eq(['$user', OPENID])
+            }).sort({
+                when: -1
             }).done(),
         as: 'ratings'
     }).end().then(r => r.list[0])
@@ -160,7 +164,7 @@ async function getFood(event, context) {
         }
     })
 
-    let myRating = await db.collection('feast_ratings').doc(OPENID + '^' + event.id).get().then(r => r.data)
+    let myRating = await db.collection('feast_ratings').doc(OPENID + '^' + event.id).get().then(r => r.data).catch(e => null)
     return {
         food,
         myRating
@@ -245,6 +249,25 @@ async function updateRatingMedia(event, context) {
 
     return {
         success: r.stats.updated == 1
+    }
+}
+
+async function delRating(event, context) {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const col = db.collection('feast_ratings')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let stats = await col.doc(OPENID + '^' + event.targetId).remove().then(r => r.stats)
+    return {
+        success: stats.removed == 1
     }
 }
 
