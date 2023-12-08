@@ -31,11 +31,25 @@
 .food {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    background: white;
+    padding: 24rpx;
+    border-bottom: dashed lightgray;
+}
+
+.food--title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .side-bar-wrapper {
     display: flex;
     height: calc(100vh - var(--bottom-safe-area));
+    --td-side-bar-width: 100rpx;
+    --td-side-bar-font-size: 30rpx;
+    --td-side-bar-item-line-height: 32rpx;
 }
 
 .side-bar-wrapper .content {

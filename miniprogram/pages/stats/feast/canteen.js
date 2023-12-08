@@ -8,7 +8,7 @@ Page({
     data: {
         canteen: {},
         windows: [],
-        sideBarIndex: 1,
+        sideBarIndex: 0,
         scrollTop: 0
     },
     canteenId: "",
@@ -34,9 +34,14 @@ Page({
         }).then(r => r.result)
 
         let canteenFoodSumRating = 0,
-            canteenFoodCount = 0
-        r.windows.forEach(w => {
+            canteenFoodCount = 0,
+            categories = []
+        r.windows.forEach((w, idx) => {
             // let windowAvgRating = 0
+            categories.push({
+                value: idx,
+                label: w.name
+            })
             w.foods.forEach(f => {
                 // windowAvgRating += f.avgRating
                 if (f.avgRating) {
@@ -50,27 +55,29 @@ Page({
 
         this.setData({
             canteen: r.canteen,
-            windows: r.windows
+            windows: r.windows,
+            categories
         })
+
         // this.data.categories.forEach(e => {
         //     this.allDishes = this.allDishes.concat(e.items)
         // })
         // console.log(this.allDishes)
 
-        // const query = wx.createSelectorQuery().in(this);
-        // const {
-        //     sideBarIndex
-        // } = this.data;
+        const query = wx.createSelectorQuery().in(this);
+        const {
+            sideBarIndex
+        } = this.data;
 
-        // query
-        //     .selectAll('.title')
-        //     .boundingClientRect((rects) => {
-        //         this.offsetTopList = rects.map((item) => item.top);
-        //         this.setData({
-        //             scrollTop: rects[sideBarIndex].top
-        //         });
-        //     })
-        //     .exec();
+        query
+            .selectAll('.title')
+            .boundingClientRect((rects) => {
+                this.offsetTopList = rects.map((item) => item.top);
+                this.setData({
+                    scrollTop: rects[sideBarIndex].top
+                });
+            })
+            .exec();
     },
 
     onLoad(options) {

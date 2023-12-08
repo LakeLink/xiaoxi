@@ -26,14 +26,15 @@
         <t-dropdown-item options="{{$f.post.sorters}}" value="{{sorterValue}}" bindchange="onSorterChange" />
     </t-dropdown-menu>
     <view class="side-bar-wrapper">
-        <!-- <t-side-bar value="{{sideBarIndex}}" bind:change="onSideBarChange">
+        <t-side-bar value="{{sideBarIndex}}" bind:change="onSideBarChange">
             <t-side-bar-item wx:for="{{categories}}" wx:key="index" value="{{item.value || index}}" label="{{item.label}}" badge-props="{{item.badgeProps}}" />
-        </t-side-bar> -->
+        </t-side-bar>
         <scroll-view class="content" scroll-y scroll-with-animation scroll-top="{{scrollTop}}" bind:scroll="onScroll">
             <view wx:for="{{windows}}" wx:key="index" class="section">
                 <view class="title">{{item.name}}</view>
+                <view class="time">{{item.time}}</view>
                 <view wx:for="{{item.foods}}" class="food" bind:tap="onTapFood" data-id="{{item._id}}">
-                    <view>
+                    <view class="food--title">
                         <t-image src="{{item.image}}" width="72" height="72"></t-image>
                         {{item.name}}
                     </view>
@@ -41,14 +42,7 @@
                         <t-rate value="{{item.avgRating}}" gap="0" size="16" />
                         <text>"awsl"</text>
                     </view>
-                    <view>
-                        君の评分
-                        <t-button>去评分</t-button>
-                    </view>
-                    <view>
-                        价格
-                        ￥{{item.price}}
-                    </view>
+                    <text>价格 ￥{{item.price}}</text>
                 </view>
             </view>
         </scroll-view>
