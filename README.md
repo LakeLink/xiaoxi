@@ -117,6 +117,8 @@ post -> comment -> subComment
 * stagename (string)
 * textContent (String)
 * images (string[])
+* upVotedBy (openid[])
+* downVotedBy (openid[])
 
 if type == canteen:
 * env (number)

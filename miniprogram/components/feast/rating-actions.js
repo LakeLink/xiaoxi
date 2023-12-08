@@ -66,8 +66,21 @@ Component({
         },
 
         onEdit(e) {
-            console.log(e)
-            return
+            wx.cloud.callFunction({
+                name: 'fn',
+                data: {
+                    mod: 'feast',
+                    func: 'delRating',
+                    targetId: this.data.rating.targetId
+                }
+            }).then(r => {
+                if (r.result.sucess) {
+                    this.triggerEvent('vote', {}, {
+                        bubbles: true,
+                        composed: true
+                    })
+                }
+            })
         }
 
     }
