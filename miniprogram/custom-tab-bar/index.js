@@ -1,6 +1,6 @@
 // components/tabbar.js
 import tabBarStore from '~/stores/tabBarStore'
-
+import featureStore from '~/stores/featureStore'
 Component({
     /**
      * 组件的属性列表
@@ -24,6 +24,7 @@ Component({
     lifetimes: {
         ready() {
             try {
+                featureStore.bind(this, '$f')
                 tabBarStore.bind(this, '$tabBar')
                 let pages = getCurrentPages()
                 // console.log('/' + pages[pages.length-1].route)

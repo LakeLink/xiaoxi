@@ -7,6 +7,9 @@ class FeatureStore extends create.Store {
             topics: [],
             sorters: [],
             visibilities: []
+        },
+        tabBar: {
+            hide: []
         }
     }
     
@@ -23,6 +26,7 @@ class FeatureStore extends create.Store {
                 }
             }).then(r => {
                 this.data.post = r.result.post
+                this.data.tabBar = r.result.tabBar
                 this.data.loaded = true
                 // console.log(this.data.post)
                 this.update()

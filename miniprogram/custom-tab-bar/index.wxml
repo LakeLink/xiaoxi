@@ -1,5 +1,14 @@
+<wxs module="util">
+    module.exports = {
+        isHidden: function(arr, v) {
+            return arr.indexOf(v) >= 0
+        }
+    }
+</wxs>
 <t-tab-bar value="{{current}}" bindchange="onChange" theme="tag" split="{{false}}">
-    <t-tab-bar-item wx:for="{{$tabBar.list}}" wx:key="label" badge-props="{{ item.badge }}" value="{{item.value}}" icon="{{item.icon}}">
-        {{item.label}}
-    </t-tab-bar-item>
+    <block wx:for="{{$tabBar.list}}" wx:key="label">
+        <t-tab-bar-item wx:if="{{!util.isHidden($f.tabBar.hide, item.url)}}" badge-props="{{ item.badge }}" value="{{item.value}}" icon="{{item.icon}}">
+            {{item.label}}
+        </t-tab-bar-item>
+    </block>
 </t-tab-bar>

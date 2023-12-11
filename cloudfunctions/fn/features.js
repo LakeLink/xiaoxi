@@ -41,6 +41,9 @@ exports.config = {
             }
         ],
         defaultVisibilityValue: 0
+    },
+    tabBar: {
+        hide: ['/pages/shop/index']
     }
 }
 exports.get = async (event, context) => {
