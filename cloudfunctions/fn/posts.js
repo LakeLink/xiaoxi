@@ -72,7 +72,7 @@ function updatedAtSorter(event, _, $, agg, cond) {
             pinned: -1,
             updatedAt: -1
         })
-        .limit(20)
+        .limit(10)
     return agg
 }
 
