@@ -3,8 +3,11 @@
 
     <view class="food">
         <view class="food--title">
-            <t-image width="72" height="72"></t-image>
-            <text>{{food.name}} / ??? / ???</text>
+            <t-image style="flex-shrink: 0;" width="72" height="72"></t-image>
+            <view style="display: flex; align-items: center; flex-wrap: wrap; gap: 6rpx;">
+                <text style="font-weight: bold; font-size: larger;">{{food.name}}</text>
+                <text>/{{windowName}}/{{canteenName}}</text>
+            </view>
             <text>￥17</text>
         </view>
         <view class="food--meta">
@@ -34,7 +37,7 @@
             </view>
         </view>
     </view>
-    <new-rating wx:if="{{newRatingVisible}}" foodId="{{food._id}}" draft="{{draft}}" bind:hide="onHideRating" bind:new="onNewRating" ></new-rating>
+    <new-rating wx:if="{{newRatingVisible}}" foodId="{{food._id}}" draft="{{draft}}" bind:hide="onHideRating" bind:new="onNewRating"></new-rating>
     <view class="sorter">
         评价排序
         <t-tabs defaultValue="new" theme="tag" space-evenly="{{false}}">
@@ -45,4 +48,5 @@
     <view wx:for="{{food.ratings}}" wx:key="_id" class="comment">
         <rating post="{{item}}" bind:vote="onVote"></rating>
     </view>
+    <view wx:if="{{!food.ratings.length}}" class="no-comments-hint">—— 这里空荡荡的，来写句评价吧 ——</view>
 </view>

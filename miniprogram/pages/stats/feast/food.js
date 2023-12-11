@@ -144,7 +144,10 @@ Page({
     onLoad(options) {
         console.log(options)
         this.foodId = options.id
-
+        this.setData({
+            windowName: options.windowName,
+            canteenName: options.canteenName
+        })
         this.refresh()
     },
 

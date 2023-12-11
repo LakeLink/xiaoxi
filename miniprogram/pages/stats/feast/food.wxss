@@ -35,6 +35,12 @@
     margin-top: 16rpx;
 }
 
+.no-comments-hint {
+    margin: 32rpx auto 0;
+    text-align: center;
+    color: gray;
+}
+
 .food--progress {
     /* width: 140rpx; */
     flex-grow: 1;
