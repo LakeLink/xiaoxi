@@ -1,7 +1,6 @@
 /* pages/stats/feast/canteen.wxss */
 .canteen {
     display: flex;
-    /* flex-direction: column; */
     justify-content: space-between;
     gap: 16rpx;
 
@@ -77,9 +76,16 @@
 
 .full-screen {
     height: calc(100vh - var(--bottom-safe-area));
+    display: flex;
+    flex-direction: column;
 }
 
 .side-bar-wrapper {
+    /* set initial height=0, it would grow; if height=100% then scroll-view would grow too large */
+    /* https://blog.csdn.net/weixin_42826294/article/details/107220190 有点帮助但不多 */
+    height: 0;
+    flex-grow: 1;
+
     display: flex;
     --td-side-bar-width: 100rpx;
     --td-side-bar-font-size: 30rpx;
@@ -87,7 +93,8 @@
 }
 
 .side-bar-wrapper .content {
-    flex: 1;
+    height: 100%;
+    flex-grow: 1;
 }
 
 .side-bar-wrapper .section {

@@ -18,17 +18,22 @@
                 break;
         }
     }
+    var timeFilter = function (a, t) {
+        // console.log(a.indexOf(t))
+        return a.indexOf(t) >= 0
+    }
+
     module.exports = {
-        parseTime: parseTime
+        parseTime: parseTime,
+        timeFilter: timeFilter
     };
 </wxs>
 <view class="safe-area-nobar">
     <view class="full-screen">
-        <view class="canteen">
+        <!----> <view class="canteen">
             <t-image width="72" height="72"></t-image>
             <view class="canteen--title">
                 <text style="font-weight: bold; font-size: larger;">{{canteen.name}}</text>
-                <!-- 5/5 -->
             </view>
             <view class="canteen--meta">
                 <view class="canteen--rate">
@@ -45,35 +50,39 @@
                 </view>
             </view>
         </view>
-        <t-dropdown-menu>
+         <t-dropdown-menu>
             <t-dropdown-item options="{{$f.post.topics}}" value="{{topicValue}}" bindchange="onTopicChange" />
-            <t-dropdown-item options="{{$f.post.sorters}}" value="{{sorterValue}}" bindchange="onSorterChange" />
+            <t-dropdown-item options="{{timeOptions}}" value="{{timeFilterValue}}" bindchange="onTimeFilterChange" />
         </t-dropdown-menu>
         <view class="side-bar-wrapper">
             <t-side-bar value="{{sideBarIndex}}" bind:change="onSideBarChange">
                 <t-side-bar-item wx:for="{{categories}}" wx:key="index" value="{{item.value || index}}" label="{{item.label}}" badge-props="{{item.badgeProps}}" />
             </t-side-bar>
-            <scroll-view class="content" scroll-y scroll-with-animation scroll-top="{{scrollTop}}" bind:scroll="onScroll">
-                <view wx:for="{{windows}}" wx:for-item="w" wx:key="index" class="section">
-                    <view class="title">{{w.name}}</view>
-                    <view wx:for="{{w.foods}}" class="food" bind:tap="onTapFood" data-id="{{item._id}}" data-window="{{w.name}}">
-                        <view class="food--image">
-                            <view wx:if="{{item.time}}" class="food--time">{{util.parseTime(item.time)}}</view>
-                            <t-image src="{{item.image}}" width="72" height="72"></t-image>
-                        </view>
-                        <view class="food--meta">
-                            <text class="food--title">{{item.name}}</text>
-                            <view class="food--meta--lower">
-                                <view>
-                                    <t-rate value="{{item.avgRating}}" gap="0" size="16" />
-                                    <text>"awsl"</text>
+            <view class="content">
+                <scroll-view style="height: 100%" scroll-y scroll-with-animation scroll-into-view="{{scrollTo}}" bind:scroll="onScroll">
+                    <view wx:for="{{windows}}" wx:for-item="w" wx:key="index" class="section">
+                        <view id="window{{index}}" class="title">{{w.name}}</view>
+                        <block wx:for="{{w.foods}}">
+                            <view wx:if="{{util.timeFilter(showTimeValues, item.time)}}" class="food" bind:tap="onTapFood" data-id="{{item._id}}" data-window="{{w.name}}">
+                                <view class="food--image">
+                                    <view wx:if="{{item.time}}" class="food--time">{{util.parseTime(item.time)}}</view>
+                                    <t-image src="{{item.image}}" width="72" height="72"></t-image>
                                 </view>
-                                <text>￥{{item.price}}</text>
+                                <view class="food--meta">
+                                    <text class="food--title">{{item.name}}</text>
+                                    <view class="food--meta--lower">
+                                        <view>
+                                            <t-rate value="{{item.avgRating}}" gap="0" size="16" />
+                                            <text>"awsl"</text>
+                                        </view>
+                                        <text>￥{{item.price}}</text>
+                                    </view>
+                                </view>
                             </view>
-                        </view>
+                        </block>
                     </view>
-                </view>
-            </scroll-view>
+                </scroll-view>
+            </view>
         </view>
     </view>
     <t-fab style="right: 32rpx; bottom: calc(var(--bottom-safe-area) + 32rpx);" icon="gamepad-1" text="Lucky" bind:click="onTapLucky"></t-fab>

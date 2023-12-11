@@ -9,7 +9,25 @@ Page({
         canteen: {},
         windows: [],
         sideBarIndex: 0,
-        scrollTop: 0
+        scrollTo: "window0",
+        timeOptions: [{
+            value: 0,
+            label: "默认"
+        }, {
+            value: 1,
+            label: "早餐"
+        }, {
+            value: 2,
+            label: "中餐"
+        }, {
+            value: 3,
+            label: "晚餐"
+        }, {
+            value: 4,
+            label: "夜宵"
+        }],
+        timeFilterValue: 0,
+        showTimeValues: [0, 1, 2, 3, 4]
     },
     canteenId: "",
     offsetTopList: [],
@@ -19,6 +37,32 @@ Page({
         console.log(e)
         wx.navigateTo({
             url: `/pages/stats/feast/food?id=${e.currentTarget.dataset.id}&canteenName=${this.data.canteen.name}&windowName=${e.currentTarget.dataset.window}`,
+        })
+    },
+
+    onTimeFilterChange(e) {
+        let a;
+        switch (e.detail.value) {
+            default:
+            case 0:
+                a = [0, 1, 2, 3, 4]
+                break
+            case 1:
+                a = [1]
+                break
+            case 2:
+                a = [0, 2]
+                break
+            case 3:
+                a = [0, 3]
+                break
+            case 4:
+                a = [4]
+                break
+        }
+        this.setData({
+            timeFilterValue: e.detail.value,
+            showTimeValues: a
         })
     },
 
@@ -63,21 +107,6 @@ Page({
         //     this.allDishes = this.allDishes.concat(e.items)
         // })
         // console.log(this.allDishes)
-
-        const query = wx.createSelectorQuery().in(this);
-        const {
-            sideBarIndex
-        } = this.data;
-
-        query
-            .selectAll('.title')
-            .boundingClientRect((rects) => {
-                this.offsetTopList = rects.map((item) => item.top);
-                this.setData({
-                    scrollTop: rects[sideBarIndex].top
-                });
-            })
-            .exec();
     },
 
     onLoad(options) {
@@ -92,29 +121,12 @@ Page({
 
         this.setData({
             sideBarIndex: value,
-            scrollTop: this.offsetTopList[value]
+            scrollTo: `window${value}`
+            // scrollTop: this.offsetTopList[value]
         });
     },
     onScroll(e) {
-        const {
-            scrollTop
-        } = e.detail;
-        const threshold = 50; // 下一个标题与顶部的距离
-
-        if (scrollTop < threshold) {
-            this.setData({
-                sideBarIndex: 0
-            });
-            return;
-        }
-
-        const index = this.offsetTopList.findIndex((top) => top > scrollTop && top - scrollTop <= threshold);
-
-        if (index > -1) {
-            this.setData({
-                sideBarIndex: index
-            });
-        }
+        // console.log(e)
     },
 
 
