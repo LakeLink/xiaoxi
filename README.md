@@ -105,7 +105,7 @@ post -> comment -> subComment
 * name (string)
 * avatarUrl (string)
 * price (number)
-* time (number[], 0: always, 1: breakfast, 2: lunch, 3: dinner, 4: latenight)
+* time (number, 0: default, 1: breakfast, 2: lunch, 3: dinner, 4: latenight)
 
 #### feast_ratings
 
