@@ -1,13 +1,5 @@
 {
     "usingComponents": {
-        "t-fab": "tdesign-miniprogram/fab/fab",
-        "t-search": "tdesign-miniprogram/search/search",
-        "t-side-bar": "tdesign-miniprogram/side-bar/side-bar",
-        "t-side-bar-item": "tdesign-miniprogram/side-bar-item/side-bar-item",
-        "t-grid": "tdesign-miniprogram/grid/grid",
-        "t-grid-item": "tdesign-miniprogram/grid-item/grid-item",
-        "t-button": "tdesign-miniprogram/button/button",
-        "t-popup": "tdesign-miniprogram/popup/popup",
-        "t-icon": "tdesign-miniprogram/icon/icon"
+        "t-button": "tdesign-miniprogram/button/button"
     }
 }
