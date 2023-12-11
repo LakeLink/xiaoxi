@@ -18,7 +18,7 @@ Page({
     onTapFood(e) {
         console.log(e)
         wx.navigateTo({
-            url: `/pages/stats/feast/food?id=${e.currentTarget.dataset.id}`,
+            url: `/pages/stats/feast/food?id=${e.currentTarget.dataset.id}&canteenName=${this.data.canteen.name}&windowName=${e.currentTarget.dataset.window}`,
         })
     },
 

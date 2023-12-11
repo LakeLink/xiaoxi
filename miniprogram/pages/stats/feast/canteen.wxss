@@ -9,6 +9,7 @@
     padding: 32rpx;
     border-bottom: dashed lightgray;
 }
+
 .canteen--title {
     display: flex;
     align-items: center;
@@ -31,22 +32,55 @@
 .food {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    gap: 24rpx;
 
     background: white;
     padding: 24rpx;
     border-bottom: dashed lightgray;
 }
 
+.food--image {
+    position: relative;
+}
+
 .food--title {
+    font-weight: bold;
+}
+
+.food--time {
+    position: absolute;
+    right: -6rpx;
+    top: -20rpx;
+    rotate: 10deg;
+
+    padding: 6rpx;
+    border-radius: 8rpx;
+    color: white;
+    background-color: lightsalmon;
+}
+
+.food--meta {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
+    gap: 16rpx;
+
+    flex-grow: 1;
+}
+
+.food--meta--lower {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.full-screen {
+    height: calc(100vh - var(--bottom-safe-area));
 }
 
 .side-bar-wrapper {
     display: flex;
-    height: calc(100vh - var(--bottom-safe-area));
     --td-side-bar-width: 100rpx;
     --td-side-bar-font-size: 30rpx;
     --td-side-bar-item-line-height: 32rpx;
