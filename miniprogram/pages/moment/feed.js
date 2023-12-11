@@ -65,13 +65,6 @@ Page({
             this.lastPostUpdatedAt = null
         }
 
-        await featureStore.load()
-        
-        // Needed, otherwise topic and sorter label would be empty by default
-        this.setData({
-            topicValue: featureStore.data.post.defaultTopicValue,
-            sorterValue: featureStore.data.post.defaultSorterValue
-        })
         let sorter = featureStore.data.post.sorters[this.data.sorterValue]
 
         return await wx.cloud.callFunction({
@@ -161,18 +154,26 @@ Page({
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad(options) {
-    },
+    onLoad(options) {},
 
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady() {
+    async onReady() {
         // this.data.$f = {}
         // console.log(this.data.$f)
         featureStore.bind(this, '$f')
-        this.refreshVotes()
+
+        await featureStore.load()
+
+        // Needed, otherwise topic and sorter label would be empty by default
+        this.setData({
+            topicValue: featureStore.data.post.defaultTopicValue,
+            sorterValue: featureStore.data.post.defaultSorterValue
+        })
+
         this.refresh(true)
+        this.refreshVotes()
     },
 
     /**

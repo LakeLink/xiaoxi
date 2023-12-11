@@ -8,7 +8,7 @@
         <t-dropdown-item options="{{$f.post.sorters}}" value="{{sorterValue}}" bindchange="onSorterChange" />
     </t-dropdown-menu>
     <t-message id="t-message" bind:tap="onTapMessage" />
-    <block wx:for="{{posts}}" wx:for-item="listItem" wx:for-index="listIndex">
+    <block wx:for="{{posts}}" wx:key="index" wx:for-item="listItem" wx:for-index="listIndex">
         <view wx:for="{{listItem}}" wx:for-index="postIndex" wx:key="_id" class="post">
             <brief-post post="{{item}}" votes="{{votes[item._id]}}" topics="{{$f.post.topics}}" bind:postVote="onPostVote"></brief-post>
             <!-- <t-swiper list="{{item.swiper}}" image-props="{{imageProps}}" previousMargin="34px" nextMargin="34px" navigation="{{ { type: 'dots-bar' } }}"></t-swiper> -->
