@@ -94,11 +94,11 @@ Component({
             //     })
             //     return
             // }
-            this.setData({
-                loading: true
-            })
 
             if (this.data.rating >= 1 && this.data.rating <= 5) {
+                this.setData({
+                    loading: true
+                })
                 wx.cloud.callFunction({
                         name: 'fn',
                         data: {
@@ -155,7 +155,7 @@ Component({
             } else {
                 wx.showToast({
                     icon: 'error',
-                    title: '似乎不太对',
+                    title: '嘿，还没打分呢！',
                 })
                 return
             }
