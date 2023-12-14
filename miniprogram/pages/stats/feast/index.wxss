@@ -2,21 +2,25 @@
 
 .canteen {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 16rpx;
 
     background: white;
     padding: 32rpx;
     border-bottom: dashed lightgray;
 }
+
 .canteen--title {
-    display: flex;
+    /* display: flex;
     align-items: center;
-    gap: 16rpx;
+    gap: 16rpx; */
+    font-weight: bold;
 }
 
 .canteen--meta {
     display: flex;
-    align-items: center;
-    gap: 16rpx;
+    flex-direction: column;
+    justify-content: space-between;
+    /* align-items: center; */
+    /* gap: 16rpx; */
 }

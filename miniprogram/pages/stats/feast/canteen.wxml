@@ -36,14 +36,14 @@
                 <text style="font-weight: bold; font-size: larger;">{{canteen.name}}</text>
             </view>
             <view class="canteen--meta">
-                <view class="canteen--rate">
+                <!-- <view class="canteen--rate">
                     环境 5/5
                     <t-rate value="5" gap="0" size="16" />
                 </view>
                 <view class="canteen--rate">
                     服务 5/5
                     <t-rate value="5" gap="0" size="16" />
-                </view>
+                </view> -->
                 <view class="canteen--rate">
                     美食 {{canteen.foodAvgRating}}/5
                     <t-rate value="{{canteen.foodAvgRating}}" gap="0" size="16" allow-half="true" />
@@ -72,7 +72,8 @@
                                     <text class="food--title">{{item.name}}</text>
                                     <view class="food--meta--lower">
                                         <view>
-                                            <t-rate value="{{item.avgRating}}" gap="0" size="16" />
+                                            <t-rate wx:if="{{item.avgRating}}" value="{{item.avgRating}}" gap="0" size="16" />
+                                            <view wx:else>暂无评价</view>
                                             <text>"awsl"</text>
                                         </view>
                                         <text>￥{{item.price}}</text>
