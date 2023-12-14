@@ -56,4 +56,9 @@ exports.main = async (event, context) => {
 
         return saveRankCache(p)
     }
+
+    if (event.TriggerName == 'updateRatings') {
+        const feast = require('./feast')
+        await feast.handler(event, context)
+    }
 }
