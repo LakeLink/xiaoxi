@@ -52,9 +52,16 @@ class UserStore extends create.Store {
 
             this.update()
         }).catch(e => {
-            wx.showToast({
-                title: '请前往`我`页面完善个人信息',
-                icon: 'error'
+            wx.showModal({
+              title: '嗨，新朋友！',
+              content: '请前往`我`页面完善个人信息',
+              complete: (res) => {
+                if (res.confirm) {
+                  wx.switchTab({
+                    url: 'pages/about/index',
+                  })
+                }
+              }
             })
         })
 
