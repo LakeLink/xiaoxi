@@ -88,8 +88,8 @@ Page({
             })
             w.foods.forEach(f => {
                 // windowAvgRating += f.avgRating
-                if (f.avgRating) {
-                    canteenFoodSumRating += f.avgRating
+                if (f.score) {
+                    canteenFoodSumRating += f.score
                     canteenFoodCount += 1
                 }
             })

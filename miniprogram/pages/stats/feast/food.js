@@ -77,6 +77,7 @@ Page({
     async refresh() {
         let {
             food,
+            score,
             myRating
         } = await wx.cloud.callFunction({
             name: 'fn',
@@ -88,12 +89,12 @@ Page({
         }).then(r => r.result)
 
         let transRatingInfo = {},
-            totalRatings = 0,
-            sumRatings = 0
+            totalRatings = 0
+            // sumRatings = 0
         food.ratingInfo.forEach(e => {
             transRatingInfo[e._id] = e.users
             totalRatings += e.users.length
-            sumRatings += e._id * e.users.length
+            // sumRatings += e._id * e.users.length
         })
         let ratingInfo = []
         for (let i = 5; i >= 1; i--) {
@@ -113,7 +114,8 @@ Page({
         this.setData({
             food,
             ratingInfo,
-            avgRating: (sumRatings / totalRatings).toFixed(1)
+            score: score ? score.toFixed(1) : 0
+            // avgRating: (sumRatings / totalRatings).toFixed(1)
         })
 
         if (myRating) {

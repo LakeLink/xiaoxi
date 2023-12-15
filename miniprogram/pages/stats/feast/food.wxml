@@ -8,12 +8,15 @@
                 <text style="font-weight: bold; font-size: larger;">{{food.name}}</text>
                 <text>/{{windowName}}/{{canteenName}}</text>
             </view>
-            <text>￥17</text>
+            <text>￥{{food.price}}</text>
         </view>
         <view class="food--meta">
-            <view>
-                Average
-                <text class="big-score">{{avgRating}}</text>
+            <view wx:if="{{score}}">
+                Weighted Avg
+                <text class="big-score">{{score}}</text>
+            </view>
+            <view wx:else>
+                暂时没有评分
             </view>
             <view style="flex-grow: 1;">
                 <view wx:for="{{ratingInfo}}" class="food--rating">

@@ -66,5 +66,15 @@ async function updateFoodScore() {
         _id: '$targetId',
         p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
         m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
-    }).end()
+    }).end().then(r => r.list)
+
+    r.forEach(e => {
+        db.collection('feast_foods').doc(e._id).update({
+            data: {
+                p: e.p,
+                m: e.m
+            }
+        })
+    })
+    console.log(r)
 }

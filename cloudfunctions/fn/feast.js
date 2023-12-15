@@ -1,5 +1,6 @@
 const cloud = require('wx-server-sdk');
 const common = require('./common')
+const dayjs = common.dayjs
 
 exports.handler = async (event, context) => {
     switch (event.func) {
@@ -21,6 +22,63 @@ exports.handler = async (event, context) => {
             throw Error('invalid func ' + event.func)
     }
 }
+
+const ratingsUserPipeline = ($, _, OPENID) => {
+    const t = dayjs()
+    return $.pipeline()
+        .match(_.expr($.eq(['$targetId', '$$id'])))
+        .lookup({
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'userInfo'
+        }).addFields({
+            userInfo: $.arrayElemAt(['$userInfo', 0]),
+            canEdit: $.eq(['$user', OPENID]),
+            y: $.subtract([
+                1,
+                $.multiply([
+                    $.floor(
+                        $.divide([$.subtract([t.unix(), '$when']), 604800])
+                    ),
+                    0.3
+                ])
+            ])
+        }).sort({
+            when: -1
+        }).done()
+}
+
+const ratingsSumPipeline = ($, _) => {
+    const t = dayjs()
+    return $.pipeline()
+    .match(_.expr($.eq(['$targetId', '$$id'])))
+    .lookup({
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'userInfo'
+    }).addFields({
+        userInfo: $.arrayElemAt(['$userInfo', 0]),
+        // canEdit: $.eq(['$user', OPENID]),
+        y: $.subtract([
+            1,
+            $.multiply([
+                $.floor(
+                    $.divide([$.subtract([t.unix(), '$when']), 604800])
+                ),
+                0.3
+            ])
+        ])
+    }).group({
+        _id: null,
+        p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
+        m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
+    }).project({
+        score: $.divide(['$m', '$p'])
+    }).done()
+}
+
 
 async function listCanteens(event, context) {
     const db = cloud.database()
@@ -53,15 +111,10 @@ async function getCanteen(event, context) {
                 let: {
                     id: '$_id'
                 },
-                pipeline: $.pipeline()
-                    .match(_.expr($.eq(['$targetId', '$$id'])))
-                    .group({
-                        _id: null,
-                        avg: $.avg('$taste')
-                    }).done(),
-                as: 'avgRating'
+                pipeline: ratingsSumPipeline($, _),
+                as: 'score'
             }).addFields({
-                avgRating: $.arrayElemAt(['$avgRating.avg', 0])
+                score: $.arrayElemAt(['$score.score', 0])
             }).done(),
         as: 'foods'
     }).end().then(r => r.list)
@@ -115,6 +168,7 @@ async function getFood(event, context) {
     const col = db.collection('feast_foods')
     const _ = db.command
     const $ = _.aggregate
+    let t = dayjs().tz('Asia/Shanghai')
 
     let food = await col.aggregate().match({
         _id: event.id
@@ -135,22 +189,12 @@ async function getFood(event, context) {
         let: {
             id: '$_id'
         },
-        pipeline: $.pipeline()
-            .match(_.expr($.eq(['$targetId', '$$id'])))
-            .lookup({
-                from: 'users',
-                localField: 'user',
-                foreignField: '_id',
-                as: 'userInfo'
-            }).addFields({
-                userInfo: $.arrayElemAt(['$userInfo', 0]),
-                canEdit: $.eq(['$user', OPENID])
-            }).sort({
-                when: -1
-            }).done(),
+        pipeline: ratingsUserPipeline($, _, OPENID),
         as: 'ratings'
     }).end().then(r => r.list[0])
 
+    let sumM = 0,
+        sumP = 0
     common.each(food.ratings, {
         stagename: true,
         relativeTime: {
@@ -159,14 +203,21 @@ async function getFood(event, context) {
             unix: true
         },
         customFunc: (arr, idx) => {
-            arr[idx].alreadyVotedUp = arr[idx].upVotedBy?.includes(OPENID)
-            arr[idx].alreadyVotedDown = arr[idx].downVotedBy?.includes(OPENID)
+            const e = arr[idx]
+            e.alreadyVotedUp = arr[idx].upVotedBy?.includes(OPENID)
+            e.alreadyVotedDown = arr[idx].downVotedBy?.includes(OPENID)
+            // console.log(e)
+            if (e.userInfo.feast_sigma && e.y) {
+                sumM += e.userInfo.feast_sigma * e.taste * e.y
+                sumP += e.userInfo.feast_sigma * e.y
+            }
         }
     })
 
     let myRating = await db.collection('feast_ratings').doc(OPENID + '^' + event.id).get().then(r => r.data).catch(e => null)
     return {
         food,
+        score: sumM / sumP,
         myRating
     }
 }
