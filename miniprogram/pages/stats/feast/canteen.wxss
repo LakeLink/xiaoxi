@@ -88,9 +88,14 @@
     flex-grow: 1;
 
     display: flex;
-    --td-side-bar-width: 100rpx;
+    --td-side-bar-width: 160rpx;
     --td-side-bar-font-size: 30rpx;
+    --td-side-bar-item-height: 120rpx;
     --td-side-bar-item-line-height: 32rpx;
+}
+
+.side-bar-wrapper .side-bar-item {
+    padding: 8rpx;
 }
 
 .side-bar-wrapper .content {
