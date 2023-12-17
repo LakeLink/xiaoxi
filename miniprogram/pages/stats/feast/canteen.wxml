@@ -74,7 +74,7 @@
                                         <view>
                                             <t-rate wx:if="{{item.avgRating}}" value="{{item.avgRating}}" gap="0" size="16" />
                                             <view wx:else>暂无评价</view>
-                                            <text>"awsl"</text>
+                                            <!-- <text>"awsl"</text> -->
                                         </view>
                                         <text>￥{{item.price}}</text>
                                     </view>

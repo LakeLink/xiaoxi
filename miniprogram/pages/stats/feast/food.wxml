@@ -4,7 +4,7 @@
     <view class="food">
         <view class="food--title">
             <t-image style="flex-shrink: 0;" width="72" height="72"></t-image>
-            <view style="display: flex; align-items: center; flex-wrap: wrap; gap: 6rpx;">
+            <view style="display: flex; flex-direction: column; gap: 6rpx;">
                 <text style="font-weight: bold; font-size: larger;">{{food.name}}</text>
                 <text>/{{windowName}}/{{canteenName}}</text>
             </view>
