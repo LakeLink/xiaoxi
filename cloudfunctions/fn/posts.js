@@ -189,7 +189,7 @@ exports.getPostsV2 = async (event, context) => {
 
             if (!event.sorterValue) {
                 if (!e.pinned && e.updatedAt > user.lastReadPostAt) {
-                    lastUnreadPost = i
+                    lastUnreadPost = idx
                 }
             }
             arr[idx].comments.forEach(c => {
