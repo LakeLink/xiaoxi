@@ -104,7 +104,7 @@ post -> comment -> subComment
 * windowId (string)
 * name (string)
 * avatarUrl (string)
-* price (number)
+* price (string)
 * time (number, 0: default, 1: breakfast, 2: lunch, 3: dinner, 4: latenight)
 
 #### feast_ratings
