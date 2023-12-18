@@ -75,7 +75,7 @@ const ratingsSumPipeline = ($, _) => {
         p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
         m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
     }).project({
-        score: $.divide(['$m', '$p'])
+        score: $.cond({ if: $.gt(['$p', 0]), then: $.divide(['$m', '$p']), else: 0})
     }).done()
 }
 
