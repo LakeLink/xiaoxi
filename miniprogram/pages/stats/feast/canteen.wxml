@@ -72,7 +72,7 @@
                                     <text class="food--title">{{item.name}}</text>
                                     <view class="food--meta--lower">
                                         <view>
-                                            <t-rate wx:if="{{item.avgRating}}" value="{{item.avgRating}}" gap="0" size="16" />
+                                            <t-rate wx:if="{{item.score}}" value="{{item.score}}" gap="0" size="16" />
                                             <view wx:else>暂无评价</view>
                                             <!-- <text>"awsl"</text> -->
                                         </view>
