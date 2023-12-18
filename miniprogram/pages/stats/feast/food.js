@@ -110,7 +110,7 @@ Page({
             }
         }
 
-        food.score = food.score.toFixed(1)
+        if(food.score) food.score = food.score.toFixed(1)
 
         this.setData({
             food,
