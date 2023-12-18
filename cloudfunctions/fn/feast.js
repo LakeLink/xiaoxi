@@ -18,6 +18,8 @@ exports.handler = async (event, context) => {
             return await getFood(event, context)
         case 'listCanteens':
             return await listCanteens(event, context)
+        case 'getLuckyFood':
+            return await getLuckyFood(event, context)
         default:
             throw Error('invalid func ' + event.func)
     }
@@ -52,31 +54,35 @@ const ratingsUserPipeline = ($, _, OPENID) => {
 const ratingsSumPipeline = ($, _) => {
     const t = dayjs()
     return $.pipeline()
-    .match(_.expr($.eq(['$targetId', '$$id'])))
-    .lookup({
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'userInfo'
-    }).addFields({
-        userInfo: $.arrayElemAt(['$userInfo', 0]),
-        // canEdit: $.eq(['$user', OPENID]),
-        y: $.subtract([
-            1,
-            $.multiply([
-                $.floor(
-                    $.divide([$.subtract([t.unix(), '$when']), 604800])
-                ),
-                0.3
+        .match(_.expr($.eq(['$targetId', '$$id'])))
+        .lookup({
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'userInfo'
+        }).addFields({
+            userInfo: $.arrayElemAt(['$userInfo', 0]),
+            // canEdit: $.eq(['$user', OPENID]),
+            y: $.subtract([
+                1,
+                $.multiply([
+                    $.floor(
+                        $.divide([$.subtract([t.unix(), '$when']), 604800])
+                    ),
+                    0.3
+                ])
             ])
-        ])
-    }).group({
-        _id: null,
-        p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
-        m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
-    }).project({
-        score: $.cond({ if: $.gt(['$p', 0]), then: $.divide(['$m', '$p']), else: 0})
-    }).done()
+        }).group({
+            _id: null,
+            p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
+            m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
+        }).project({
+            score: $.cond({
+                if: $.gt(['$p', 0]),
+                then: $.divide(['$m', '$p']),
+                else: 0
+            })
+        }).done()
 }
 
 
@@ -402,4 +408,37 @@ async function commentFood(event, context) {
             // subComments: []
         }
     })
+}
+
+async function getLuckyFood(event, context) {
+    // 获取基础信息
+    const {
+        ENV,
+        OPENID,
+        APPID
+    } = cloud.getWXContext()
+    console.log(OPENID)
+    const db = cloud.database()
+    const _ = db.command
+    const $ = _.aggregate
+
+    let window = await db.collection('feast_windows').aggregate().sample({
+        size: 1
+    }).lookup({
+        from: 'feast_canteens',
+        localField: 'canteenId',
+        foreignField: '_id',
+        as: 'canteen'
+    }).addFields({
+        canteen: $.arrayElemAt(['$canteen', 0])
+    }).end().then(r => r.list[0])
+
+    return {
+        window,
+        food: await db.collection('feast_foods').aggregate().match({
+            windowId: window._id,
+        }).sample({
+            size: 1
+        }).end().then(r => r.list[0])
+    }
 }

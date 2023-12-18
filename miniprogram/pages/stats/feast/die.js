@@ -5,21 +5,53 @@ Page({
      * 页面的初始数据
      */
     data: {
+        food: null,
+        window: null,
+        confirmed: false
+    },
 
+    async randomFood() {
+        let r = await wx.cloud.callFunction({
+            name: 'fn',
+            data: {
+                mod: 'feast',
+                func: 'getLuckyFood'
+            }
+        }).then(r => r.result)
+        console.log(r)
+
+        this.setData({
+            food: r.food,
+            window: r.window
+        })
+    },
+
+    onBack(e) {
+        wx.navigateBack()
+    },
+
+    onRoll(e) {
+        console.log(e)
+        this.randomFood()
+    },
+
+    onChoose(e) {
+        this.setData({
+            confirmed: true
+        })
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-
     },
 
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-
+        this.randomFood()
     },
 
     /**

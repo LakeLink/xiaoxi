@@ -1,1 +1,28 @@
 /* pages/stats/feast/dice.wxss */
+
+.die-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 32rpx 24rpx;
+    height: 80vh;
+}
+
+.die-center {
+    /* flex-grow: 2; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: larger;
+}
+
+.die-buttons {
+    display: flex;
+    gap: 24rpx;
+
+    margin-top: 32rpx;
+}

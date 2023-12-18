@@ -1,2 +1,18 @@
 <!--pages/stats/feast/dice.wxml-->
-<text>pages/stats/feast/dice.wxml</text>
+<view class="die-container">
+    <text style="color:salmon; font-weight: bolder; font-size: xx-large; margin-bottom: 32rpx; align-self: flex-start;">Roll a Die!</text>
+    <view wx:if="{{food && window}}" class="die-center">
+        <text>吃 {{food.name}}</text>
+        <text>在 {{window.canteen.name}}, {{window.name}}</text>
+    </view>
+    <view wx:else>
+        <text>让我想想，今天吃……</text>
+    </view>
+    <view wx:if="{{!confirmed}}" class="die-buttons">
+        <t-button theme="primary" bind:tap="onChoose">就它了!</t-button>
+        <t-button bind:tap="onRoll">再Roll一回!</t-button>
+    </view>
+    <view wx:else class="die-buttons">
+        <t-button bind:tap="onBack">返回</t-button>
+    </view>
+</view>
