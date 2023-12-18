@@ -61,8 +61,14 @@ async function getCanteen(event, context) {
         canteenId: event.id
     }).lookup({
         from: 'feast_foods',
-        localField: '_id',
-        foreignField: 'windowId',
+        let: {
+            id: '$_id'
+        },
+        pipeline: $.pipeline()
+            .match(_.expr($.eq(['$windowId', '$$id'])))
+            .sort({
+                score: -1
+            }).done(),
         as: 'foods'
     }).end().then(r => r.list)
 
