@@ -1,12 +1,17 @@
 {
     "permissions": {
-        "openapi": [
-        ]
-    },  "triggers": [
+        "openapi": []
+    },
+    "triggers": [
         {
-          "name": "saveRankCache",
-          "type": "timer",
-          "config": "0 1 0 * * * *"
+            "name": "saveRankCache",
+            "type": "timer",
+            "config": "0 1 0 * * * *"
+        },
+        {
+            "name": "updateFeastRatings",
+            "type": "timer",
+            "config": "0 1 * * * * *"
         }
-      ]
+    ]
 }

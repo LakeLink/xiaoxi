@@ -8,6 +8,7 @@ dayjs.locale('zh-cn')
 exports.handler = async (event, context) => {
     await updateUserScore()
     await updateFoodScore()
+    await updateWindowScore()
 }
 
 async function updateUserScore() {
@@ -29,7 +30,7 @@ async function updateUserScore() {
     r.forEach(e => {
         db.collection('users').doc(e._id).update({
             data: {
-                feast_sigma: 1-Math.trunc(e.upVotes/10)*0.3+Math.trunc(e.downVotes/10)*0.2
+                feast_sigma: 1 - Math.trunc(e.upVotes / 10) * 0.3 + Math.trunc(e.downVotes / 10) * 0.2
             }
         })
     })
@@ -52,29 +53,52 @@ async function updateFoodScore() {
         foreignField: '_id',
         as: 'userInfo'
     }).addFields({
-        userInfo: $.arrayElemAt(['$userInfo', 0]),
-        y: $.subtract([
-            1,
-            $.multiply([
-                $.floor(
-                    $.divide([$.subtract([t.unix(), '$when']), 604800])
-                ),
-                0.3
-            ])
-        ])
-    }).group({
-        _id: '$targetId',
-        p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
-        m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
+        userInfo: $.arrayElemAt(['$userInfo', 0])
     }).end().then(r => r.list)
 
+    let targetM = {},
+        targetP = {};
     r.forEach(e => {
-        db.collection('feast_foods').doc(e._id).update({
+        let y = 1 - Math.trunc((t.unix() - e.when) / 604800) * 0.3
+
+        if (targetM[e.targetId]) targetM[e.targetId] += e.userInfo.feast_sigma * e.taste * y
+        else targetM[e.targetId] = e.userInfo.feast_sigma * e.taste * y
+
+        if (targetP[e.targetId]) targetP[e.targetId] += e.userInfo.feast_sigma * y
+        else targetP[e.targetId] = e.userInfo.feast_sigma * y
+    })
+
+    let tasks = []
+    for (const k of Object.keys(targetM)) {
+        let r = db.collection('feast_foods').doc(k).update({
             data: {
-                p: e.p,
-                m: e.m
+                score: targetM[k] / targetP[k]
             }
         })
+        tasks.push(r)
+    }
+    await Promise.all(tasks)
+}
+
+async function updateWindowScore() {
+    const db = cloud.database()
+    const col = db.collection('feast_foods')
+    const _ = db.command
+    const $ = _.aggregate
+
+    let r = await col.aggregate().group({
+        _id: '$windowId',
+        score: $.avg('$score')
+    }).end().then(r => r.list)
+
+    let tasks = []
+    r.forEach(e => {
+        let r = db.collection('feast_windows').doc(e._id).update({
+            data: {
+                score: e.score
+            }
+        })
+        tasks.push(r)
     })
-    console.log(r)
+    await Promise.all(tasks)
 }

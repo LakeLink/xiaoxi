@@ -25,74 +25,28 @@ exports.handler = async (event, context) => {
     }
 }
 
-const ratingsUserPipeline = ($, _, OPENID) => {
-    const t = dayjs()
-    return $.pipeline()
-        .match(_.expr($.eq(['$targetId', '$$id'])))
-        .lookup({
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'userInfo'
-        }).addFields({
-            userInfo: $.arrayElemAt(['$userInfo', 0]),
-            canEdit: $.eq(['$user', OPENID]),
-            y: $.subtract([
-                1,
-                $.multiply([
-                    $.floor(
-                        $.divide([$.subtract([t.unix(), '$when']), 604800])
-                    ),
-                    0.3
-                ])
-            ])
-        }).sort({
-            when: -1
-        }).done()
-}
-
-const ratingsSumPipeline = ($, _) => {
-    const t = dayjs()
-    return $.pipeline()
-        .match(_.expr($.eq(['$targetId', '$$id'])))
-        .lookup({
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'userInfo'
-        }).addFields({
-            userInfo: $.arrayElemAt(['$userInfo', 0]),
-            // canEdit: $.eq(['$user', OPENID]),
-            y: $.subtract([
-                1,
-                $.multiply([
-                    $.floor(
-                        $.divide([$.subtract([t.unix(), '$when']), 604800])
-                    ),
-                    0.3
-                ])
-            ])
-        }).group({
-            _id: null,
-            p: $.sum($.multiply(['$userInfo.feast_sigma', '$y'])),
-            m: $.sum($.multiply(['$userInfo.feast_sigma', '$taste', '$y'])),
-        }).project({
-            score: $.cond({
-                if: $.gt(['$p', 0]),
-                then: $.divide(['$m', '$p']),
-                else: 0
-            })
-        }).done()
-}
-
-
 async function listCanteens(event, context) {
     const db = cloud.database()
-    const col = db.collection('feast_canteens')
     const _ = db.command
     const $ = _.aggregate
 
-    return await col.get().then(r => r.data)
+    let canteens = await db.collection('feast_canteens').aggregate().lookup({
+        from: 'feast_windows',
+        let: {
+            id: '$_id'
+        },
+        pipeline: $.pipeline()
+            .match(_.expr($.eq(['$canteenId', '$$id'])))
+            .group({
+                _id: null,
+                score: $.avg('$score')
+            }).done(),
+        as: 'windows'
+    }).addFields({
+        score: $.arrayElemAt(['$windows.score', 0])
+    }).end().then(r => r.list)
+    console.log(canteens)
+    return canteens
 }
 
 async function getCanteen(event, context) {
@@ -107,21 +61,8 @@ async function getCanteen(event, context) {
         canteenId: event.id
     }).lookup({
         from: 'feast_foods',
-        let: {
-            id: '$_id'
-        },
-        pipeline: $.pipeline()
-            .match(_.expr($.eq(['$windowId', '$$id'])))
-            .lookup({
-                from: 'feast_ratings',
-                let: {
-                    id: '$_id'
-                },
-                pipeline: ratingsSumPipeline($, _),
-                as: 'score'
-            }).addFields({
-                score: $.arrayElemAt(['$score.score', 0])
-            }).done(),
+        localField: '_id',
+        foreignField: 'windowId',
         as: 'foods'
     }).end().then(r => r.list)
 
@@ -195,12 +136,20 @@ async function getFood(event, context) {
         let: {
             id: '$_id'
         },
-        pipeline: ratingsUserPipeline($, _, OPENID),
+        pipeline: $.pipeline()
+            .match(_.expr($.eq(['$targetId', '$$id'])))
+            .lookup({ 
+                from: 'users', 
+                localField: 'user', 
+                foreignField: '_id', 
+                as: 'userInfo' 
+            }).addFields({ 
+                userInfo: $.arrayElemAt(['$userInfo', 0]), 
+                canEdit: $.eq(['$user', OPENID])
+            }).done(),
         as: 'ratings'
     }).end().then(r => r.list[0])
 
-    let sumM = 0,
-        sumP = 0
     common.each(food.ratings, {
         stagename: true,
         relativeTime: {
@@ -213,17 +162,12 @@ async function getFood(event, context) {
             e.alreadyVotedUp = arr[idx].upVotedBy?.includes(OPENID)
             e.alreadyVotedDown = arr[idx].downVotedBy?.includes(OPENID)
             // console.log(e)
-            if (e.userInfo.feast_sigma && e.y) {
-                sumM += e.userInfo.feast_sigma * e.taste * e.y
-                sumP += e.userInfo.feast_sigma * e.y
-            }
         }
     })
 
     let myRating = await db.collection('feast_ratings').doc(OPENID + '^' + event.id).get().then(r => r.data).catch(e => null)
     return {
         food,
-        score: sumM / sumP,
         myRating
     }
 }
