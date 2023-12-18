@@ -32,6 +32,9 @@ Page({
                 func: 'listCanteens'
             }
         }).then(r => {
+            r.result.forEach(e => {
+                if(e.score) e.score = e.score.toFixed(1)
+            })
             this.setData({
                 canteens: r.result
             })

@@ -109,6 +109,12 @@ Page({
         // console.log(this.allDishes)
     },
 
+    onTapLucky(e) {
+        wx.navigateTo({
+          url: '/pages/stats/feast/die',
+        })
+    },
+
     onLoad(options) {
         this.canteenId = options.id
 

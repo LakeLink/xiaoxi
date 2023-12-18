@@ -77,7 +77,6 @@ Page({
     async refresh() {
         let {
             food,
-            score,
             myRating
         } = await wx.cloud.callFunction({
             name: 'fn',
@@ -111,10 +110,11 @@ Page({
             }
         }
 
+        food.score = food.score.toFixed(1)
+
         this.setData({
             food,
-            ratingInfo,
-            score: score ? score.toFixed(1) : 0
+            ratingInfo
             // avgRating: (sumRatings / totalRatings).toFixed(1)
         })
 

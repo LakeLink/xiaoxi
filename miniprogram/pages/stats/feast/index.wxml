@@ -16,9 +16,12 @@
                 服务 5/5
                 <t-rate value="5" gap="0" size="16" />
             </view> -->
-            <view>
-                美食 5/5
-                <t-rate value="5" gap="0" size="16" />
+            <view wx:if="{{item.score}}">
+                美食 {{item.score}}/5
+                <t-rate value="{{item.score}}" gap="0" size="16" />
+            </view>
+            <view wx:else>
+                暂无评分
             </view>
         </view>
     </view>

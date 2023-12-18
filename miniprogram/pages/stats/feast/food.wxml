@@ -11,9 +11,9 @@
             <text>￥{{food.price}}</text>
         </view>
         <view class="food--meta">
-            <view wx:if="{{score}}">
+            <view wx:if="{{food.score}}">
                 Weighted Avg
-                <text class="big-score">{{score}}</text>
+                <text class="big-score">{{food.score}}</text>
             </view>
             <view wx:else>
                 暂时没有评分
